@@ -1,0 +1,37 @@
+.container{
+    /* margin: 0 0 ;
+     padding: 30px;
+     display: flex;
+     justify-content: space-between;
+     min-height: 16px; */
+    background-color:#f7f5e8;
+    box-shadow: 2vw,black;
+    
+}
+
+.headerLinks{
+    @media (width <=480px) {
+        display: none;
+    }
+    color: #000814;
+    align-items: center;
+    display: flex;
+    gap: 20px;
+    font-weight: bold;
+    
+}
+.logo{
+    /* font-weight: bold; */
+    color: #023047;
+    /* font-size: calc(40px + 0.1vw); */
+}
+/* @font-face {
+  //Done (Completed): Make local font work on client side
+    font-family: mogenaLocal;
+    src: url('./fonts/Mogena.ttf');
+} */
+.footerLogo{
+/* font-family:  mogenaLocal; */
+    color: #023047;
+    font-size: calc(40px + 0.1vw);
+}
