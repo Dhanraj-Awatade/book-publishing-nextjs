@@ -31,7 +31,7 @@ const LibraryPage = async ({ searchParams }: LibraryPageProps) => {
             <p className='mt-2 text-base text-muted-foreground'>
                 You&apos;ve have not signed in to your Account. Please sign-in to view your Library.
             </p>
-            <Link href={`${process.env.VERCEL_URL}/sign-in?origin=library`} className={cn(buttonVariants({ variant: "outline" }), "mt-6")} >Click here to Sign-in</Link>
+            <Link href={`${process.env.NEXT_PUBLIC_SERVER_URL}/sign-in?origin=library`} className={cn(buttonVariants({ variant: "outline" }), "mt-6")} >Click here to Sign-in</Link>
         </div>
     )
     else return (

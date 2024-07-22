@@ -103,7 +103,7 @@ const CheckoutButton = ({ productIds, cartItemCount }: CheckoutButtonProps) => {
     };
 
     const verifyOrderAPI = await fetch(
-      `${process.env.VERCEL_URL}/api/updateOrderStatus`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/api/updateOrderStatus`,
       {
         method: "POST",
         body: JSON.stringify(functionRespose),

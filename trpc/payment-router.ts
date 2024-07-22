@@ -160,7 +160,7 @@ export const paymentRouter = router({
 
         try {
           const req = await fetch(
-            `${process.env.VERCEL_URL}/api/users/${addProductToUserQuery}`,
+            `${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/${addProductToUserQuery}`,
             {
               method: "PATCH",
               credentials: "include",

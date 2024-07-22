@@ -26,7 +26,7 @@ export const RecieptEmail = ({ email, date, orderId, products }: RecieptEmailPro
                     <Section>
                         <Column>
                             <Img
-                                src={`${process.env.VERCEL_URL}/hippo-email-sent.png`}
+                                src={`${process.env.NEXT_PUBLIC_SERVER_URL}/hippo-email-sent.png`}
                                 width='100'
                                 height='100'
                                 alt='DigitalHippo'
@@ -96,7 +96,7 @@ export const RecieptEmail = ({ email, date, orderId, products }: RecieptEmailPro
                                         </Text>
                                     ) : null}
                                     <Link
-                                        href={`${process.env.VERCEL_URL}/thank-you?orderId=${orderId}`}
+                                        href={`${process.env.NEXT_PUBLIC_SERVER_URL}/thank-you?orderId=${orderId}`}
                                         style={productLink}>
                                         Download Asset
                                     </Link>

@@ -11,7 +11,7 @@ const Providers = ({ children }: PropsWithChildren) => {
         {
             links: [
                 httpBatchLink({
-                    url: `${process.env.VERCEL_URLL}/api/trpc`,
+                    url: `${process.env.NEXT_PUBLIC_SERVER_URL}/api/trpc`,
                     fetch(url, options) {
                         return fetch(url, {
                             ...options,

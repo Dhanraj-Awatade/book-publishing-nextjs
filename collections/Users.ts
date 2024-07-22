@@ -87,7 +87,7 @@ export const Users: CollectionConfig = {
         return PrimaryActionEmailHtml({
           actionLabel: "Verify Your Account",
           buttonText: "Verify Account",
-          href: `${process.env.VERCEL_URLL}/verify-email?token=${token}`,
+          href: `${process.env.NEXT_PUBLIC_SERVER_URL}/verify-email?token=${token}`,
         });
         // `<a href='${process.env.NEXT_PUBLIC_URL}/verify-email?token=${token}'>Verify Email</a>`; //TO-DO: Beautify this
       },
