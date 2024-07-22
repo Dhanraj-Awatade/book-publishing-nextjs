@@ -113,7 +113,11 @@ const start = async () => {
     })
   );
 
-  app.use((req, res) => nextHandler(req, res));
+  app.use((req, res) => {
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    return nextHandler(req, res);
+  });
   nextApp.prepare().then(() => {
     // payload.console.logger.info("NextJS Started");
   });

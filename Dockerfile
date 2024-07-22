@@ -19,7 +19,7 @@ ENV NEXT_PUBLIC_SERVER_URL https://shabdashivar.in
 ENV RAZORPAY_ID rzp_live_CgO7cPvnACYQ4E
 ENV RAZORPAY_KEY lToFcTaZj8Es4THS2676BSeO
 
-RUN npm run build
+RUN yarn build
 
 FROM base AS runner
 WORKDIR /app
@@ -51,4 +51,4 @@ EXPOSE 3000
 
 ENV PORT 3000
 
-CMD ["npm", "start"]
+CMD ["yarn", "start"]
