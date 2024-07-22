@@ -13,13 +13,21 @@ import nextBuild from "next/dist/build";
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
+
+// app.use((req, res, next) => {
+//   res.setHeader("Access-Control-Allow-Credentials", "true");
+//   res.setHeader("Access-Control-Allow-Origin", "*");
+//   next();
+// });
+
 const createContext = ({
   req,
   res,
-}: trpcExpress.CreateExpressContextOptions) => ({
-  req,
-  res,
-});
+}: trpcExpress.CreateExpressContextOptions) => {
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Origin", "shabdashivar.in");
+  return { req, res };
+};
 export type ExpressContext = inferAsyncReturnType<typeof createContext>;
 
 const start = async () => {
@@ -114,8 +122,8 @@ const start = async () => {
   );
 
   app.use((req, res) => {
-    res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.setHeader("Access-Control-Allow-Origin", "*");
+    // res.setHeader("Access-Control-Allow-Credentials", "true");
+    // res.setHeader("Access-Control-Allow-Origin", "*");
     return nextHandler(req, res);
   });
   nextApp.prepare().then(() => {
