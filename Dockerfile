@@ -5,7 +5,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci --legacy-peer-deps
+RUN yarn install --frozen-lockfile
 
 FROM base AS builder
 WORKDIR /app
@@ -15,7 +15,7 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED 1
 ENV PAYLOAD_SECRET cascasa8895a4cxc4s84cwasc
 ENV MONGODB_URL mongodb+srv://dhanraj:dhanu2020@saptarshee.gi7pexh.mongodb.net/?retryWrites=true&w=majority
-ENV NEXT_PUBLIC_SERVER_URL https://shabdashivar.in
+ENV NEXT_PUBLIC_SERVER_URL https://saptarshee-nextjs-docker-loxeg3gfjq-el.a.run.app
 ENV RAZORPAY_ID rzp_live_CgO7cPvnACYQ4E
 ENV RAZORPAY_KEY lToFcTaZj8Es4THS2676BSeO
 
