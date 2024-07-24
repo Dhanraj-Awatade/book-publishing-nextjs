@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import { Button } from './ui/button'
 
@@ -5,6 +6,8 @@ import { ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import { PRODUCT_CATEGORIES, PRODUCT_TYPES } from '@/lib/config'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 type Type = typeof PRODUCT_TYPES[number]
 
 // const categories = PRODUCT_CATEGORIES.map()
@@ -16,6 +19,7 @@ interface navProps {
 }
 
 function NavItem({ type, handleOpen, isAnyOpen, isOpen }: navProps) {
+    const router = useRouter()
     return (
         <div className='flex'>
             <div className='relative flex items-center'>
@@ -33,18 +37,18 @@ function NavItem({ type, handleOpen, isAnyOpen, isOpen }: navProps) {
                     }
                 )}>
                 <div className='absolute inset-0 top-1/2 bg-white shadow' aria-hidden='true' />
-                <div className='relative bg-white'>
-                    <div className='mx-auto max-w-7xl px-8'>
-                        <div className='grid grid-cols-4 gap-x-8 gap-y-10 py-16'>
-                            <div className='col-span-1 col-start-1 grid grid-cols-3 gap-x-8'>
+                <div className='relative bg-gray-100'>
+                    <div className='mx-auto max-w-7xl px-8 border rounded-lg'>
+                        <div className='grid grid-rows-4 gap-x-8 gap-y-10 py-16'>
+                            <div className='col-span-1 row-span-4 col-start-1 grid grid-cols-6 gap-x-8 '>
                                 {
                                     PRODUCT_CATEGORIES.map((category) => (
-                                        <div key={category.label} className='group relative text-base sm:text-sm'>
-                                            {/* Done (Completed): Whether to include Images => Yes
-                                            <div className='relative rounded-lg aspect-video overflow-hidden bg-gray-100 group-hover:opacity-75'>
-                                            <Image src={category.imgSrc} alt='Category Image'
-                                            </div> */}
-                                            <Link href={category.href} className='mt-6 block font-medium text-gray-900'>
+                                        <div key={category.label} className='group my-4 mx-auto aspect-square relative text-base sm:text-sm'>
+                                            {/* Done (Completed): Whether to include Images => Yes*/}
+                                            <div className='relative rounded-lg aspect-video overflow-hidden group-hover:opacity-75'>
+                                                <Link href={category.href} ><Image fill onClick={handleOpen} src={category.imgSrc} alt='Category Image' /></Link>
+                                            </div>
+                                            <Link href={category.href} className='mt-6 block mx-auto text-center whitespace-normal font-semibold text-gray-900'>
                                                 {category.label}
                                             </Link>
                                         </div>

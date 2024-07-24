@@ -22,11 +22,11 @@ export const appRouter = router({
     )
     .query(async ({ input }) => {
       const { query, cursor } = input;
-      const { sort, limit, ...queryOpts } = query;
+      const { sort, limit, category, ...queryOpts } = query;
 
       const payload = await getPayloadClient();
 
-      const parsedQueryOpts: Record<string, { equals: string }> = {};
+      const parsedQueryOpts: Record<string, { equals: any }> = {};
 
       Object.entries(queryOpts).forEach(([key, value]) => {
         parsedQueryOpts[key] = {
@@ -35,27 +35,52 @@ export const appRouter = router({
       });
 
       const page = cursor || 1;
-
-      const {
-        docs: items,
-        hasNextPage,
-        nextPage,
-      } = await payload.find({
-        collection: "products",
-        where: {
-          approvedForSale: {
-            equals: "approved",
+      if (category) {
+        const {
+          docs: items,
+          hasNextPage,
+          nextPage,
+        } = await payload.find({
+          collection: "products",
+          where: {
+            approvedForSale: {
+              equals: "approved",
+            },
+            category: {
+              equals: category,
+            },
           },
-        },
-        sort,
-        depth: 1,
-        limit,
-        page,
-      });
-      return {
-        items,
-        nextPage: hasNextPage ? nextPage : null,
-      };
+          sort,
+          depth: 1,
+          limit,
+          page,
+        });
+        return {
+          items,
+          nextPage: hasNextPage ? nextPage : null,
+        };
+      } else {
+        const {
+          docs: items,
+          hasNextPage,
+          nextPage,
+        } = await payload.find({
+          collection: "products",
+          where: {
+            approvedForSale: {
+              equals: "approved",
+            },
+          },
+          sort,
+          depth: 1,
+          limit,
+          page,
+        });
+        return {
+          items,
+          nextPage: hasNextPage ? nextPage : null,
+        };
+      }
     }),
 
   getPurchasedProducts: publicProcedure

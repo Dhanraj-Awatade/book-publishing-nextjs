@@ -67,18 +67,22 @@ const CheckoutButton = ({ productIds, cartItemCount }: CheckoutButtonProps) => {
     }
   );
   // console.log("Outer orderId", orderId)
-  console.log("Checkout Button User", updatedUser)
+  // console.log("Checkout Button User", updatedUser)
   /*------------------------- Add Product to User Logic End ----------------------------------*/
 
   useEffect(() => {
-    if (isFetched === true) {
-      setOrderId(razorpayServer!.order.id)
-      console.log("orderId:", orderId)
+    try {
+      if (isFetched === true) {
+        setOrderId(razorpayServer!.order.id)
+        // console.log("orderId:", orderId)
+      }
+    } catch (error) {
+      console.log(error)
     }
 
     if (orderVerificationStatus === true) {
       refetchUpdatedUser()
-      console.log("UseEffect Checkout Button User", updatedUser)
+      // console.log("UseEffect Checkout Button User", updatedUser)
       router.replace(`/thank-you?orderId=${razorpayServer!.order.id}`)
       // clearCart() //To-do:Check if this works
     }

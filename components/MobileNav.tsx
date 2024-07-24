@@ -11,9 +11,10 @@ import Link from 'next/link'
 // import { useEffect, useState } from 'react'
 import { ScrollArea } from "./ui/scroll-area"
 import { useRouter } from "next/navigation"
+import { useAuth } from "@/lib/hooks/use-auth"
+import { useEffect, useState } from "react"
 
 // // import {} from ''
-
 interface MobileNavProps {
     isSignedIn: boolean
 }
@@ -21,6 +22,10 @@ interface MobileNavProps {
 const MobileNav = ({ isSignedIn }: MobileNavProps) => {
     //     const [isOpen, setIsOpen] = useState<boolean>(false)
 
+    const [signedStatus, setSignedStatus] = useState<Boolean>(isSignedIn)
+    // useEffect(() => { setSignedStatus(isSignedIn) }, [isSignedIn, signedStatus])
+    // setSignedStatus(false)
+    // const signedStatus = false
     //     const pathname = usePathname()
 
     //     // whenever we click an item in the menu and navigate away, we want to close the menu
@@ -54,6 +59,7 @@ const MobileNav = ({ isSignedIn }: MobileNavProps) => {
     //         )
 
     const router = useRouter()
+    const { signOut } = useAuth()
 
     return (
 
@@ -97,13 +103,13 @@ const MobileNav = ({ isSignedIn }: MobileNavProps) => {
                                                         <div
                                                             key={category.label}
                                                             className='group relative text-sm min-w-fit'>
-                                                            <div className='relative aspect-square  overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75'>
+                                                            <div className='relative mx-auto aspect-square h-16 w-16 items-center justify-center overflow-hidden rounded-lg group-hover:opacity-75'>
                                                                 <DrawerClose>
                                                                     <Image
                                                                         fill
                                                                         src={category.imgSrc}
                                                                         alt='product category image'
-                                                                        className='object-cover object-center'
+                                                                        className='object-contain object-center'
                                                                         onClick={() => router.push(category.href)}
                                                                     />
                                                                 </DrawerClose>
@@ -114,7 +120,7 @@ const MobileNav = ({ isSignedIn }: MobileNavProps) => {
                                                                         onClick={() => router.push(category.href)}
                                                                         variant={'outline'}
                                                                         // href={category.href}
-                                                                        className='mt-4 font-medium text-gray-900'>
+                                                                        className='mt-4 object-cover h-auto object-center font-medium text-gray-900 whitespace-normal'>
                                                                         {category.label}
                                                                     </Button>
                                                                 </DrawerClose>
@@ -131,11 +137,14 @@ const MobileNav = ({ isSignedIn }: MobileNavProps) => {
                     </div>
 
                     <DrawerFooter>
-                        {isSignedIn
-                            ? <Button onClick={() => router.push('/cart')} variant={'default'}>Go to Cart</Button>
+                        {signedStatus
+                            ? <div className="w-full flex flex-1 max-w-sm justify-evenly">
+                                <DrawerClose asChild><Button className="mx-3 w-1/2" onClick={() => router.push('/cart')} variant={'default'}>Go to Cart</Button></DrawerClose>
+                                <DrawerClose asChild><Button className="mx-3 w-1/2" onClick={() => { signOut().then(() => setSignedStatus(false)) }} variant={'outline'}>Sign out</Button></DrawerClose>
+                            </div>
                             : <div className="w-full flex flex-1 max-w-sm justify-evenly">
-                                <Button className="mx-3 w-1/2" variant={'default'}>Sign-in</Button>
-                                <Button className="mx-3 w-1/2" variant={'outline'}>Sign-up</Button>
+                                <DrawerClose asChild><Button className="mx-3 w-1/2" onClick={() => router.push('/sign-in')} variant={'default'}>Sign-in</Button></DrawerClose>
+                                <DrawerClose asChild><Button className="mx-3 w-1/2" onClick={() => router.push('/sign-up')} variant={'outline'}>Sign-up</Button></DrawerClose>
                             </div>
                         }
                         <DrawerClose asChild>

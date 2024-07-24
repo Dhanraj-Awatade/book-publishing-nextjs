@@ -24,7 +24,7 @@ const ThankYouPage = async ({ searchParams }: PageProps) => {
     const nextCookies = cookies()
     const payload = await getPayloadClient()
 
-    const { user } = await getServerSideUser(nextCookies)
+    const user = await getServerSideUser(nextCookies)
     console.log("Signed User:", user);
 
     const { docs: orders } = await payload.find({

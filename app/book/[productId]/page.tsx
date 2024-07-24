@@ -57,7 +57,7 @@ const Page = async ({ params }: PageProps) => {
         depth: 2,
         where: {
             id: {
-                equals: signedUser.user?.id
+                equals: signedUser?.id
             }
         },
     })

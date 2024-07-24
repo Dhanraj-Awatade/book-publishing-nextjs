@@ -23,7 +23,7 @@ const LibraryPage = async ({ searchParams }: LibraryPageProps) => {
     const label = PRODUCT_CATEGORIES.find(({ value }) => value === category)?.label
     const nextCookies = cookies()
 
-    const { user } = await getServerSideUser(nextCookies)
+    const user = await getServerSideUser(nextCookies)
 
     if (!user) return (
         <div className='flex-col flex mx-auto my-auto h-screen justify-center items-center w-screen'>

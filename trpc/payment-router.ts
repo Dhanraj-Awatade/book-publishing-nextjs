@@ -151,12 +151,12 @@ export const paymentRouter = router({
           { addQueryPrefix: true }
         );
 
-        console.log(
-          "JSON Object: ",
-          JSON.stringify({
-            products: purchasedProductIds,
-          })
-        );
+        // console.log(
+        //   "JSON Object: ",
+        //   JSON.stringify({
+        //     products: purchasedProductIds,
+        //   })
+        // );
 
         try {
           const req = await fetch(
@@ -173,7 +173,7 @@ export const paymentRouter = router({
             }
           );
           const data = await req.json();
-          console.log("Updated User on server", data);
+          console.log("Updated User on server");
           return data as User;
         } catch (err) {
           console.log("Adding Product to user failed:", err);

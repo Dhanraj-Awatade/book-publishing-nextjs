@@ -24,7 +24,7 @@ const mogena = localFont({ src: '../public/fonts/Mogena.ttf' })
 const Header = async () => {
 
   const nextCookies = cookies()
-  const { user } = await getServerSideUser(nextCookies)
+  const user = await getServerSideUser(nextCookies)
   const isSignedIn = user !== null
 
   return (
@@ -56,7 +56,7 @@ const Header = async () => {
                 }
                 {isSignedIn
                   ? (<UserAccountNav user={user} />)
-                  : (<Link href='sign-up' className={buttonVariants({ variant: 'ghost' })}>
+                  : (<Link href='/sign-up' className={buttonVariants({ variant: 'ghost' })}>
                     Sign up
                   </Link>
                   )

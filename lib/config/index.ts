@@ -1,33 +1,76 @@
 export const PRODUCT_CATEGORIES = [
   {
+    label: "Biography & Memoir",
+    value: "biography" as const,
+    href: "/books?category=biography",
+    imgSrc: "/Images/Category_Images/biography.png",
+  },
+  {
+    label: "Non-Fiction",
+    value: "nonfiction" as const,
+    href: "/books?category=nonfiction",
+    imgSrc: "/Images/Category_Images/Nonfiction.png",
+  },
+  {
+    label: "Business & Finance",
+    value: "business" as const,
+    href: "/books?category=business",
+    imgSrc: "/Images/Category_Images/business.png",
+  },
+  {
+    label: "Periodicals",
+    value: "periodicals" as const,
+    href: "/books?category=periodicals",
+    imgSrc: "/Images/Category_Images/periodicals.png",
+  },
+  {
+    label: "Romance",
+    value: "romance" as const,
+    href: "/books?category=romance",
+    imgSrc: "/Images/Category_Images/romance.png",
+  },
+  {
+    label: "Science Fiction & Fantasy",
+    value: "fantasy" as const,
+    href: "/books?category=fantasy",
+    imgSrc: "/Images/Category_Images/fantasy.png",
+  },
+  {
+    label: "Mystery & Suspense",
+    value: "mystery" as const,
+    href: "/books?category=mystery",
+    imgSrc: "/Images/Category_Images/mystery.png",
+  },
+  {
+    label: "Young Adult",
+    value: "youngadult" as const,
+    href: "/books?category=youngadult",
+    imgSrc: "/Images/Category_Images/youngadult.png",
+  },
+  {
     label: "Fiction",
     value: "fiction" as const,
     href: "/books?category=fiction",
-    //To-Do: Add Categories & Images Here
-    imgSrc: "",
-
-    // categories: [
-    //   {
-    //     label: "Erotica",
-    //     value: "erotica",
-    //     href: "#",
-    //     imgSource: "",
-    //   },
-    // ],
+    //To-Do(Completed): Add Categories & Images Here
+    imgSrc: "/Images/Category_Images/fiction.png",
   },
   {
-    label: "Erotica",
-    value: "erotica" as const,
-    href: "/books?category=erotica",
-    imgSrc: "",
-    // categories: [
-    //   {
-    //     label: "Erotica",
-    //     value: "erotica",
-    //     href: "#",
-    //     imgSource: "",
-    //   },
-    // ],
+    label: "Literature",
+    value: "literature" as const,
+    href: "/books?category=literature",
+    imgSrc: "/Images/Category_Images/literature.png",
+  },
+  {
+    label: "Kids",
+    value: "kids" as const,
+    href: "/books?category=kids",
+    imgSrc: "/Images/Category_Images/kids.png",
+  },
+  {
+    label: "Comics, Graphic Novels & Manga",
+    value: "comics" as const,
+    href: "/books?category=comics",
+    imgSrc: "/Images/Category_Images/comics.png",
   },
 ];
 
