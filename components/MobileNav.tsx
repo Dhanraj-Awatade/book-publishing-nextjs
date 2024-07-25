@@ -2,7 +2,6 @@
 
 import { Button } from "./ui/button"
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "./ui/drawer"
-
 import { PRODUCT_CATEGORIES, PRODUCT_TYPES } from '@/lib/config'
 import { Menu, X } from 'lucide-react'
 import Image from 'next/image'
@@ -13,8 +12,6 @@ import { ScrollArea } from "./ui/scroll-area"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/lib/hooks/use-auth"
 import { useEffect, useState } from "react"
-
-// // import {} from ''
 interface MobileNavProps {
     isSignedIn: boolean
 }
@@ -22,7 +19,7 @@ interface MobileNavProps {
 const MobileNav = ({ isSignedIn }: MobileNavProps) => {
     //     const [isOpen, setIsOpen] = useState<boolean>(false)
 
-    const [signedStatus, setSignedStatus] = useState<Boolean>(isSignedIn)
+    // const [signedStatus, setSignedStatus] = useState<Boolean>(isSignedIn)
     // useEffect(() => { setSignedStatus(isSignedIn) }, [isSignedIn, signedStatus])
     // setSignedStatus(false)
     // const signedStatus = false
@@ -59,7 +56,7 @@ const MobileNav = ({ isSignedIn }: MobileNavProps) => {
     //         )
 
     const router = useRouter()
-    const { signOut } = useAuth()
+    // const { signOut } = useAuth()
 
     return (
 
@@ -77,76 +74,77 @@ const MobileNav = ({ isSignedIn }: MobileNavProps) => {
                 <div className="mx-auto w-full sm:max-w-screen-sm md:max-w-screen-md">
 
                     <DrawerHeader>
-                        <DrawerTitle className="text-2xl">Explore the Store</DrawerTitle>
-                        <DrawerDescription>Choose what you want to explore</DrawerDescription>
+                        <DrawerTitle className="items-center justify-center flex"><Image src={"/Images/logo.png"} alt="Saptarshee Logo" height={64} width={96} /></DrawerTitle>
+                        <DrawerTitle className="text-2xl">Saptarshee Publications</DrawerTitle>
+                        <DrawerDescription>Scroll down to explore the Categories</DrawerDescription>
                     </DrawerHeader>
 
                     <div className="p-4 pb-0">
-                        <div className="min-h-64 mt-2">
-                            <ScrollArea>
-                                <div className='max-h-60'>
-                                    <ul>
-                                        {PRODUCT_TYPES.map((type) => (
-                                            <li
-                                                key={type.label}
-                                                className='space-y-10 px-4 pb-8 pt-0'>
-                                                <div className='border rounded-lg border-gray-400'>
-                                                    <div className='-mb-px flex'>
-                                                        <p className='border-transparent rounded-lg text-center text-gray-900 bg-secondary flex-1 whitespace-nowrap border-b-2 py-4 text-base font-medium'>
-                                                            {type.label}s
-                                                        </p>
-                                                    </div>
+                        {/* <div className=" bg-blue-300"> */}
+                        <ScrollArea className="min-h-96 mt-2">
+                            <div className='max-h-96'>
+                                <ul>
+                                    {PRODUCT_TYPES.map((type) => (
+                                        <li
+                                            key={type.label}
+                                            className='space-y-10 px-4 pb-8 pt-0'>
+                                            <div className='border rounded-lg border-gray-400'>
+                                                <div className='-mb-px flex'>
+                                                    <p className='border-transparent rounded-lg text-center text-gray-900 bg-secondary flex-1 whitespace-nowrap border-b-2 py-4 text-base font-medium'>
+                                                        {type.label}s
+                                                    </p>
                                                 </div>
+                                            </div>
 
-                                                <div className='grid grid-cols-3 gap-y-10 gap-x-4'>
-                                                    {PRODUCT_CATEGORIES.map((category) => (
-                                                        <div
-                                                            key={category.label}
-                                                            className='group relative text-sm min-w-fit'>
-                                                            <div className='relative mx-auto aspect-square h-16 w-16 items-center justify-center overflow-hidden rounded-lg group-hover:opacity-75'>
-                                                                <DrawerClose>
-                                                                    <Image
-                                                                        fill
-                                                                        src={category.imgSrc}
-                                                                        alt='product category image'
-                                                                        className='object-contain object-center'
-                                                                        onClick={() => router.push(category.href)}
-                                                                    />
-                                                                </DrawerClose>
-                                                            </div>
-                                                            <div className="flex flex-1 justify-center items-center">
-                                                                <DrawerClose>
-                                                                    <Button
-                                                                        onClick={() => router.push(category.href)}
-                                                                        variant={'outline'}
-                                                                        // href={category.href}
-                                                                        className='mt-4 object-cover h-auto object-center font-medium text-gray-900 whitespace-normal'>
-                                                                        {category.label}
-                                                                    </Button>
-                                                                </DrawerClose>
-                                                            </div>
+                                            <div className='grid grid-cols-3 gap-y-10 gap-x-4'>
+                                                {PRODUCT_CATEGORIES.map((category) => (
+                                                    <div
+                                                        key={category.label}
+                                                        className='group relative text-sm min-w-fit'>
+                                                        <div className='relative mx-auto aspect-square h-16 w-16 items-center justify-center overflow-hidden rounded-lg group-hover:opacity-75'>
+                                                            <DrawerClose>
+                                                                <Image
+                                                                    fill
+                                                                    src={category.imgSrc}
+                                                                    alt='product category image'
+                                                                    className='object-contain object-center'
+                                                                    onClick={() => router.push(category.href)}
+                                                                />
+                                                            </DrawerClose>
                                                         </div>
-                                                    ))}
-                                                </div>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            </ScrollArea>
-                        </div>
+                                                        <div className="flex flex-1 justify-center items-center">
+                                                            <DrawerClose>
+                                                                <Button
+                                                                    onClick={() => router.push(category.href)}
+                                                                    variant={'outline'}
+                                                                    // href={category.href}
+                                                                    className='mt-4 object-cover h-auto object-center font-medium text-gray-900 whitespace-normal'>
+                                                                    {category.label}
+                                                                </Button>
+                                                            </DrawerClose>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </ScrollArea>
+                        {/* </div> */}
                     </div>
 
                     <DrawerFooter>
-                        {signedStatus
+                        {/* {signedStatus 
                             ? <div className="w-full flex flex-1 max-w-sm justify-evenly">
                                 <DrawerClose asChild><Button className="mx-3 w-1/2" onClick={() => router.push('/cart')} variant={'default'}>Go to Cart</Button></DrawerClose>
                                 <DrawerClose asChild><Button className="mx-3 w-1/2" onClick={() => { signOut().then(() => setSignedStatus(false)) }} variant={'outline'}>Sign out</Button></DrawerClose>
                             </div>
                             : <div className="w-full flex flex-1 max-w-sm justify-evenly">
-                                <DrawerClose asChild><Button className="mx-3 w-1/2" onClick={() => router.push('/sign-in')} variant={'default'}>Sign-in</Button></DrawerClose>
-                                <DrawerClose asChild><Button className="mx-3 w-1/2" onClick={() => router.push('/sign-up')} variant={'outline'}>Sign-up</Button></DrawerClose>
+                                <DrawerClose asChild><Button className="mx-3 w-1/2" onClick={() => router.replace('/sign-in')} variant={'default'}>Sign-in</Button></DrawerClose>
+                                <DrawerClose asChild><Button className="mx-3 w-1/2" onClick={() => router.replace('/sign-up')} variant={'outline'}>Sign-up</Button></DrawerClose>
                             </div>
-                        }
+                        }*/}
                         <DrawerClose asChild>
                             <Button variant={'destructive'}>Close Drawer</Button>
                         </DrawerClose>

@@ -15,6 +15,7 @@ import { cookies } from 'next/headers';
 import UserAccountNav from './UserAccountNav';
 import MobileNav from './MobileNav';
 import Image from 'next/image';
+import UserAccountNavMobile from './UserAccountNavMobile';
 // import { LINKS } from '@/lib';
 
 // const migo = localFont({ src: [{ path: './fonts/Migo Black.ttf' }, { path: './fonts/Migo Bold.ttf', weight: 'bold' }] })
@@ -34,15 +35,15 @@ const Header = async () => {
           <div className='flex h-16 items-center mx-4'>
             {/* Done (Completed): Mobile Nav */}
             <MobileNav isSignedIn />
-            <Image className='sm:hidden md:block' src={'/Images/logo.png'} alt='Saptarshee Logo' height={64} width={96} />
-            <div className='ml-4 flex lg:ml-0 lg:text-4xl text-2xl'>
+            <Image className='hidden md:block' src={'/Images/logo.png'} alt='Saptarshee Logo' height={64} width={96} />
+            <div className='ml-6 flex lg:ml-0 lg:text-4xl text-2xl'>
               <Link className={cn(styles.logo, mogena.className)} href={"/"}> <span className='text-rose-600 '>Saptarshee {' '}</span>Publications</Link>
             </div>
             <div className='hidden z-50 lg:ml-8 lg:block lg:self-stretch'>
               <NavItems />
             </div>
             <div className='ml-auto flex items-center'>
-              <div className='hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6'>
+              <div className='hidden md:flex md:flex-1 md:items-center md:justify-end md:space-x-6'>
                 {isSignedIn
                   ? null
                   : <Link href='/sign-in' className={buttonVariants({ variant: 'default' })}>
@@ -70,6 +71,8 @@ const Header = async () => {
               <div className='mx-4 flow-root lg:ml-6'>
                 <Cart />
               </div>
+
+              <div className='md:hidden '><UserAccountNavMobile user={user} /></div>
 
             </div>
           </div>
