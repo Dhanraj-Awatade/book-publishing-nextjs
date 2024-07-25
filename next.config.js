@@ -28,7 +28,7 @@ const nextConfig = {
     images:{
         remotePatterns:[
             {
-                hostname:"shabdashivar.in",
+                hostname:"saptarshee.in",
                 pathname:"**",
                 port:"3000",
                 protocol:"https"
@@ -40,7 +40,7 @@ const nextConfig = {
                 protocol:"http"
             },
             {
-                hostname:"192.168.205.211",
+                hostname:"192.168.1.211",
                 pathname:"**",
                 port:"3000",
                 protocol:"http"
