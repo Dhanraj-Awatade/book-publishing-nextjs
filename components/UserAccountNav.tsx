@@ -20,7 +20,7 @@ const UserAccountNav = ({ user }: { user: User }) => {
             </div>
 
             <DropdownMenuSeparator />
-
+            {/* To-Do: Add Account Page */}
             <DropdownMenuItem asChild>
                 <Link href='/account'>Account Details</Link>
             </DropdownMenuItem>
