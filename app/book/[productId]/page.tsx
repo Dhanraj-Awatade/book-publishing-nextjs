@@ -3,13 +3,14 @@ import ImageSlider from '@/components/ImageSlider'
 import MaxWidthWrapper from '@/components/MaxWidthWrapper'
 import ProductReel from '@/components/ProductReel'
 import { Button, buttonVariants } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
 import { PRODUCT_CATEGORIES } from '@/lib/config'
 import { getPayloadClient } from '@/lib/get-payload'
 import { useCart } from '@/lib/hooks/use-cart'
 import { getServerSideUser } from '@/lib/payload-utils'
 import { cn, formatPrice } from '@/lib/utils'
 import { Product } from '@/payload-types'
-import { Check, Shield } from 'lucide-react'
+import { Check, Shield, X } from 'lucide-react'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
 import { notFound, useRouter } from 'next/navigation'
@@ -126,15 +127,46 @@ const Page = async ({ params }: PageProps) => {
                                     {label}
                                 </div>
                             </div>
-                            <div className='mt-4 space-y-6'>
+                            <Separator className='my-2' />
+                            <div className='mx-4 space-y-6'>
                                 <p className='text-base text-muted-foreground'>
                                     {product.description}
                                 </p>
                             </div>
-                            <div className='mt-6 flex items-center'>
-                                <Check aria-hidden='true' className='h-5 w-5 flex-shrink-0 text-green-500' />
-                                <p className='ml-2 text-sm text-muted-foreground'>In Stock</p>
-                            </div>
+                            <Separator className='my-2' />
+                            <div className='mt-4 flex flex-col gap-y-2 items-start'>
+                                {product.attributes?.author
+                                    ? <p className='ml-2 text-sm text-muted-foreground'>
+                                        Author:{" "}
+                                        <span className='text-sm text-muted-foreground font-semibold text-rose-400'>
+                                            {product.attributes?.author}
+                                        </span>
+                                    </p>
+                                    : null
+                                }
+                                {product.attributes?.isbn
+                                    ? <p className='ml-2 text-sm text-muted-foreground'>
+                                        ISBN Number:{" "}
+                                        <span className='text-sm text-muted-foreground font-semibold text-blue-400'>
+                                            {product.attributes?.isbn}
+                                        </span>
+                                    </p>
+                                    : null
+                                }</div>
+
+                            {product.stock
+                                ? <div className='mt-4 flex items-center'>
+
+                                    <Check aria-hidden='true' className='h-5 w-5 flex-shrink-0 text-green-500' />
+                                    <p className='ml-2 text-sm text-muted-foreground'>In Stock</p>
+                                </div>
+                                : <div className='mt-4 flex items-center'>
+
+                                    <X aria-hidden='true' className='h-5 w-5 flex-shrink-0 text-red-500' />
+                                    <p className='ml-2 text-sm text-muted-foreground'>Out of Stock</p>
+                                </div>
+                            }
+
                         </section>
                     </div>
                     {/* Product Images */}

@@ -50,10 +50,27 @@ export interface Product {
   user?: (string | null) | User;
   name: string;
   description?: string | null;
+  attributes?: {
+    author?: string | null;
+    isbn?: string | null;
+  };
   price: number;
   type: 'paperback' | 'ebook';
-  category: 'fiction' | 'erotica';
+  category:
+    | 'biography'
+    | 'nonfiction'
+    | 'business'
+    | 'periodicals'
+    | 'romance'
+    | 'fantasy'
+    | 'mystery'
+    | 'youngadult'
+    | 'fiction'
+    | 'literature'
+    | 'kids'
+    | 'comics';
   product_files?: (string | null) | ProductFile;
+  stock?: boolean | null;
   approvedForSale?: ('pending' | 'approved' | 'denied') | null;
   images: {
     image: string | Media;

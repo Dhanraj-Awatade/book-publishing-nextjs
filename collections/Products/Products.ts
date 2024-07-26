@@ -187,6 +187,23 @@ export const Products: CollectionConfig = {
       label: "Product Details",
     },
     {
+      name: "attributes",
+      type: "group",
+      label: "Attributes",
+      fields: [
+        {
+          name: "author",
+          label: "Author(s) Name(s)",
+          type: "text",
+        },
+        {
+          name: "isbn",
+          label: "ISBN Number",
+          type: "text",
+        },
+      ],
+    },
+    {
       name: "price",
       label: "Price in INR",
       min: 0,
@@ -232,6 +249,20 @@ export const Products: CollectionConfig = {
       required: false,
       relationTo: "product_files",
       hasMany: false,
+    },
+    {
+      name: "stock",
+      label: "In Stock?",
+      defaultValue: false,
+      type: "checkbox",
+      admin: {
+        condition: (siblingData) => {
+          if (siblingData.type === "paperback") {
+            return true;
+          } else return false;
+        },
+      },
+      required: true,
     },
     {
       name: "approvedForSale",
