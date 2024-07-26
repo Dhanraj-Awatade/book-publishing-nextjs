@@ -5,15 +5,15 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 COPY package*.json ./
-COPY media ./
-COPY product_files ./
+# COPY media ./
+# COPY product_files ./
 RUN yarn install --frozen-lockfile
 
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/media ./media
-COPY --from=deps /app/product_files ./product_files
+# COPY --from=deps /app/media ./media
+# COPY --from=deps /app/product_files ./product_files
 COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED 1
@@ -41,14 +41,13 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 COPY --from=builder /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/media ./media
-COPY --from=builder --chown=nextjs:nodejs /app/product_files ./product_files
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/build ./build
+COPY --from=builder --chown=nextjs:nodejs /app/media ./dist/media
+COPY --from=builder --chown=nextjs:nodejs /app/product_files ./dist/product_files
 COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/build ./build
-
 USER nextjs
 
 EXPOSE 3000
