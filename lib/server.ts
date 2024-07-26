@@ -25,7 +25,7 @@ const createContext = ({
   res,
 }: trpcExpress.CreateExpressContextOptions) => {
   res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Origin", "https://shabdashivar.in");
   return { req, res };
 };
 
@@ -125,7 +125,7 @@ const start = async () => {
 
   app.use((req, res) => {
     res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Origin", "https://shabdashivar.in");
     return nextHandler(req, res);
   });
   nextApp.prepare().then(() => {

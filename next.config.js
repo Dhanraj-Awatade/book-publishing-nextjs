@@ -30,11 +30,13 @@ const nextConfig = {
             {
                 hostname:"saptarshee.in",
                 pathname:"**",
+                port:'',
                 protocol:"https"
             },
             {
               hostname:"www.saptarshee.in",
               pathname:"**",
+              port:'',
               protocol:"https"
           },
             {
