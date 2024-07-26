@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSideUser } from "./lib/payload-utils";
 
 const allowedOrigins = [
-  "https://shabdashivar.in",
-  "https://www.shabdashivar.in",
   "https://saptarshee.in",
   "https://www.saptarshee.in",
   // "http://localhost:3000",

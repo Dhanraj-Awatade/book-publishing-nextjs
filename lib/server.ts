@@ -25,7 +25,7 @@ const createContext = ({
   res,
 }: trpcExpress.CreateExpressContextOptions) => {
   res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Origin", "https://shabdashivar.in");
+  res.setHeader("Access-Control-Allow-Origin", "https://saptarshee.in");
   return { req, res };
 };
 
@@ -47,8 +47,8 @@ const start = async () => {
   // app.get("/api/trpc", cors(), (req, res) => {});
   // app.use(function (req, res, next) {
   //   // const allowedOrigins = [
-  //   //   "https://shabdashivar.in",
-  //   //   "https://www.shabdashivar.in",
+  //   //   "https://saptarshee.in",
+  //   //   "https://www.saptarshee.in",
   //   //   "https://saptarshee.in",
   //   //   "https://www.saptarshee.in",
   //   //   "http://localhost:3000",
@@ -77,14 +77,14 @@ const start = async () => {
   //   // if (isAllowedOrigin) {
   //   // res.setHeader("Access-Control-Allow-Origin", s);
   //   // }
-  //   res.setHeader("Access-Control-Allow-Origin", "https://www.shabdashivar.in");
+  //   res.setHeader("Access-Control-Allow-Origin", "https://www.saptarshee.in");
   //   next();
   // });
 
   // // const corsOptions = {
   // //   origin: [
-  // //     "https://shabdashivar.in",
-  // //     "https://www.shabdashivar.in",
+  // //     "https://saptarshee.in",
+  // //     "https://www.saptarshee.in",
   // //     "https://saptarshee.in",
   // //     "https://www.saptarshee.in",
   // //   ],
@@ -125,7 +125,7 @@ const start = async () => {
 
   app.use((req, res) => {
     res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.setHeader("Access-Control-Allow-Origin", "https://shabdashivar.in");
+    res.setHeader("Access-Control-Allow-Origin", "https://saptarshee.in");
     return nextHandler(req, res);
   });
   nextApp.prepare().then(() => {
