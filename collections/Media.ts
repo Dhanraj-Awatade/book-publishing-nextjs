@@ -28,14 +28,15 @@ export const Media: CollectionConfig = {
     hidden: ({ user }) => user.role !== "admin",
   },
   access: {
-    read: async ({ req }) => {
-      const referer = req.headers.referer;
+    read: () => true,
+    //  async ({ req }) => {
+    //   const referer = req.headers.referer;
 
-      if (!req.user || !referer?.includes("admin")) {
-        return true;
-      }
-      return await isAdminOrHasAccessToImages()({ req });
-    },
+    //   if (!req.user || !referer?.includes("admin")) {
+    //     return true;
+    //   }
+    //   return await isAdminOrHasAccessToImages()({ req });
+    // },
     delete: isAdminOrHasAccessToImages(),
     update: isAdminOrHasAccessToImages(),
   },

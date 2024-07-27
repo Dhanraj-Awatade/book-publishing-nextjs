@@ -2,34 +2,40 @@
 
 const nextConfig = {
   images:{
-    domains:['saptarshee.in','localhost','192.168.204.211'],
+    // domains:['saptarshee.in','localhost','192.168.204.211','shabdashivar.in'],
     // domains:[`${process.env.NEXT_PUBLIC_SERVER_URL}`],
-    // remotePatterns:[
-    //     {
-    //         hostname:"saptarshee.in",
-    //         pathname:"**",
-    //         port:'',
-    //         protocol:"https"
-    //     },
-    //     {
-    //       hostname:"www.saptarshee.in",
-    //       pathname:"**",
-    //       port:'',
-    //       protocol:"https"
-    //   },
-    //     {
-    //         hostname:"localhost",
-    //         pathname:"**",
-    //         port:"3000",
-    //         protocol:"http"
-    //     },
-    //     {
-    //         hostname:"192.168.1.211",
-    //         pathname:"**",
-    //         port:"3000",
-    //         protocol:"http"
-    //     }
-    // ]
+    remotePatterns:[
+        {
+            hostname:"saptarshee.in",
+            pathname:"**",
+            port:'',
+            protocol:"https"
+        },
+        {
+          hostname:"saptarshee.in",
+          pathname:"/media/**",
+          port:'',
+          protocol:"https"
+      },
+        {
+          hostname:"www.saptarshee.in",
+          pathname:"**",
+          port:'',
+          protocol:"https"
+      },
+        {
+            hostname:"localhost",
+            pathname:"**",
+            port:"3000",
+            protocol:"http"
+        },
+        {
+            hostname:"192.168.1.211",
+            pathname:"**",
+            port:"3000",
+            protocol:"http"
+        }
+    ]
 },
     webpack: (config) => {
            config.resolve.alias.canvas = false;
