@@ -43,6 +43,7 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/build ./build
+COPY --from=builder /app/next.config.js ./next.config.js
 COPY --from=builder --chown=nextjs:nodejs /app/media ./dist/media
 COPY --from=builder --chown=nextjs:nodejs /app/product_files ./dist/product_files
 COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
