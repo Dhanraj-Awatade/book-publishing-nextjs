@@ -98,7 +98,7 @@ const ImageSlider = ({ urls }: ImageSliderProps) => {
                             alt='Product Image'
                             fill
                             loading='eager'
-                            className='h-full w-full -z-10 object-cover object-center' />
+                            className='h-full w-full -z-10 object-contain object-center' />
                     </SwiperSlide>
                 ))}
             </Swiper>

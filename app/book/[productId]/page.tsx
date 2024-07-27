@@ -188,7 +188,13 @@ const Page = async ({ params }: PageProps) => {
                                         >
                                             Read
                                         </Link>
-                                        : <AddToCartButton product={product} />
+                                        : <>{product.stock
+                                            ? <AddToCartButton product={product} />
+                                            : <Button size='lg'
+                                                className='w-full mt-2' disabled>Add to Cart</Button>
+                                        }
+
+                                        </>
                                 }
 
                             </div>
