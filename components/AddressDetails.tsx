@@ -24,7 +24,8 @@ const AddressDetails = ({ selectAddress, selectedAddress }: AddressDetailsProps)
 
     const { data: addresses, isLoading, refetch, } = trpc.payment.fetchUserAddresses.useQuery()
     const { data: updatedAddresses, mutate: saveAddress, } = trpc.payment.saveAddressToUser.useMutation({
-        onSuccess: () => { toast.success("Added address successfully"); refetch }
+        onSuccess: () => { refetch(); toast.success("Added address successfully") },
+        // onMutate: () => { toast.message("Adding address") }
     })
 
 
@@ -50,7 +51,7 @@ const AddressDetails = ({ selectAddress, selectedAddress }: AddressDetailsProps)
                     <Select onValueChange={handleSelection}>
                         {isLoading
                             ? <SelectTrigger><SelectValue placeholder={"Loading Addresses"} /></SelectTrigger>
-                            : <SelectTrigger><SelectValue defaultValue={addresses?.at(0)?.id} placeholder={!addresses ? "No Address found" : addresses?.at(0)?.adressName} /></SelectTrigger>
+                            : <SelectTrigger><SelectValue /*defaultValue={addresses?.at(0)?.id}*/ placeholder={!addresses ? "No Address found" : /*addresses?.at(0)?.adressName*/"Click to choose from existing addresses"} /></SelectTrigger>
                         }
                         <SelectContent>
                             {addresses?.map((addr, key) =>
@@ -178,7 +179,7 @@ const AddressDetails = ({ selectAddress, selectedAddress }: AddressDetailsProps)
                                                             }
                                                         </div>
                                                         {/*  */}<DrawerClose >
-                                                            <Button onClick={() => { handleSubmit(onSubmit) }}>Save Details</Button>
+                                                            <Button size={"lg"} onClick={() => { handleSubmit(onSubmit) }}>Save Details</Button>
                                                         </DrawerClose>
                                                     </div>
                                                 </form>

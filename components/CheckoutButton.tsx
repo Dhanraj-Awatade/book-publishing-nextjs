@@ -86,7 +86,7 @@ const CheckoutButton = ({ productIds, cartItemCount, selectedAddress, isAnyPaper
     if (orderVerificationStatus === true) {
       refetchUpdatedUser()
       // console.log("UseEffect Checkout Button User", updatedUser)
-      router.replace(`/thank-you?orderId=${razorpayServer!.order.id}`)
+      router.replace(`/thank-you?orderId=${razorpayServer!.order.id}&isAnyPaperback=${isAnyPaperback}`)
       // clearCart() //To-do:Check if this works
     }
 

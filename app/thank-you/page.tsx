@@ -3,14 +3,13 @@ import Image from 'next/image'
 import React from 'react'
 import { cookies } from 'next/headers'
 import { getPayloadClient } from '@/lib/get-payload'
-import { notFound, redirect } from 'next/navigation'
+import { notFound, redirect, } from 'next/navigation'
 import { Product, ProductFile, User } from '@/payload-types'
 import { PRODUCT_CATEGORIES } from '@/lib/config'
 import Link from 'next/link'
 import { cn, formatPrice } from '@/lib/utils'
 import { Button, buttonVariants } from '@/components/ui/button'
 import PaymentStatus from '@/components/PaymentStatus'
-import { useCart } from '@/lib/hooks/use-cart'
 
 interface PageProps {
     searchParams: {
@@ -20,12 +19,14 @@ interface PageProps {
 
 const ThankYouPage = async ({ searchParams }: PageProps) => {
 
+    // const searchParams = useSearchParams()
     const orderId = searchParams.orderId
+    const isAnyPaperback = searchParams.isAnyPaperback === "true"
     const nextCookies = cookies()
     const payload = await getPayloadClient()
 
     const user = await getServerSideUser(nextCookies)
-    console.log("Signed User:", user);
+    // console.log("Signed User:", user);
 
     const { docs: orders } = await payload.find({
         collection: 'orders',
@@ -46,27 +47,15 @@ const ThankYouPage = async ({ searchParams }: PageProps) => {
         : order.user.id
 
     if (orderUserId !== user?.id) {
-        return redirect(`/sign-in?origin=thank-you?orderId=${order.id}`)
+        const message = "Access denied. This order does not belong to you."
+        redirect(`/error?message=${message}`)
+        // return redirect(`/sign-in?origin=thank-you?orderId=${order.id}`)
     }
 
     const products = order.products as Product[]
     const orderTotal = products.reduce((total, product) => {
         return total + product.price
     }, 0)
-
-    // const inputData = {
-    //     user: user.id,
-    //     products: order.products
-    // };
-    // const addProductToUserAPI = await fetch(
-    //     `${process.env.NEXT_PUBLIC_SERVER_URL}/api/addProductToUser`,
-    //     {
-    //         method: "POST",
-    //         body: JSON.stringify(inputData),
-    //     }
-    // );
-    // const text = await addProductToUserAPI.json();
-    // console.log("Updated User with Products", text);
 
     return (
         <main className='relative lg:minmax-h-full'>
@@ -81,8 +70,14 @@ const ThankYouPage = async ({ searchParams }: PageProps) => {
 
                         {
                             order._isPaid
-                                ? <p className='mt-2 text-base text-muted-foreground'>
-                                    Your order has been processed & the product has been added to your library. We&apos;ve sent your order details & receipt to
+                                ?
+                                <p className='mt-2 text-base text-muted-foreground'>
+                                    Your order has been processed{
+                                        isAnyPaperback ?
+                                            <span>. The product will be shipped soon to your provided address.</span>
+                                            : <span>{" "}& the product has been added to your library.</span>
+                                    }
+                                    We&apos;ve sent your order details & receipt to
                                     {
                                         typeof order.user !== 'string'
                                             ? (<span className='font-medium text-gray-900'>{" "}{order.user.email}</span>)
@@ -90,6 +85,7 @@ const ThankYouPage = async ({ searchParams }: PageProps) => {
                                     }
                                     .
                                 </p>
+
                                 : <p className='mt-2 text-base text-muted-foreground' >
                                     Thank you for ordering from us. We are currently processing your Order.
                                     We will get back to you shortly.
@@ -107,7 +103,7 @@ const ThankYouPage = async ({ searchParams }: PageProps) => {
                                 {(order.products as Product[]).map((product) => {
                                     const label = PRODUCT_CATEGORIES.find(({ value }) => value === product.category)?.label
                                     //To-DO: Create a new database table to store the book if order is successful & modify Thank-you Page accordingly.
-                                    const readerUrl = (product.product_files as ProductFile).url as string
+                                    // const readerUrl = (product.product_files as ProductFile).url as string
                                     const { image } = product.images[0]
                                     return <li key={product.id} className='flex space-x-6 py-6'>
                                         <div className='relative h-24 w-24'>
@@ -129,7 +125,7 @@ const ThankYouPage = async ({ searchParams }: PageProps) => {
                                                 <p className='my-1'>Category: {label}</p>
                                             </div>
                                             {
-                                                order._isPaid
+                                                order._isPaid && !isAnyPaperback
                                                     // true
                                                     ? (
                                                         <Link
@@ -174,7 +170,7 @@ const ThankYouPage = async ({ searchParams }: PageProps) => {
                     </div>
                 </div>
             </div>
-        </main>
+        </main >
     )
 }
 

@@ -11,7 +11,7 @@ export const PrimaryActionEmail = ({ actionLabel, buttonText, href }: PrimaryEma
     return (
         <Html>
             <Head />
-            <Preview>The marketplace for high-quality digital goods.</Preview>
+            <Preview>The marketplace for high-quality Books & e-Books.</Preview>
             <Body style={main}>
                 <Container style={container}>
                     <Img
@@ -23,8 +23,7 @@ export const PrimaryActionEmail = ({ actionLabel, buttonText, href }: PrimaryEma
                     />
                     <Text style={paragraph}>Hi there,</Text>
                     <Text style={paragraph}>
-                        Welcome to DigitalHippo, the marketplace for high quality digital
-                        goods. Use the button below to {actionLabel}.
+                        Welcome to Saptarshee Publications, the marketplace for high quality Books & e-Books. Use the button below to {actionLabel}.
                     </Text>
                     <Section style={btnContainer}>
                         <Button style={button} href={href}>
