@@ -28,7 +28,7 @@ export interface User {
   addresses?: (string | Address)[] | null;
   products?: (string | Product)[] | null;
   product_files?: (string | ProductFile)[] | null;
-  role: 'admin' | 'customer';
+  role: 'admin' | 'customer' | 'author';
   name: string;
   updatedAt: string;
   createdAt: string;
@@ -70,6 +70,7 @@ export interface Product {
     author?: string | null;
     isbn?: string | null;
   };
+  mrp: number;
   price: number;
   type: 'paperback' | 'ebook';
   category:

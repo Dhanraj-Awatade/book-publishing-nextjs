@@ -42,7 +42,7 @@ const Page = () => {
                 return
                 //TO-DO: Implement Author Selling
             }
-            router.push('/')
+            router.replace('/')
             router.refresh()
         },
         onError: (err) => {
