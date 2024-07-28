@@ -100,7 +100,7 @@ export const Orders: CollectionConfig = {
       name: "razorpayOrderId",
       type: "text",
       admin: {
-        hidden: true,
+        hidden: false,
       },
       access: {
         create: () => false,

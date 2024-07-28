@@ -120,6 +120,9 @@ const Page = async ({ params }: PageProps) => {
 
                         <section className='mt-4'>
                             <div className='flex items-center'>
+                                <p className='font-medium mr-2 line-through text-gray-400'>
+                                    {formatPrice(product.mrp)}
+                                </p>
                                 <p className='font-medium text-gray-900'>
                                     {formatPrice(product.price)}
                                 </p>
