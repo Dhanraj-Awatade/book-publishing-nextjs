@@ -23,6 +23,39 @@ interface ReaderProps {
 }
 
 const PdfReader = ({ productPath }: ReaderProps) => {
+    // .addEventListener('touchstart', function (event) {
+    //     touchstartX = event.changedTouches[0].screenX;
+    //     touchstartY = event.changedTouches[0].screenY;
+    // }, false);
+
+    // touchableElement.addEventListener('touchend', function (event) {
+    //     touchendX = event.changedTouches[0].screenX;
+    //     touchendY = event.changedTouches[0].screenY;
+    //     handleGesture();
+    // }, false);
+
+
+    // function handleGesture() {
+    //     if (touchendX < touchstartX) {
+    //         console.log('Swiped Left');
+    //     }
+
+    //     if (touchendX > touchstartX) {
+    //         console.log('Swiped Right');
+    //     }
+
+    //     if (touchendY < touchstartY) {
+    //         console.log('Swiped Up');
+    //     }
+
+    //     if (touchendY > touchstartY) {
+    //         console.log('Swiped Down');
+    //     }
+
+    //     if (touchendY === touchstartY) {
+    //         console.log('Tap');
+    //     }
+    // }
 
     const [numPages, setNumPages] = useState<number>();
     const [pageNumber, setPageNumber] = useState<number>(1);
@@ -35,7 +68,7 @@ const PdfReader = ({ productPath }: ReaderProps) => {
         <div className='max-h-[980px] md:max-h-max w-screen max-w-screen md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl overflow-hidden my-2 mx-auto'>
 
             {/* Progress Bar & Page number Div */}
-            <div className='mt-4 mx-2'>
+            <div className='mt-4 mx-2 gap-y-2'>
                 <div className='flex items-center justify-center space-x-2 font-semibold'>
                     <h3>Page:{" "}{pageNumber}/{numPages}</h3>
 
@@ -56,7 +89,7 @@ const PdfReader = ({ productPath }: ReaderProps) => {
             <div className='relative flex justify-center items-center max-w-screen-sm md:max-w-screen-xl h-[820px] md:h-[820px] px-4 '>
                 <Button className="absolute start-3 z-10 rounded-full" variant={'outline'} onClick={() => setPageNumber(pageNumber - 1)} disabled={pageNumber === 1}><ArrowLeftCircle className="" /></Button>
 
-                <div className="h-fit flex items-center justify-center">
+                <div className="h-fit max-h-fit flex items-center justify-center">
                     <Document
                         onSourceError={() => (<h1 className='text-red-600'>Error loading PDF. Please try again</h1>)}
                         file={productPath}
