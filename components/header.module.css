@@ -32,6 +32,7 @@
 } */
 .footerLogo{
 /* font-family:  mogenaLocal; */
-    color: #023047;
+    /* color: #023047; */
+    color: antiquewhite;
     font-size: calc(40px + 0.1vw);
 }
