@@ -13,6 +13,7 @@ export interface Config {
     media: Media;
     product_files: ProductFile;
     orders: Order;
+    addresses: Address;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
@@ -24,6 +25,7 @@ export interface Config {
  */
 export interface User {
   id: string;
+  addresses?: (string | Address)[] | null;
   products?: (string | Product)[] | null;
   product_files?: (string | ProductFile)[] | null;
   role: 'admin' | 'customer';
@@ -40,6 +42,20 @@ export interface User {
   loginAttempts?: number | null;
   lockUntil?: string | null;
   password: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "addresses".
+ */
+export interface Address {
+  id: string;
+  adressName: string;
+  house: string;
+  road?: string | null;
+  pin: string;
+  state: string;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -149,6 +165,7 @@ export interface Order {
   id: string;
   _isPaid: boolean;
   user: string | User;
+  address?: (string | null) | Address;
   products: (string | Product)[];
   razorpayOrderId?: string | null;
   updatedAt: string;

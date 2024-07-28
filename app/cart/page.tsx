@@ -13,22 +13,18 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import CheckoutButton from '@/components/CheckoutButton'
+import AddressDetails from '@/components/AddressDetails'
+import { Separator } from '@/components/ui/separator'
+import { Address } from '@/payload-types'
 
 
 const Page = () => {
 
     const { items, removeItem } = useCart()
     const productIds = items.map(({ product }) => product.id)
-
+    const isAnyPaperback = items.flatMap(({ product }) => product.type).includes("paperback")
     const [isMounted, setIsMounted] = useState<boolean>(false)
-
-    // TO-Do: Implement isPurchased Logic
-
-    let _returnObject = {
-        orderId: "",
-        razorpaySignature: "",
-        paymentId: ""
-    }
+    const [selectedAddress, selectAddress] = useState<{ id: string; house: string; state: string; pin: string; adressName: string; updatedAt: string; createdAt: string; road?: string | null | undefined; } | null | undefined>(/*addresses && addresses.at(0) ? addresses.at(0) :*/ null)
 
     const cartTotal = items.reduce((total, { product }) => total + product.price, 0)
     const fee = 1
@@ -37,43 +33,6 @@ const Page = () => {
         setIsMounted(true)
     }), []
 
-
-    // try {
-    //     const razorScript = document.createElement("script");
-    //     razorScript.src = "https://checkout.razorpay.com/v1/checkout.js";
-    //     razorScript.async = true;
-    //     document.body.appendChild(razorScript);
-    //     console.log("Loaded Razorpay Script!")
-
-    // } catch (error) {
-    //     console.error("Failed to Load Razorpay Script!")
-    // }
-
-    //TO-Do(Failed): Try API Way for Payments instead of trpc
-
-
-    // const { data: razorpayVerifyQuery, refetch } = trpc.payment.updateOrder.useQuery(_returnObject, { enabled: false })
-
-    // const createRazorpaySession = async (razorpayOrderOptions: any) => {
-    //     // razorpayOrderQuery.refetch()
-
-    //     console.log("inside BtnFn: ", razorpayOrderOptions)
-    //     let paymentObject = new (window as any).Razorpay(razorpayOrderOptions);
-    //     paymentObject.open();
-    //     // console.log("Payment Object: ", paymentObject)
-
-    //     _returnObject = {
-    //         orderId: paymentObject.razorpay_order_id,
-    //         razorpaySignature: paymentObject.razorpay_signature,
-    //         paymentId: paymentObject.razorpay_payment_id
-    //     }
-    //     console.log("_returnObject: ", _returnObject)
-
-    // refetch()
-
-    // if (razorpayVerifyQuery?.success === true)
-    //     router.push(`/thank-you?orderId=${paymentObject.razorpay_order_id}`)
-    // }
 
     return (
         <div className='bg-white'>
@@ -163,7 +122,12 @@ const Page = () => {
                             }
                         </ul>
                     </div>
-                    <section className='mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8'>
+                    {isAnyPaperback
+                        ? <AddressDetails selectedAddress={selectedAddress} selectAddress={selectAddress} />
+                        : null
+                    }
+                    <section className='mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-9 lg:col-start-2 lg:mt-0 lg:p-8'>
+                        <Separator className='my-4 bg-black' />
                         <h2 className='text-lg font-medium text-gray-900'>Order Summary</h2>
                         <div className='mt-6 space-y-4'>
                             <div className='flex items-center justify-between'>
@@ -215,8 +179,9 @@ const Page = () => {
                                     ? "Checkout"
                                     : (<Loader2 className='h-4 w-4 animate-spin ml-1.5' />)}
                             </Button> */}
-                            <CheckoutButton productIds={productIds} cartItemCount={items.length} />
-
+                            {
+                                <CheckoutButton isAnyPaperback={isAnyPaperback} selectedAddress={selectedAddress} productIds={productIds} cartItemCount={items.length} />
+                            }
                         </div>
                     </section>
                 </div>

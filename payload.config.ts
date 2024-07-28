@@ -9,6 +9,7 @@ import { Products } from "./collections/Products/Products";
 import { ProductFiles } from "./collections/Products/ProductFile";
 import { Media } from "./collections/Media";
 import { Orders } from "./collections/Products/Orders";
+import { Addresses } from "./collections/Addresses";
 // import { PurchasedProducts } from "./collections/Products/PurchasedProducts";
 
 dotenv.config({
@@ -23,6 +24,7 @@ export default buildConfig({
     Media,
     ProductFiles,
     Orders,
+    Addresses,
     // PurchasedProducts,
   ],
   routes: {

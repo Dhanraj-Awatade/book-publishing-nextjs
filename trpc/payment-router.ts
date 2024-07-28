@@ -6,14 +6,20 @@ import shortid from "shortid";
 import { Orders } from "razorpay/dist/types/orders";
 import Razorpay from "razorpay";
 import qs from "qs";
-import { User } from "../payload-types";
+import { Address, User } from "../payload-types";
 
 export const paymentRouter = router({
   createSession: privateProcedure
-    .input(z.object({ productIds: z.array(z.string()) }))
+    .input(
+      z.object({
+        productIds: z.array(z.string()),
+        addressId: z.string().or(z.null()),
+        isAnyPaperback: z.boolean(),
+      })
+    )
     .query(async ({ ctx, input }) => {
       const { user } = ctx;
-      let { productIds } = input;
+      let { productIds, addressId, isAnyPaperback } = input;
 
       if (productIds.length === 0) {
         throw new TRPCError({ code: "BAD_REQUEST" });
@@ -46,6 +52,8 @@ export const paymentRouter = router({
           // These notes will be added to your transaction. So you can search it within their dashboard.
           // Also, it's included in webhooks as well. So you can automate it.
           userId: `${user.id}`,
+          userName: `${user.name}`,
+          addressId: `${addressId}`,
         },
       };
 
@@ -58,23 +66,37 @@ export const paymentRouter = router({
 
       const order: Orders.RazorpayOrder = await razorpayOrder;
 
-      const payloadOrder = await payload.create({
-        collection: "orders",
-        data: {
-          id: order.id,
-          _isPaid: false,
-          products: products.map((prod) => prod.id) as string[],
-          user: user.id,
-          razorpayOrderId: order.id,
-        },
-      });
-
+      if (isAnyPaperback) {
+        const payloadOrder = await payload.create({
+          collection: "orders",
+          data: {
+            id: order.id,
+            _isPaid: false,
+            products: products.map((prod) => prod.id) as string[],
+            user: user.id,
+            razorpayOrderId: order.id,
+            address: addressId,
+          },
+        });
+      } else {
+        const payloadOrder = await payload.create({
+          collection: "orders",
+          data: {
+            id: order.id,
+            _isPaid: false,
+            products: products.map((prod) => prod.id) as string[],
+            user: user.id,
+            razorpayOrderId: order.id,
+          },
+        });
+      }
       // console.log("Payload Order Created: ", payloadOrder);
 
       const keyId = process.env.RAZORPAY_ID;
-      const orderOptions: { key: string; name: string } = {
+      const orderOptions: { key: string; name: string; email: string } = {
         key: keyId as string,
-        name: user.email,
+        name: user.name,
+        email: user.email,
       };
 
       // const payloadOrderId = payloadOrder.id;
@@ -228,4 +250,107 @@ export const paymentRouter = router({
       const [order] = orders;
       return { isPaid: order._isPaid };
     }),
+
+  //************************************************************************************************************** */
+  saveAddressToUser: privateProcedure
+    .input(
+      z.object({
+        name: z.string(),
+        house: z.string(),
+        road: z.string().optional(),
+        state: z.string(),
+        pin: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const { house, pin, road, state, name } = input;
+      const { user } = ctx;
+      const payload = await getPayloadClient();
+
+      const definedRoad = typeof road === "undefined" ? null : road;
+      const updatedAddress: {
+        adressName: string;
+        house: string;
+        road: string | null;
+        pin: string;
+        state: string;
+      } = {
+        adressName: name,
+        house,
+        road: definedRoad,
+        pin,
+        state,
+      };
+
+      const address = await payload.create({
+        collection: "addresses",
+        data: updatedAddress,
+      });
+      // const [user] = users;
+
+      const addAddressToUserQuery = qs.stringify(
+        {
+          where: {
+            id: {
+              equals: user.id,
+            },
+          },
+        },
+        { addQueryPrefix: true }
+      );
+
+      let existingUserAddressIds: string[] = [];
+
+      try {
+        if (user.addresses) {
+          existingUserAddressIds = ctx.user.addresses!.flatMap((addr) =>
+            typeof addr === "string" ? addr : addr.id
+          );
+        }
+        const addressIdsToAdd = [...existingUserAddressIds, address.id];
+        // console.log("addresstoadd:", addressIdsToAdd);
+        const req = await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/${addAddressToUserQuery}`,
+          {
+            method: "PATCH",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              addresses: addressIdsToAdd,
+            }),
+          }
+        );
+        const data = await req.json();
+        console.log("Updated User on server");
+        return user.addresses as Address[];
+      } catch (err) {
+        console.log("Adding Address to user failed:", err);
+      }
+
+      // const { docs: updatedUser } = await payload.update({
+      //   collection: "users",
+      //   where: {
+      //     id: {
+      //       equals: userId,
+      //     },
+      //   },
+      //   depth: 1,
+      //   data: {
+      //     addresses: addressIdsToAdd,
+      //   },
+      // });
+      // console.log("user:", userId, "updated:", updatedUser);
+      // return updatedUser;
+    }),
+  //************************************************************************************************************** */
+  fetchUserAddresses: privateProcedure.query(async ({ ctx }) => {
+    const { user } = ctx;
+    if (!user.addresses) return null;
+    const addresses = user.addresses
+      .map((addr) => (typeof addr !== "string" ? addr : null))
+      .filter((addr) => addr !== null);
+    return addresses;
+  }),
 });

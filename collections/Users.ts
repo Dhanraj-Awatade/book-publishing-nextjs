@@ -104,6 +104,12 @@ export const Users: CollectionConfig = {
 
   fields: [
     {
+      name: "addresses",
+      type: "relationship",
+      relationTo: "addresses",
+      hasMany: true,
+    },
+    {
       name: "products",
       label: "Products",
       admin: {

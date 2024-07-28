@@ -10,9 +10,11 @@ import { useCart } from "@/lib/hooks/use-cart";
 interface CheckoutButtonProps {
   productIds: string[];
   cartItemCount: number
+  isAnyPaperback: boolean
+  selectedAddress: { id: string; house: string; state: string; pin: string; adressName: string; updatedAt: string; createdAt: string; road?: string | null | undefined; } | null | undefined
 }
 
-const CheckoutButton = ({ productIds, cartItemCount }: CheckoutButtonProps) => {
+const CheckoutButton = ({ productIds, cartItemCount, selectedAddress, isAnyPaperback }: CheckoutButtonProps) => {
 
   try {
     const razorScript = document.createElement("script");
@@ -31,6 +33,7 @@ const CheckoutButton = ({ productIds, cartItemCount }: CheckoutButtonProps) => {
   const router = useRouter()
   const { clearCart } = useCart()
 
+  const selectedAddressId = selectedAddress ? selectedAddress.id : null
   const {
     data: razorpayServer,
     isLoading,
@@ -38,7 +41,7 @@ const CheckoutButton = ({ productIds, cartItemCount }: CheckoutButtonProps) => {
     isFetched,
     status,
   } = trpc.payment.createSession.useQuery(
-    { productIds },
+    { productIds: productIds, addressId: selectedAddressId, isAnyPaperback },
     {
       enabled: razorpayOptions === null,
       retry: productIds.length !== 0,
@@ -120,7 +123,9 @@ const CheckoutButton = ({ productIds, cartItemCount }: CheckoutButtonProps) => {
   }
   /*------------------------- Handler Function End ----------------------------------*/
 
-  if (status === "success") {
+  let paymentObject: any = null
+
+  if (status === "success" && selectedAddress) {
     const razorpayServerOrder = razorpayServer.order;
     const razorpayServerOrderOptions = razorpayServer.orderOptions;
 
@@ -129,11 +134,15 @@ const CheckoutButton = ({ productIds, cartItemCount }: CheckoutButtonProps) => {
       amount: razorpayServerOrder.amount,
       currency: razorpayServerOrder.currency,
       order_id: razorpayServerOrder.id,
-      name: razorpayServerOrderOptions.name,
+      name: "Saptarshee Publications",
       receipt: razorpayServerOrder.receipt,
       notes: razorpayServerOrder.notes,
       description: razorpayServerOrder.description,
       handler: razorpayHandler,
+      prefill: {
+        name: razorpayServerOrderOptions.name,
+        email: razorpayServerOrderOptions.email,
+      }
       // callback_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/api/updateOrderStatus`
     };
 
@@ -142,8 +151,7 @@ const CheckoutButton = ({ productIds, cartItemCount }: CheckoutButtonProps) => {
     } else {
       refetch;
     }
-
-    let paymentObject = new (window as any).Razorpay(orderOptions);
+    paymentObject = new (window as any).Razorpay(orderOptions);
 
     paymentObject.on('payment.failed', function (response: any) {
       alert(response.error.code);
@@ -155,22 +163,23 @@ const CheckoutButton = ({ productIds, cartItemCount }: CheckoutButtonProps) => {
       alert(response.error.metadata.payment_id);
     });
 
-    return <Button
-      disabled={cartItemCount === 0}
-      className='w-full'
-      size='lg'
-      onClick={(e) => {
-        paymentObject.open()
-        e.preventDefault()
-        // setOrderVerificationStatus(true)
-      } /*createRazorpaySession(orderOptions) */}
-    >
 
-      {(!isLoading)
-        ? "Checkout"
-        : (<Loader2 className='h-4 w-4 animate-spin ml-1.5' />)}
-    </Button>
   };
+  return <Button
+    disabled={cartItemCount === 0 || !selectedAddress}
+    className='w-full'
+    size='lg'
+    onClick={(e) => {
+      paymentObject.open()
+      e.preventDefault()
+      // setOrderVerificationStatus(true)
+    } /*createRazorpaySession(orderOptions) */}
+  >
+
+    {(!isLoading)
+      ? "Checkout"
+      : (<Loader2 className='h-4 w-4 animate-spin ml-1.5' />)}
+  </Button>
 }
 
 export default CheckoutButton;

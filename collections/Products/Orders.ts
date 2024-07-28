@@ -81,6 +81,15 @@ export const Orders: CollectionConfig = {
       required: true,
     },
     {
+      name: "address",
+      type: "relationship",
+      admin: {
+        hidden: false,
+      },
+      relationTo: "addresses",
+      hasMany: false,
+    },
+    {
       name: "products",
       type: "relationship",
       relationTo: "products",
