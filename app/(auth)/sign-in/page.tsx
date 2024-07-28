@@ -20,11 +20,11 @@ import { useRouter, useSearchParams } from 'next/navigation'
 const Page = () => {
     const router = useRouter()
     const searchParams = useSearchParams()
-    const isSeller = searchParams.get('as') === 'seller'
+    const isAuthor = searchParams.get('as') === 'author'
     const origin = searchParams.get('origin')
 
-    const continueAsSeller = () => {
-        router.push('?as=seller')
+    const continueAsAuthor = () => {
+        router.push('?as=author')
     }
 
     const continueAsCustomer = () => {
@@ -38,7 +38,7 @@ const Page = () => {
                 router.push(`/${origin}`)
                 return
             }
-            if (isSeller) {
+            if (isAuthor) {
                 return
                 //TO-DO: Implement Author Selling
             }
@@ -68,7 +68,7 @@ const Page = () => {
                 <div className='flex flex-col mx-auto w-full justify-center space-y-6 sm:w-[350px]'>
                     <div className='flex flex-col items-center'>
                         <Image src={"/Images/Humaaans_SignIn.png"} alt='Human Sign-in Image' width={943.00108} height={795.62948} />
-                        <h1 className='text-2xl my-4 font-semibold'>Sign in to your {isSeller ? "Seller " : " "}Account</h1>
+                        <h1 className='text-2xl my-4 font-semibold'>Sign in to your {isAuthor ? "author " : " "}Account</h1>
                         <div className='grid gap-6'>
                             <form method='POST' onSubmit={handleSubmit(onSubmit)}>
                                 <div className='grid gap-2'>
@@ -121,7 +121,7 @@ const Page = () => {
                                 </div>
                             </div>
                             {
-                                isSeller
+                                isAuthor
                                     ? (
                                         <Button onClick={continueAsCustomer}
                                             variant='secondary'
@@ -129,10 +129,10 @@ const Page = () => {
                                             Continue as Customer
                                         </Button>)
                                     : (
-                                        <Button onClick={continueAsSeller}
+                                        <Button onClick={continueAsAuthor}
                                             variant='secondary'
                                             disabled={isLoading}>
-                                            Continue as Seller
+                                            Continue as author
                                         </Button>
                                     )
                             }
