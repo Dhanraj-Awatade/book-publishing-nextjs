@@ -9,7 +9,7 @@ export async function POST(req: Request, res: NextResponse) {
   const payload = await getPayloadClient();
 
   const webhookSignature = req.headers.get("X-Razorpay-Signature") as string;
-  const webhookSecret = process.env.RAZORPAY_KEY as string;
+  const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET as string;
   const isValidated = validateWebhookSignature(
     JSON.stringify(data),
     webhookSignature,
