@@ -46,7 +46,7 @@ const Footer = () => {
                                     <div className='relative flex items-center sm:py-8 lg:mt-0'>
                                         <div className='text-center relative mx-auto max-w-sm'>
                                             <p className=' text-sm text-muted-foreground text-yellow-100'>Want to publish your own books?{' '}</p>
-                                            <Link href="/sign-in?as=author" className='font-semibold text-cyan-300 whitespace-nowrap hover:text-amber-500'><h3 className=''>Sign in az Author &rarr;</h3></Link>
+                                            <Link href="/sign-in?as=author" className='font-semibold text-cyan-300 whitespace-nowrap hover:text-amber-500'><h3 className=''>Sign in as Author &rarr;</h3></Link>
                                             {/* <Link href="/sign-in?as=author" className='whitespace-nowrap font-medium text-rose-600 hover:text-amber-500>Publish Here </Link> */}
                                         </div>
                                     </div>
