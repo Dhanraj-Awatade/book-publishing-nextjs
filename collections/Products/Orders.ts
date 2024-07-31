@@ -72,6 +72,19 @@ export const Orders: CollectionConfig = {
       required: true,
     },
     {
+      name: "amount",
+      type: "number",
+      // access: {
+      //   read: ({ req }) => req.user.role === "admin",
+      //   create: () => false,
+      //   update: ({ req }) => req.user.role === "admin",
+      // },
+      admin: {
+        hidden: false,
+      },
+      required: true,
+    },
+    {
       name: "user",
       type: "relationship",
       admin: {

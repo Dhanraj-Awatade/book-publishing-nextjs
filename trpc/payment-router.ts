@@ -76,6 +76,7 @@ export const paymentRouter = router({
             user: user.id,
             razorpayOrderId: order.id,
             address: addressId,
+            amount: amount,
           },
         });
       } else {
@@ -87,6 +88,7 @@ export const paymentRouter = router({
             products: products.map((prod) => prod.id) as string[],
             user: user.id,
             razorpayOrderId: order.id,
+            amount: amount,
           },
         });
       }
