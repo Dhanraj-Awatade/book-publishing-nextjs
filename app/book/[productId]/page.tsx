@@ -155,6 +155,33 @@ const Page = async ({ params }: PageProps) => {
                                         </span>
                                     </p>
                                     : null
+                                }
+                                {product.attributes?.language
+                                    ? <p className='ml-2 text-sm text-muted-foreground'>
+                                        Language:{" "}
+                                        <span className='text-sm text-muted-foreground font-semibold text-blue-400'>
+                                            {product.attributes?.language}
+                                        </span>
+                                    </p>
+                                    : null
+                                }
+                                {product.attributes?.pages
+                                    ? <p className='ml-2 text-sm text-muted-foreground'>
+                                        Number of pages:{" "}
+                                        <span className='text-sm text-muted-foreground font-semibold text-blue-400'>
+                                            {product.attributes?.pages}
+                                        </span>
+                                    </p>
+                                    : null
+                                }
+                                {product.attributes?.publication
+                                    ? <p className='ml-2 text-sm text-muted-foreground'>
+                                        Publication:{" "}
+                                        <span className='text-sm text-muted-foreground font-semibold text-blue-400'>
+                                            {product.attributes?.publication}
+                                        </span>
+                                    </p>
+                                    : null
                                 }</div>
 
                             {product.stock
@@ -171,16 +198,16 @@ const Page = async ({ params }: PageProps) => {
                             }
 
                         </section>
-                    </div>
+                    </div >
                     {/* Product Images */}
 
-                    <div className='mt-10 lg:col-start-2 lg:row-span-2 lg:mt-0 lg:self-center'>
+                    <div className='mt-10 lg:col-start-2 lg:row-span-2 lg:mt-0 lg:self-center' >
                         <div className='aspect-square rounded-lg'>
                             <ImageSlider urls={validUrl} />
                         </div>
-                    </div>
+                    </div >
                     {/* Add to cart Part */}
-                    <div className='mt-10 lg:col-start-1 lg:row-start-2 lg:max-w-lg lg:self-start'>
+                    <div className='mt-10 lg:col-start-1 lg:row-start-2 lg:max-w-lg lg:self-start' >
                         <div>
                             <div className='mt-10'>
                                 {
@@ -208,9 +235,9 @@ const Page = async ({ params }: PageProps) => {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
+                    </div >
+                </div >
+            </div >
 
             <ProductReel
                 title={`Similar ${label}`}
@@ -219,7 +246,7 @@ const Page = async ({ params }: PageProps) => {
                 query={{ category: product.category, limit: 4 }}
             />
 
-        </MaxWidthWrapper>
+        </MaxWidthWrapper >
     )
 }
 

@@ -201,6 +201,21 @@ export const Products: CollectionConfig = {
           label: "ISBN Number",
           type: "text",
         },
+        {
+          name: "language",
+          label: "Language",
+          type: "text",
+        },
+        {
+          name: "publication",
+          label: "Publication",
+          type: "text",
+        },
+        {
+          name: "pages",
+          label: "Number of Pages",
+          type: "text",
+        },
       ],
     },
     {

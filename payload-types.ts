@@ -69,6 +69,9 @@ export interface Product {
   attributes?: {
     author?: string | null;
     isbn?: string | null;
+    language?: string | null;
+    publication?: string | null;
+    pages?: string | null;
   };
   mrp: number;
   price: number;
@@ -165,6 +168,7 @@ export interface Media {
 export interface Order {
   id: string;
   _isPaid: boolean;
+  amount: number;
   user: string | User;
   address?: (string | null) | Address;
   products: (string | Product)[];
