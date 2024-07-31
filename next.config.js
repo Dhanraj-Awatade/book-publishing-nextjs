@@ -75,7 +75,7 @@ const nextConfig = {
     // experimental: {
     //     urlImports: ['https://cdnjs.cloudflare.com/ajax/libs/pdf.js/','https://unpkg.com/'],
     //   },
-    // output:"export"
+    output:"standalone"
 };
 
 module.exports = nextConfig
