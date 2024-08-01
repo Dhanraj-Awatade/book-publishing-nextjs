@@ -278,13 +278,13 @@ export const Products: CollectionConfig = {
       label: "In Stock?",
       defaultValue: false,
       type: "checkbox",
-      admin: {
-        condition: (siblingData) => {
-          if (siblingData.type === "paperback") {
-            return true;
-          } else return false;
-        },
-      },
+      // admin: {
+      //   condition: (siblingData) => {
+      //     if (siblingData.type === "paperback") {
+      //       return true;
+      //     } else return false;
+      //   },
+      // },
       required: true,
     },
     {
