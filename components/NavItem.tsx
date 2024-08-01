@@ -45,7 +45,7 @@ function NavItem({ type, handleOpen, isAnyOpen, isOpen }: navProps) {
                                     PRODUCT_CATEGORIES.map((category) => (
                                         <div key={category.label} className='group my-4 mx-auto aspect-square relative text-base sm:text-sm'>
                                             {/* Done (Completed): Whether to include Images => Yes*/}
-                                            <div className='relative rounded-lg aspect-video overflow-hidden group-hover:opacity-75'>
+                                            <div className='relative rounded-lg aspect-video h-16 w-16 mx-auto overflow-hidden group-hover:opacity-75'>
                                                 <Link href={category.href} ><Image fill onClick={handleOpen} src={category.imgSrc} alt='Category Image' /></Link>
                                             </div>
                                             <Link href={category.href} className='mt-6 block mx-auto text-center whitespace-normal font-semibold text-gray-900'>
