@@ -72,6 +72,30 @@ export const PRODUCT_CATEGORIES = [
     href: "/books?category=comics",
     imgSrc: "/Images/Category_Images/comics.png",
   },
+  {
+    label: "Agriculture",
+    value: "agriculture" as const,
+    href: "/books?category=agriculture",
+    imgSrc: "/Images/Category_Images/agriculture.png",
+  },
+  {
+    label: "Poetry",
+    value: "poetry" as const,
+    href: "/books?category=poetry",
+    imgSrc: "/Images/Category_Images/poetry.png",
+  },
+  {
+    label: "Miscellaneous",
+    value: "misc" as const,
+    href: "/books?category=misc",
+    imgSrc: "/Images/Category_Images/misc.png",
+  },
+  {
+    label: "Legal",
+    value: "legal" as const,
+    href: "/books?category=legal",
+    imgSrc: "/Images/Category_Images/legal.png",
+  },
 ];
 
 export const PRODUCT_TYPES = [
