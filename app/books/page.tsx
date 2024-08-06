@@ -15,10 +15,11 @@ const parse = (param: Param) => {
 const ProductsPage = ({ searchParams }: ProductPageProps) => {
     const sort = parse(searchParams.sort)
     const category = parse(searchParams.category)
+    const type = parse(searchParams.type)
     const label = PRODUCT_CATEGORIES.find(({ value }) => value === category)?.label
     return (
         <MaxWidthWrapper>
-            <ProductReel title={label ?? "Browse all the books here"} query={{ category, limit: 40, sort: sort === "desc" || sort === "asc" ? sort : undefined }} />
+            <ProductReel title={label ?? "Browse all the books here"} query={{ category, type, limit: 40, sort: sort === "desc" || sort === "asc" ? sort : undefined }} />
         </MaxWidthWrapper>
     )
 }

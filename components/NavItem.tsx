@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import { PRODUCT_CATEGORIES, PRODUCT_TYPES } from '@/lib/config'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+
 type Type = typeof PRODUCT_TYPES[number]
 
 // const categories = PRODUCT_CATEGORIES.map()
@@ -19,7 +19,6 @@ interface navProps {
 }
 
 function NavItem({ type, handleOpen, isAnyOpen, isOpen }: navProps) {
-    const router = useRouter()
     return (
         <div className='flex'>
             <div className='relative flex items-center'>
@@ -46,9 +45,9 @@ function NavItem({ type, handleOpen, isAnyOpen, isOpen }: navProps) {
                                         <div key={category.label} className='group my-4 mx-auto aspect-square relative text-base sm:text-sm'>
                                             {/* Done (Completed): Whether to include Images => Yes*/}
                                             <div className='relative rounded-lg aspect-video h-16 w-16 mx-auto overflow-hidden group-hover:opacity-75'>
-                                                <Link href={category.href} ><Image fill onClick={handleOpen} src={category.imgSrc} alt='Category Image' /></Link>
+                                                <Link href={`${category.href}&type=${type.value}`} ><Image fill onClick={handleOpen} src={category.imgSrc} alt='Category Image' /></Link>
                                             </div>
-                                            <Link href={category.href} className='mt-6 block mx-auto text-center whitespace-normal font-semibold text-gray-900'>
+                                            <Link href={`${category.href}&type=${type.value}`} className='mt-6 block mx-auto text-center whitespace-normal font-semibold text-gray-900'>
                                                 {category.label}
                                             </Link>
                                         </div>

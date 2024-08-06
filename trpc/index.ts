@@ -22,7 +22,7 @@ export const appRouter = router({
     )
     .query(async ({ input }) => {
       const { query, cursor } = input;
-      const { sort, limit, category, ...queryOpts } = query;
+      const { sort, limit, category, type, ...queryOpts } = query;
 
       const payload = await getPayloadClient();
 
@@ -35,7 +35,59 @@ export const appRouter = router({
       });
 
       const page = cursor || 1;
-      if (category) {
+
+      if (category && type) {
+        const {
+          docs: items,
+          hasNextPage,
+          nextPage,
+        } = await payload.find({
+          collection: "products",
+          where: {
+            approvedForSale: {
+              equals: "approved",
+            },
+            category: {
+              equals: category,
+            },
+            type: {
+              equals: type,
+            },
+          },
+          sort,
+          depth: 1,
+          limit,
+          page,
+        });
+        return {
+          items,
+          nextPage: hasNextPage ? nextPage : null,
+        };
+      } else if (type) {
+        const {
+          docs: items,
+          hasNextPage,
+          nextPage,
+        } = await payload.find({
+          collection: "products",
+          where: {
+            approvedForSale: {
+              equals: "approved",
+            },
+            type: {
+              equals: type,
+            },
+          },
+          sort,
+          depth: 1,
+          limit,
+          page,
+        });
+        return {
+          items,
+          nextPage: hasNextPage ? nextPage : null,
+        };
+      } else if (category) {
         const {
           docs: items,
           hasNextPage,

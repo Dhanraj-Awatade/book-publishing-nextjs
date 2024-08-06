@@ -4,6 +4,7 @@ export const QueryValidator = z.object({
   category: z.string().optional(),
   sort: z.enum(["asc", "desc"]).optional(),
   limit: z.number().optional(),
+  type: z.string().optional(),
 });
 
 export const PurchasedProductsQueryValidator = z.object({
