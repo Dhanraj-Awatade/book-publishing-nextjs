@@ -31,28 +31,28 @@ const ProductsPage = ({ searchParams }: ProductPageProps) => {
 
             <Pagination>
                 <PaginationContent>
+
                     <PaginationItem>
-                        {/* <PaginationPrevious onClick={() => setCursor(cursor === 1 ? 1 : cursor - 1)} href={""} /> */}
                         <Button disabled={cursor === 1} onClick={() => setCursor(cursor === 1 ? 1 : cursor - 1)} variant={"outline"}>Previous</Button>
                     </PaginationItem>
 
+                    {cursor !== 1
+                        ? <PaginationItem>
+                            <Button onClick={() => setCursor(1)} variant={"outline"}>1</Button>
+                        </PaginationItem>
+                        : null
+                    }
+
                     <PaginationItem>
-                        <Button onClick={() => setCursor(1)} variant={"outline"}>1</Button>
+                        <Button variant={"default"}>{cursor}</Button>
                     </PaginationItem>
 
                     <PaginationItem>
-                        {cursor > 2
-                            ? <PaginationEllipsis />
-                            : <Button onClick={() => setCursor(cursor + 1)} variant={"outline"}>{cursor + 1}</Button>
-                        }
+                        <Button onClick={() => setCursor(cursor + 1)} variant={"outline"}>{cursor + 1}</Button>
                     </PaginationItem>
 
                     <PaginationItem>
                         <Button onClick={() => setCursor(cursor + 2)} variant={"outline"}>{cursor + 2}</Button>
-                    </PaginationItem>
-
-                    <PaginationItem>
-                        <Button onClick={() => setCursor(cursor + 3)} variant={"outline"}>{cursor + 3}</Button>
                     </PaginationItem>
 
                     <PaginationItem>
