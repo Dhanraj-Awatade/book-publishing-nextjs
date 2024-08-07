@@ -3,7 +3,7 @@ import { TQueryValidator } from '@/lib/validators/query-validator'
 import { Product } from '@/payload-types'
 import { trpc } from '@/trpc/client'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ProductListing from './ProductListing'
 
 interface ProductReelProps {
@@ -11,26 +11,43 @@ interface ProductReelProps {
     subtitle?: string
     href?: string
     query: TQueryValidator
+    cursor?: number
+    callbackFn?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const FALLBACK_LIMIT = 4
 
 const ProductReel = (props: ProductReelProps) => {
 
+    const { title, subtitle, href, query, cursor, callbackFn } = props
+    const FALLBACK_CURSOR = 1
 
-
-    const { title, subtitle, href, query } = props
-
-    const { data: queryResults, isLoading } = trpc.getInfiniteProducts.useInfiniteQuery({
-        limit: query.limit ?? FALLBACK_LIMIT, query
+    const { data: queryResults, isLoading } = trpc.getInfiniteProducts.useQuery({
+        limit: query.limit ?? FALLBACK_LIMIT, query, cursor: cursor ? cursor : FALLBACK_CURSOR
     },
         {
-            getNextPageParam: (lastPage) => lastPage.nextPage,
-        })
-
-    const products = queryResults?.pages.flatMap(
-        (page) => page.items
+            //     getNextPageParam: (lastPage) => {
+            //         console.log("getNextPageParam:", lastPage.nextPage);
+            //         return lastPage.nextPage
+            //     },
+            //     refetchOnWindowFocus: false,
+            //     // refetchInterval: 4000
+        }
     )
+    // let products: Product[] | undefined = []
+
+    // const nextPage = queryResults?.nextPage
+    // const prevPage = queryResults?.prevPage
+    const hasNextPage = queryResults?.hasNextPage
+    // useEffect(() => {
+    //     callbackFn ? callbackFn(nextPage, prevPage) : null
+    //     console.log(nextPage,prevPage)
+    // }, [nextPage, prevPage])
+
+    const products = queryResults?.items
+    // .pages.flatMap(
+    //     (page) => page.items
+    // )
 
     let map: (Product | null)[] = []
 
@@ -40,6 +57,9 @@ const ProductReel = (props: ProductReelProps) => {
     else if (isLoading) {
         map = new Array<null>(query.limit ?? FALLBACK_LIMIT).fill(null)
     }
+    // useEffect(() => {
+    if (callbackFn) { hasNextPage ? callbackFn(hasNextPage) : callbackFn(false) }
+    // }, [hasNextPage])
 
     return (
         <section className='py-12'>

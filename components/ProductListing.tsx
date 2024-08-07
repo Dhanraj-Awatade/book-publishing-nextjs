@@ -53,11 +53,11 @@ const ProductListing = ({ product, index }: ProductListingProps) => {
             </Link>
         )
     }
-    return (
-        <div>
+    // return (
+    //     <div>
 
-        </div>
-    )
+    //     </div>
+    // )
 }
 
 export const ProductPlaceholder = () => {

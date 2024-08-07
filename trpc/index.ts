@@ -22,11 +22,11 @@ export const appRouter = router({
     )
     .query(async ({ input }) => {
       const { query, cursor } = input;
-      const { sort, limit, category, type, ...queryOpts } = query;
+      const { sort, limit, /*category, type,*/ ...queryOpts } = query;
 
       const payload = await getPayloadClient();
 
-      const parsedQueryOpts: Record<string, { equals: any }> = {};
+      const parsedQueryOpts: Record<string, { equals: string }> = {};
 
       Object.entries(queryOpts).forEach(([key, value]) => {
         parsedQueryOpts[key] = {
@@ -35,104 +35,119 @@ export const appRouter = router({
       });
 
       const page = cursor || 1;
-
-      if (category && type) {
-        const {
-          docs: items,
-          hasNextPage,
-          nextPage,
-        } = await payload.find({
-          collection: "products",
-          where: {
-            approvedForSale: {
-              equals: "approved",
-            },
-            category: {
-              equals: category,
-            },
-            type: {
-              equals: type,
-            },
+      // console.log("cursor:", cursor);
+      // if (category && type) {
+      const {
+        docs: items,
+        hasNextPage,
+        nextPage,
+        hasPrevPage,
+        prevPage,
+      } = await payload.find({
+        collection: "products",
+        where: {
+          approvedForSale: {
+            equals: "approved",
           },
-          sort,
-          depth: 1,
-          limit,
-          page,
-        });
-        return {
-          items,
-          nextPage: hasNextPage ? nextPage : null,
-        };
-      } else if (type) {
-        const {
-          docs: items,
-          hasNextPage,
-          nextPage,
-        } = await payload.find({
-          collection: "products",
-          where: {
-            approvedForSale: {
-              equals: "approved",
-            },
-            type: {
-              equals: type,
-            },
-          },
-          sort,
-          depth: 1,
-          limit,
-          page,
-        });
-        return {
-          items,
-          nextPage: hasNextPage ? nextPage : null,
-        };
-      } else if (category) {
-        const {
-          docs: items,
-          hasNextPage,
-          nextPage,
-        } = await payload.find({
-          collection: "products",
-          where: {
-            approvedForSale: {
-              equals: "approved",
-            },
-            category: {
-              equals: category,
-            },
-          },
-          sort,
-          depth: 1,
-          limit,
-          page,
-        });
-        return {
-          items,
-          nextPage: hasNextPage ? nextPage : null,
-        };
-      } else {
-        const {
-          docs: items,
-          hasNextPage,
-          nextPage,
-        } = await payload.find({
-          collection: "products",
-          where: {
-            approvedForSale: {
-              equals: "approved",
-            },
-          },
-          sort,
-          depth: 1,
-          limit,
-          page,
-        });
-        return {
-          items,
-          nextPage: hasNextPage ? nextPage : null,
-        };
-      }
+          ...{ parsedQueryOpts },
+          // category: {
+          //   equals: category,
+          // },
+          // type: {
+          //   equals: type,
+          // },
+        },
+        sort,
+        depth: 1,
+        limit,
+        page,
+      });
+      // console.log(
+      //   "hasNextPage:",
+      //   hasNextPage,
+      //   "nextPage:",
+      //   nextPage,
+      //   "hasPrevPage:",
+      //   hasPrevPage,
+      //   "prevPage:",
+      //   prevPage
+      // );
+      return {
+        items,
+        nextPage: hasNextPage ? nextPage : null,
+        prevPage: hasPrevPage ? prevPage : null,
+        hasNextPage,
+      };
+      // } else if (type) {
+      //   const {
+      //     docs: items,
+      //     hasNextPage,
+      //     nextPage,
+      //   } = await payload.find({
+      //     collection: "products",
+      //     where: {
+      //       approvedForSale: {
+      //         equals: "approved",
+      //       },
+      //       type: {
+      //         equals: type,
+      //       },
+      //     },
+      //     sort,
+      //     depth: 1,
+      //     limit,
+      //     page,
+      //   });
+      //   return {
+      //     items,
+      //     nextPage: hasNextPage ? nextPage : null,
+      //   };
+      // } else if (category) {
+      //   const {
+      //     docs: items,
+      //     hasNextPage,
+      //     nextPage,
+      //   } = await payload.find({
+      //     collection: "products",
+      //     where: {
+      //       approvedForSale: {
+      //         equals: "approved",
+      //       },
+      //       category: {
+      //         equals: category,
+      //       },
+      //     },
+      //     sort,
+      //     depth: 1,
+      //     limit,
+      //     page,
+      //   });
+      //   return {
+      //     items,
+      //     nextPage: hasNextPage ? nextPage : null,
+      //   };
+      // } else {
+      //   const {
+      //     docs: items,
+      //     hasNextPage,
+      //     nextPage,
+      //   } = await payload.find({
+      //     collection: "products",
+      //     where: {
+      //       approvedForSale: {
+      //         equals: "approved",
+      //       },
+      //     },
+      //     sort,
+      //     depth: 1,
+      //     limit,
+      //     page,
+      //   });
+      //   return {
+      //     items,
+      //     nextPage: hasNextPage ? nextPage : null,
+      //   };
+      // }
     }),
 
   getPurchasedProducts: publicProcedure
