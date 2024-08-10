@@ -108,16 +108,16 @@ const MobileNav = ({ isSignedIn }: MobileNavProps) => {
                                                                     src={category.imgSrc}
                                                                     alt='product category image'
                                                                     className='object-contain object-center'
-                                                                    onClick={() => router.push(category.href)}
+                                                                    onClick={() => router.push(`${category.href}&type=${type.value}`)}
                                                                 />
                                                             </DrawerClose>
                                                         </div>
                                                         <div className="flex flex-1 justify-center items-center">
                                                             <DrawerClose>
                                                                 <Button
-                                                                    onClick={() => router.push(category.href)}
+                                                                    onClick={() => router.push(`${category.href}&type=${type.value}`)}
                                                                     variant={'outline'}
-                                                                    // href={category.href}
+                                                                    // href={`${category.href}&type=${type.value}`}
                                                                     className='mt-4 object-cover h-auto object-center font-medium text-gray-900 whitespace-normal'>
                                                                     {category.label}
                                                                 </Button>
@@ -199,7 +199,7 @@ const MobileNav = ({ isSignedIn }: MobileNavProps) => {
         //                                                         />
         //                                                     </div>
         //                                                     <Link
-        //                                                         href={category.href}
+        //                                                         href={`${category.href}&type=${type.value}`}
         //                                                         className='mt-6 block font-medium text-gray-900'>
         //                                                         {category.label}
         //                                                     </Link>
