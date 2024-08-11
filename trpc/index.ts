@@ -49,7 +49,7 @@ export const appRouter = router({
           approvedForSale: {
             equals: "approved",
           },
-          ...{ parsedQueryOpts },
+          ...parsedQueryOpts,
           // category: {
           //   equals: category,
           // },
