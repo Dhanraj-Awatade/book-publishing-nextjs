@@ -6,14 +6,12 @@ import { Button, buttonVariants } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { PRODUCT_CATEGORIES } from '@/lib/config'
 import { getPayloadClient } from '@/lib/get-payload'
-import { useCart } from '@/lib/hooks/use-cart'
 import { getServerSideUser } from '@/lib/payload-utils'
 import { cn, formatPrice } from '@/lib/utils'
-import { Product } from '@/payload-types'
 import { Check, Shield, X } from 'lucide-react'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
-import { notFound, useRouter } from 'next/navigation'
+import { notFound } from 'next/navigation'
 import React from 'react'
 
 interface PageProps {
@@ -130,6 +128,18 @@ const Page = async ({ params }: PageProps) => {
                                     {label}
                                 </div>
                             </div>
+                            {/* Product Images */}
+
+                            <div className='mt-10 lg:col-start-2 lg:row-span-2 lg:mt-0 lg:self-center' >
+                                <div className='aspect-square rounded-lg'>
+                                    <ImageSlider urls={validUrl} />
+                                </div>
+                            </div >
+                        </section>
+                    </div>
+                    <div>
+                        <section>
+                            <p className='font-semibold mt-6'>Description</p>
                             <Separator className='my-2' />
                             <div className='mx-4 space-y-6'>
                                 <p className='text-base text-muted-foreground'>
@@ -197,44 +207,39 @@ const Page = async ({ params }: PageProps) => {
                                 </div>
                             }
 
-                        </section>
-                    </div >
-                    {/* Product Images */}
 
-                    <div className='mt-10 lg:col-start-2 lg:row-span-2 lg:mt-0 lg:self-center' >
-                        <div className='aspect-square rounded-lg'>
-                            <ImageSlider urls={validUrl} />
-                        </div>
-                    </div >
-                    {/* Add to cart Part */}
-                    <div className='mt-10 lg:col-start-1 lg:row-start-2 lg:max-w-lg lg:self-start' >
-                        <div>
-                            <div className='mt-10'>
-                                {
-                                    isPurchased && product.type === "ebook"
-                                        ? <Link
-                                            href={`/reader/${productId}`}
-                                            className={cn(buttonVariants({ size: 'lg' }), "w-full")}
-                                        >
-                                            Read
-                                        </Link>
-                                        : <>{product.stock
-                                            ? <AddToCartButton product={product} />
-                                            : <Button size='lg'
-                                                className='w-full mt-2' disabled>Add to Cart</Button>
+                            {/* Add to cart Part */}
+                            <div className='mt-10 lg:col-start-1 lg:row-start-2 lg:max-w-lg lg:self-start' >
+                                <div>
+                                    <div className='mt-10'>
+                                        {
+                                            isPurchased && product.type === "ebook"
+                                                ? <Link
+                                                    href={`/reader/${productId}`}
+                                                    className={cn(buttonVariants({ size: 'lg' }), "w-full")}
+                                                >
+                                                    Read
+                                                </Link>
+                                                : <>{product.stock
+                                                    ? <AddToCartButton product={product} />
+                                                    : <Button size='lg'
+                                                        className='w-full mt-2' disabled>Add to Cart</Button>
+                                                }
+
+                                                </>
                                         }
 
-                                        </>
-                                }
-
-                            </div>
-                            <div className='mt-6 text-center'>
-                                <div className='group inline-flex text-sm text-medium'>
-                                    <Shield aria-hidden='true' className='mr-2 h-5 w-5 flex-shrink-0 text-gray-400' />
-                                    <span className='text-muted-foreground hover:text-gray-700'>Verified by our Authors</span>
+                                    </div>
+                                    <div className='mt-6 text-center'>
+                                        <div className='group inline-flex text-sm text-medium'>
+                                            <Shield aria-hidden='true' className='mr-2 h-5 w-5 flex-shrink-0 text-gray-400' />
+                                            <span className='text-muted-foreground hover:text-gray-700'>Verified by our Authors</span>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
+                            </div >
+
+                        </section>
                     </div >
                 </div >
             </div >
