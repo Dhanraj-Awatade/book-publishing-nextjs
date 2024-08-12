@@ -4,21 +4,17 @@ import { nextApp, nextHandler } from "./next-utils";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { appRouter } from "../trpc";
 import { inferAsyncReturnType } from "@trpc/server";
-import Razorpay from "razorpay";
 import { PayloadRequest } from "payload/types";
 import { parse } from "url";
 import payload from "payload";
 import path from "path";
 import nextBuild from "next/dist/build";
+import { IncomingMessage } from "http";
+import bodyParser from "body-parser";
+import { webhookHandler } from "./webhooks";
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
-
-// app.use((req, res, next) => {
-//   res.setHeader("Access-Control-Allow-Credentials", "true");
-//   res.setHeader("Access-Control-Allow-Origin", "*");
-//   next();
-// });
 
 const createContext = ({
   req,
@@ -31,7 +27,28 @@ const createContext = ({
 
 export type ExpressContext = inferAsyncReturnType<typeof createContext>;
 
+// export type WebhookRequest = IncomingMessage & {
+//   rawBody: Buffer;
+// };
+
 const start = async () => {
+  app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Access-Control-Allow-Origin", "https://saptarshee.in");
+    next();
+  });
+
+  // const webhookMiddleware = bodyParser.json({
+  //   verify: (req: WebhookRequest, _, buffer) => {
+  //     req.rawBody = buffer;
+  //   },
+  // });
+
+  app.use(bodyParser.json());
+
+  // app.post("/api/webhooks/test", webhookMiddleware, razorpayWebhookHandler);
+  app.post("/api/webhooks/test", webhookHandler);
+
   const payload = await getPayloadClient({
     initOptions: {
       express: app,
@@ -42,54 +59,6 @@ const start = async () => {
   });
 
   app.disable("x-powered-by");
-
-  // app.use(cors());
-  // app.get("/api/trpc", cors(), (req, res) => {});
-  // app.use(function (req, res, next) {
-  //   // const allowedOrigins = [
-  //   //   "https://saptarshee.in",
-  //   //   "https://www.saptarshee.in",
-  //   //   "https://saptarshee.in",
-  //   //   "https://www.saptarshee.in",
-  //   //   "http://localhost:3000",
-  //   // ];
-  //   // const corsOptions = {
-  //   //   "Access-Control-Allow-Credentials": "true",
-  //   //   "Access-Control-Allow-Methods": "GET,DELETE,PATCH,POST,PUT",
-  //   //   "Access-Control-Allow-Headers":
-  //   //     "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
-  //   // };
-
-  //   // const origin = req.headers.host ?? "";
-  //   // const isAllowedOrigin = allowedOrigins.includes(origin);
-
-  //   // // Handle preflighted requests
-  //   // const isPreflight = req.method === "OPTIONS";
-
-  //   // if (isPreflight) {
-  //   //   const preflightHeaders = {
-  //   //     ...(isAllowedOrigin && { "Access-Control-Allow-Origin": origin }),
-  //   //     ...corsOptions,
-  //   //   };
-  //   //   return NextResponse.json({}, { headers: preflightHeaders });
-  //   // }
-
-  //   // if (isAllowedOrigin) {
-  //   // res.setHeader("Access-Control-Allow-Origin", s);
-  //   // }
-  //   res.setHeader("Access-Control-Allow-Origin", "https://www.saptarshee.in");
-  //   next();
-  // });
-
-  // // const corsOptions = {
-  // //   origin: [
-  // //     "https://saptarshee.in",
-  // //     "https://www.saptarshee.in",
-  // //     "https://saptarshee.in",
-  // //     "https://www.saptarshee.in",
-  // //   ],
-  // // };
-  // // app.use(cors(corsOptions));
 
   if (process.env.NEXT_BUILD) {
     app.listen(PORT, async () => {

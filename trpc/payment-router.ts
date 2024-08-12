@@ -197,7 +197,7 @@ export const paymentRouter = router({
             }
           );
           const data = await req.json();
-          console.log("Updated User on server");
+          console.log("Added Product to User Account Successfully");
           return data as User;
         } catch (err) {
           console.log("Adding Product to user failed:", err);
