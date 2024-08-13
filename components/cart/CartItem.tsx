@@ -39,30 +39,25 @@ const CartItem = ({ product, qty }: { product: Product, qty: number }) => {
                             {label}
                         </span>
 
-                        <div className='mt-4 text-xs text-muted-foreground'>
+                        <div className='mt-4 text-xs text-muted-foreground flex '>
 
                             <Button
                                 variant="outline"
                                 size="icon"
-                                className="h-8 w-8 shrink-0 rounded-full"
+                                className="h-8 w-8 shrink-0 rounded-full m-2"
                                 onClick={() => removeItem(product.id)}
                                 disabled={qty === 0}
                             >
                                 <MinusIcon className="h-4 w-4" />
                                 <span className="sr-only">Decrease</span>
                             </Button>
-                            <div className="flex-1 text-center">
-                                <div className="text-xl font-bold tracking-tighter">
-                                    test {qty}
-                                </div>
-                                <div className="text-[0.70rem] uppercase text-muted-foreground">
-                                    Calories/day
-                                </div>
+                            <div className="text-xl font-bold tracking-tighter text-gray-900 text-center m-2">
+                                {qty}
                             </div>
                             <Button
                                 variant="outline"
                                 size="icon"
-                                className="h-8 w-8 shrink-0 rounded-full"
+                                className="m-2 h-8 w-8 shrink-0 rounded-full"
                                 onClick={() => addItem(product, qty + 1)}
                             // disabled={goal >= 400}
                             >

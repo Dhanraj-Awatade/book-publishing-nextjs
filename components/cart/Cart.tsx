@@ -6,19 +6,19 @@ import { ShoppingCart } from 'lucide-react'
 import { Separator } from '../ui/separator';
 import { formatPrice } from '@/lib/utils';
 import Link from 'next/link';
-import { buttonVariants } from '../ui/button';
+import { Button, buttonVariants } from '../ui/button';
 import Image from 'next/image';
 import { useCart } from '@/lib/hooks/use-cart';
 import { ScrollArea } from '../ui/scroll-area';
 import CartItem from './CartItem';
 
 const Cart = () => {
-    const { items } = useCart()
-    const itemCount = items.length;
+    const { items, clearCart } = useCart()
+    const itemCount = items.reduce((total, { productCount }) => total + productCount, 0);
     // const itemCount = items.reduce((total, { qty }) => total + qty, 0)
     const fee = 1;
 
-    const cartTotal = items.reduce((total, { product }) => total + product?.price, 0)
+    const cartTotal = items.reduce((total, { product, productCount }) => total + (product?.price * productCount), 0)
     const [isMounted, setIsMounted] = useState<boolean>(false)
 
     useEffect(() => {
@@ -53,20 +53,23 @@ const Cart = () => {
                         <div className='space-y-4 pr-6'>
                             <div className='space-y-1.5 pr-6'>
                                 <Separator />
-                                <div className='flex'>
+                                {/* <div className='flex'>
                                     <span className='flex-1'>Shipping</span>
                                     <span>Free</span>
-                                </div>
-                                <div className='flex'>
+                                </div> */}
+                                {/* <div className='flex'>
                                     <span className='flex-1'>Charges</span>
                                     <span>{formatPrice(fee)}</span>
-                                </div>
+                                </div> */}
                                 <div className='flex'>
-                                    <span className='flex-1'>Total</span>
-                                    <span>{formatPrice(cartTotal + fee)}</span>
+                                    <span className='flex-1 text-muted-foreground'>Total</span>
+                                    <span className='font-bold'>{formatPrice(cartTotal)}</span>
                                 </div>
                             </div>
                             <SheetFooter >
+                                <SheetTrigger asChild>
+                                    <Button variant={"destructive"} onClick={clearCart}>Clear Cart</Button>
+                                </SheetTrigger>
                                 <SheetTrigger asChild>
                                     <Link href='/cart' className={buttonVariants({
                                         className: 'w-full',

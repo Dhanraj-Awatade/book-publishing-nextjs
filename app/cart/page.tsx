@@ -16,19 +16,20 @@ import CheckoutButton from '@/components/checkout/CheckoutButton'
 import AddressDetails from '@/components/checkout/AddressDetails'
 import { Separator } from '@/components/ui/separator'
 import { Address } from '@/payload-types'
+import CheckOutProductList from '@/components/checkout/CheckOutProductList'
 
 
 const Page = () => {
 
-    const { items, removeItem } = useCart()
+    const { items, removeItem, addItem, removeItemCompletely } = useCart()
     const productIds = items.map(({ product }) => product.id)
     const isAnyPaperback = items.flatMap(({ product }) => product.type).includes("paperback")
     const [isMounted, setIsMounted] = useState<boolean>(false)
     const [selectedAddress, selectAddress] = useState<{ id: string; house: string; state: string; pin: string; adressName: string; updatedAt: string; createdAt: string; road?: string | null | undefined; } | null | undefined>(/*addresses && addresses.at(0) ? addresses.at(0) :*/ null)
 
-    const cartPriceTotal = items.reduce((total, { product }) => total + product.price, 0)
-    const cartMrpTotal = items.reduce((total, { product }) => total + product.mrp, 0)
-    const fee = 1
+    const cartPriceTotal = items.reduce((total, { product, productCount }) => total + (product.price * productCount), 0)
+    const cartMrpTotal = items.reduce((total, { product, productCount }) => total + (product.mrp * productCount), 0)
+    const shippingCharges = isAnyPaperback ? 1 : 0
 
     useEffect(() => {
         setIsMounted(true)
@@ -47,85 +48,9 @@ const Page = () => {
                         { "rounded-lg border-2 border-dashed border-zinc-200 p-12": isMounted && items.length === 0, }
                     )}>
                         <h2 className='sr-only'>Items in your shopping cart</h2>
-                        {
-                            isMounted && items.length === 0
-                                ? (
-                                    <div className='flex h-full flex-col items-center justify-center space-y-1'>
-                                        <div aria-hidden='true' className='relative mb-4 h-40 w-40 text-muted-foreground'>
-                                            <Image src='/Images/hippo-empty-cart.png' alt='empty cart image' loading='eager' fill />
-                                        </div>
-                                        <h3 className='font-semibold text-2xl'>Your Cart is Empty</h3>
-                                        <p className='text-muted-foreground text-center'>
-                                            Whoops! Nothing to show here.
-                                        </p>
-                                    </div>
-                                )
-                                : null}
 
-                        <ul className={cn({
-                            "divide-y divide-gray-200 border-b border-t border-gray-200": isMounted && items.length > 0
-                        })}>
-                            {
-                                isMounted && items.map(({ product }) => {
-                                    const label = PRODUCT_CATEGORIES.find((c) => c.value === product.category)?.label
-                                    const { image } = product.images[0]
+                        <CheckOutProductList isMounted items={items} removeItem={removeItem} addItem={addItem} removeItemCompletely={removeItemCompletely} />
 
-                                    return (
-                                        <li key={product.id} className='flex py-6 sm:py-10'>
-                                            <div className='flex-shrink-0'>
-                                                <div className='relative h-24 w-24'>
-                                                    {
-                                                        typeof image !== 'string' && image.url
-                                                            ? (
-                                                                <Image
-                                                                    fill
-                                                                    src={image.url}
-                                                                    alt='product image'
-                                                                    className='h-full w-full rounded-md object-cover object-center sm:h-48 sm:w-48'
-                                                                />
-                                                            )
-                                                            : null
-                                                    }
-                                                </div>
-                                            </div>
-                                            <div className='ml-4 flex-col flex justify-between flex-1 sm:ml-6'>
-                                                <div className='relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0'>
-                                                    <div>
-                                                        <div className='flex justify-between'>
-                                                            <h3 className='text-sm'>
-                                                                <Link
-                                                                    className='font-medium text-gray-700 hover:text-gray-800'
-                                                                    href={`/books/${product.id}`}
-                                                                >{product.name}</Link>
-                                                            </h3>
-                                                        </div>
-                                                        <div className='mt-1 flex text-sm'>
-                                                            <p className='text-muted-foreground'>Category:{" "}{label}</p>
-                                                            <p className='ml-2 border-l text-muted-foreground border-gray-400 pl-2'>{product.type}</p>
-                                                        </div>
-                                                        <p className='mt-1 text-sm font-medium text-green-900'>
-                                                            <span className='mr-1 line-through text-xs font-normal text-gray-400'>{formatPrice(product.mrp)}</span>
-                                                            {formatPrice(product.price)}
-                                                        </p>
-                                                    </div>
-                                                    <div className='mt-4 sm:mt-0 sm:pr-9 w-20'>
-                                                        <div className='absolute right-0 top-0'>
-                                                            <Button aria-label='remove product' onClick={() => removeItem(product.id)} variant='ghost'>
-                                                                <X className='h-5 w-6' aria-hidden='true' />
-                                                            </Button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <p className='mt-4 flex space-x-2 text-sm text-gray-700'>
-                                                    <Check className='h-5 w-5 flex-shrink-0 text-green-500' />
-                                                    <span>In Stock</span>
-                                                </p>
-                                            </div>
-                                        </li>
-                                    )
-                                })
-                            }
-                        </ul>
                     </div>
                     {isAnyPaperback
                         ? <AddressDetails selectedAddress={selectedAddress} selectAddress={selectAddress} />
@@ -153,11 +78,11 @@ const Page = () => {
                             </div>
                             <div className='flex items-center justify-between border-t border-gray-200 pt-4'>
                                 <div className='flex items-center text-sm text-muted-foreground'>
-                                    <span>Flat transaction fee</span>
+                                    <span>Shipping Charges</span>
                                 </div>
                                 <div className='text-sm font-medium text-gray-900'>
                                     {isMounted
-                                        ? formatPrice(fee)
+                                        ? formatPrice(shippingCharges)
                                         : (
                                             <Loader2 className='h-4 w-4 animate-spin text-muted-foreground' />
                                         )}
@@ -181,7 +106,7 @@ const Page = () => {
                                 <div className='text-base font-medium text-gray-900'>
                                     {
                                         isMounted
-                                            ? formatPrice(cartPriceTotal + fee)
+                                            ? formatPrice(cartPriceTotal + shippingCharges)
                                             : (
                                                 <Loader2 className='h-4 w-4 animate-spin text-muted-foreground' />
                                             )

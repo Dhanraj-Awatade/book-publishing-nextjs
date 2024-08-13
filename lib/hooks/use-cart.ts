@@ -4,12 +4,14 @@ import { createJSONStorage, persist } from "zustand/middleware";
 
 export type CartItem = {
   product: Product;
+  productCount: number;
 };
 
 type CartState = {
   items: CartItem[];
-  addItem: (product: Product) => void;
+  addItem: (product: Product, productCount: number) => void;
   removeItem: (productId: string) => void;
+  removeItemCompletely: (productId: string) => void;
   clearCart: () => void;
 };
 
@@ -17,15 +19,43 @@ export const useCart = create<CartState>()(
   persist(
     (set) => ({
       items: [],
-      addItem: (product) =>
+      addItem: (product, productCount) =>
         set((state) => {
-          return { items: [...state.items, { product }] };
+          // return {items:
+          if (state.items.map(({ product }) => product).includes(product)) {
+            return {
+              items: [
+                ...state.items.map((item) => {
+                  if (item.product.id === product.id) {
+                    return {
+                      product: item.product,
+                      productCount: item.productCount + 1,
+                    };
+                  } else return item;
+                }),
+              ],
+            };
+            // state.items.map((item) => item);
+            // : {items: [...state.items, { product, productCount }]}}
+          } else return { items: [...state.items, { product, productCount }] };
         }),
+
       removeItem: (id) =>
+        set((state) => ({
+          // items: state.items.filter((item) => item.product.id !== id),
+          items: state.items
+            .map(({ product, productCount }) =>
+              product.id === id && productCount > 0
+                ? { product, productCount: productCount - 1 }
+                : { product, productCount }
+            )
+            .filter(({ productCount }) => productCount !== 0),
+        })),
+      clearCart: () => set({ items: [] }),
+      removeItemCompletely: (id) =>
         set((state) => ({
           items: state.items.filter((item) => item.product.id !== id),
         })),
-      clearCart: () => set({ items: [] }),
     }),
     {
       name: "cart-storage",
