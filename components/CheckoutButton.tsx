@@ -166,7 +166,7 @@ const CheckoutButton = ({ productIds, cartItemCount, selectedAddress, isAnyPaper
 
   };
   return <Button
-    disabled={cartItemCount === 0 || !selectedAddress}
+    disabled={cartItemCount === 0 || isAnyPaperback ? !selectedAddress : isAnyPaperback}
     className='w-full'
     size='lg'
     onClick={(e) => {
