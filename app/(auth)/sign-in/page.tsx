@@ -35,7 +35,8 @@ const Page = () => {
         onSuccess: () => {
             toast.success("Signed in successfully.")
             if (origin) {
-                router.push(`/${origin}`)
+                console.log("redirecting to", `/${origin}`)
+                router.replace(`/${origin}`)
                 return
             }
             if (isAuthor) {
