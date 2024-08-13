@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Product } from '@/payload-types'
 import { ProductPlaceholder } from './ProductListing'
+import { isValidURL } from '@/lib/validators/urlValidator'
 
 interface CarouselImageProps {
     product: Product | null
@@ -23,7 +24,7 @@ const CarouselImage = ({ product, index }: CarouselImageProps) => {
     if (!product || !isVisible) return <ProductPlaceholder />
 
     const validUrl = product.images.map(
-        ({ image }) => (typeof image === 'string' ? image : image.url)
+        ({ image }) => (typeof image === 'string' ? isValidURL(image) : image.url)
     ).filter(Boolean) as string[]
 
     return (
