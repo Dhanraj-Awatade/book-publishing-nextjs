@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { cn, formatPrice } from '@/lib/utils'
 import { PRODUCT_CATEGORIES } from '@/lib/config'
 import ImageSlider from './ImageSlider'
+import { isValidURL } from '@/lib/validators/urlValidator'
 interface ProductListingProps {
     product: Product | null,
     index: number
@@ -28,7 +29,7 @@ const ProductListing = ({ product, index }: ProductListingProps) => {
         ({ value }) => value === product.category)?.label
 
     const validUrl = product.images.map(
-        ({ image }) => (typeof image === 'string' ? image : image.url)
+        ({ image }) => (typeof image === 'string' ? isValidURL(image) : image.url)
     ).filter(Boolean) as string[]
 
     if (isVisible && product) {
