@@ -4,12 +4,12 @@ import React, { use } from 'react'
 import styles from './header.module.css'
 import { cn } from '@/lib/utils';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
-import NavItems from '@/components/NavItems';
+import NavItems from '@/components/header_footer/NavItems';
 import { buttonVariants } from '@/components/ui/button';
 // import { Ghost } from 'lucide-react';
 // import { spawn } from 'child_process';
 // import { Span } from 'next/dist/trace';
-import Cart from './Cart';
+import Cart from '../cart/Cart';
 import { getServerSideUser } from '@/lib/payload-utils';
 import { cookies } from 'next/headers';
 import UserAccountNav from './UserAccountNav';
@@ -19,7 +19,7 @@ import UserAccountNavMobile from './UserAccountNavMobile';
 // import { LINKS } from '@/lib';
 
 // const migo = localFont({ src: [{ path: './fonts/Migo Black.ttf' }, { path: './fonts/Migo Bold.ttf', weight: 'bold' }] })
-const mogena = localFont({ src: '../public/fonts/Mogena.ttf' })
+const mogena = localFont({ src: '../../public/fonts/Mogena.ttf' })
 
 
 const Header = async () => {

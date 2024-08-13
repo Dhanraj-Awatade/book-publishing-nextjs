@@ -2,14 +2,15 @@ import { PRODUCT_CATEGORIES } from '@/lib/config'
 import { useCart } from '@/lib/hooks/use-cart'
 import { formatPrice } from '@/lib/utils'
 import { Product } from '@/payload-types'
-import { ImageIcon, X } from 'lucide-react'
+import { ImageIcon, MinusIcon, PlusIcon, X } from 'lucide-react'
 import Image from 'next/image'
 import React, { useState } from 'react'
+import { Button } from '../ui/button'
 
-const CartItem = ({ product /*,qty*/ }: { product: Product,/* qty: number */ }) => {
+const CartItem = ({ product, qty }: { product: Product, qty: number }) => {
     const { image } = product.images[0]
     const label = PRODUCT_CATEGORIES.find(({ value }) => value === product.category)?.label
-    const { removeItem, } = useCart()
+    const { removeItem, addItem, clearCart } = useCart()
 
     return (
         <div className='space-y-3 py-2'>
@@ -39,13 +40,37 @@ const CartItem = ({ product /*,qty*/ }: { product: Product,/* qty: number */ }) 
                         </span>
 
                         <div className='mt-4 text-xs text-muted-foreground'>
-                            <button
-                                onClick={() => removeItem(product.id)} //TO-DO:Add Product Qty in Cart
-                                className='flex items-center gap-0.5'
+
+                            <Button
+                                variant="outline"
+                                size="icon"
+                                className="h-8 w-8 shrink-0 rounded-full"
+                                onClick={() => removeItem(product.id)}
+                                disabled={qty === 0}
                             >
-                                <X className='w-3 h-3' />
-                                Remove
-                            </button>
+                                <MinusIcon className="h-4 w-4" />
+                                <span className="sr-only">Decrease</span>
+                            </Button>
+                            <div className="flex-1 text-center">
+                                <div className="text-xl font-bold tracking-tighter">
+                                    test {qty}
+                                </div>
+                                <div className="text-[0.70rem] uppercase text-muted-foreground">
+                                    Calories/day
+                                </div>
+                            </div>
+                            <Button
+                                variant="outline"
+                                size="icon"
+                                className="h-8 w-8 shrink-0 rounded-full"
+                                onClick={() => addItem(product, qty + 1)}
+                            // disabled={goal >= 400}
+                            >
+                                <PlusIcon className="h-4 w-4" />
+                                <span className="sr-only">Increase</span>
+                            </Button>
+
+
                         </div>
                         {/* <div>{qty}</div> */}
                     </div>

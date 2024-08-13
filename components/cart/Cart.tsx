@@ -1,15 +1,15 @@
 "use client"
 
 import React, { useEffect, useState } from 'react'
-import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet'
+import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '../ui/sheet'
 import { ShoppingCart } from 'lucide-react'
-import { Separator } from './ui/separator';
+import { Separator } from '../ui/separator';
 import { formatPrice } from '@/lib/utils';
 import Link from 'next/link';
-import { buttonVariants } from './ui/button';
+import { buttonVariants } from '../ui/button';
 import Image from 'next/image';
 import { useCart } from '@/lib/hooks/use-cart';
-import { ScrollArea } from './ui/scroll-area';
+import { ScrollArea } from '../ui/scroll-area';
 import CartItem from './CartItem';
 
 const Cart = () => {
@@ -23,7 +23,7 @@ const Cart = () => {
 
     useEffect(() => {
         setIsMounted(true)
-    }), []
+    }, [])
 
     return <Sheet>
         <SheetTrigger className='group -m-2 p-2 flex items-center'>
@@ -43,8 +43,8 @@ const Cart = () => {
                             <ScrollArea>
                                 {
                                     items.map(
-                                        ({ product /*,qty*/ }) => (
-                                            <CartItem product={product} key={product?.id} /*qty={qty}*/ />
+                                        ({ product, productCount }) => (
+                                            <CartItem product={product} key={product?.id} qty={productCount} />
                                         )
                                     )
                                 }

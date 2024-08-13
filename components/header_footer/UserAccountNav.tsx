@@ -1,7 +1,7 @@
 "use client"
 import React from 'react'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu'
-import { Button } from './ui/button'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu'
+import { Button } from '../ui/button'
 import { User } from '@/payload-types'
 import Link from 'next/link'
 import { useAuth } from '@/lib/hooks/use-auth'

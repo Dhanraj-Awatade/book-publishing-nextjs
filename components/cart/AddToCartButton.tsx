@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect, useState } from 'react'
-import { Button } from './ui/button'
+import { Button } from '../ui/button'
 import { useCart } from '@/lib/hooks/use-cart'
 import { Product } from '@/payload-types'
 import { useRouter } from 'next/navigation'
@@ -12,6 +12,7 @@ const AddToCartButton = ({ product }: { product: Product }) => {
     const { addItem, items } = useCart()
     const [isSuccess, setIsSuccess] = useState<boolean>(false)
     const router = useRouter()
+    // const [productCount,setProductCount] = useState<number>(0)
 
     useEffect(() => {
         if (isSuccess) toast.success("Added to Cart Successfully!")
@@ -29,7 +30,7 @@ const AddToCartButton = ({ product }: { product: Product }) => {
     return <>
         <Button
             onClick={() => {
-                addItem(product)
+                addItem(product, 1)
                 setIsSuccess(true)
             }}
             size='lg'

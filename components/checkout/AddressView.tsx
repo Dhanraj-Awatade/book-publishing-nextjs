@@ -1,5 +1,5 @@
 import React from 'react'
-import { Separator } from './ui/separator'
+import { Separator } from '../ui/separator'
 import { Loader2 } from 'lucide-react'
 
 interface AddressViewProps {
