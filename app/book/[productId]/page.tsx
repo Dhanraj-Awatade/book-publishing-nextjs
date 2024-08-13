@@ -8,6 +8,7 @@ import { PRODUCT_CATEGORIES } from '@/lib/config'
 import { getPayloadClient } from '@/lib/get-payload'
 import { getServerSideUser } from '@/lib/payload-utils'
 import { cn, formatPrice } from '@/lib/utils'
+import { isValidURL } from '@/lib/validators/urlValidator'
 import { Check, Shield, X } from 'lucide-react'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
@@ -78,7 +79,7 @@ const Page = async ({ params }: PageProps) => {
     const label = PRODUCT_CATEGORIES.find(({ value }) => value === product.category)?.label
 
     const validUrl = product.images.map(
-        ({ image }) => (typeof image === 'string' ? image : image.url)
+        ({ image }) => (typeof image === 'string' ? isValidURL(image) : image.url)
     ).filter(Boolean) as string[]
 
 
@@ -118,19 +119,22 @@ const Page = async ({ params }: PageProps) => {
 
                         <section className='mt-4'>
                             <div className='flex items-center'>
-                                <p className='font-medium mr-2 line-through text-gray-400'>
+                                <p className='font-normal mr-2 line-through text-sm text-gray-400'>
                                     {formatPrice(product.mrp)}
                                 </p>
-                                <p className='font-medium text-gray-900'>
+                                <p className='font-medium text-xl text-green-900'>
                                     {formatPrice(product.price)}
                                 </p>
                                 <div className='ml-4 border-l text-muted-foreground border-gray-300 pl-4'>
                                     {label}
                                 </div>
+                                <div className='ml-4 border-l text-muted-foreground border-gray-300 pl-4'>
+                                    {product.type}
+                                </div>
                             </div>
                             {/* Product Images */}
 
-                            <div className='mt-10 lg:col-start-2 lg:row-span-2 lg:mt-0 lg:self-center' >
+                            <div className='mt-10 lg:col-start-2 lg:row-span-2 lg:mt-4 lg:self-center' >
                                 <div className='aspect-square rounded-lg'>
                                     <ImageSlider urls={validUrl} />
                                 </div>
