@@ -26,7 +26,8 @@ const Page = () => {
     const [isMounted, setIsMounted] = useState<boolean>(false)
     const [selectedAddress, selectAddress] = useState<{ id: string; house: string; state: string; pin: string; adressName: string; updatedAt: string; createdAt: string; road?: string | null | undefined; } | null | undefined>(/*addresses && addresses.at(0) ? addresses.at(0) :*/ null)
 
-    const cartTotal = items.reduce((total, { product }) => total + product.price, 0)
+    const cartPriceTotal = items.reduce((total, { product }) => total + product.price, 0)
+    const cartMrpTotal = items.reduce((total, { product }) => total + product.mrp, 0)
     const fee = 1
 
     useEffect(() => {
@@ -99,9 +100,13 @@ const Page = () => {
                                                             </h3>
                                                         </div>
                                                         <div className='mt-1 flex text-sm'>
-                                                            <p className='text-muted-foreground'>Category:{label}</p>
+                                                            <p className='text-muted-foreground'>Category:{" "}{label}</p>
+                                                            <p className='ml-2 border-l text-muted-foreground border-gray-400 pl-2'>{product.type}</p>
                                                         </div>
-                                                        <p className='mt-1 text-sm font-medium text-gray-900'>{formatPrice(product.price)}</p>
+                                                        <p className='mt-1 text-sm font-medium text-green-900'>
+                                                            <span className='mr-1 line-through text-xs font-normal text-gray-400'>{formatPrice(product.mrp)}</span>
+                                                            {formatPrice(product.price)}
+                                                        </p>
                                                     </div>
                                                     <div className='mt-4 sm:mt-0 sm:pr-9 w-20'>
                                                         <div className='absolute right-0 top-0'>
@@ -132,10 +137,14 @@ const Page = () => {
                         <div className='mt-6 space-y-4'>
                             <div className='flex items-center justify-between'>
                                 <p className='text-sm text-gray-600'>Subtotal</p>
-                                <p className='text-sm text-gray-900 font-medium'>
+                                <p className='text-sm font-medium text-gray-900'>
                                     {
                                         isMounted
-                                            ? formatPrice(cartTotal)
+                                            ? <>
+                                                <span className='mr-1 line-through text-xs font-normal text-gray-400'>{formatPrice(cartMrpTotal)}</span>
+                                                {formatPrice(cartPriceTotal)}
+                                            </>
+
                                             : (
                                                 <Loader2 className='h-4 w-4 animate-spin text-muted-foreground' />
                                             )
@@ -155,11 +164,24 @@ const Page = () => {
                                 </div>
                             </div>
                             <div className='flex items-center justify-between border-t border-gray-200 pt-4'>
+                                <div className='flex items-center text-sm text-green-700'>
+                                    <span className='mr-2'>Total saved</span>
+                                    <Image src={"/Images/party_popper.png"} alt='party popper icon' width={20} height={20} />
+                                </div>
+                                <div className='text-sm font-medium text-green-700'>
+                                    {isMounted
+                                        ? formatPrice(cartMrpTotal - cartPriceTotal)
+                                        : (
+                                            <Loader2 className='h-4 w-4 animate-spin text-muted-foreground' />
+                                        )}
+                                </div>
+                            </div>
+                            <div className='flex items-center justify-between border-t border-gray-200 pt-4'>
                                 <div className='text-base font-medium text-gray-900'>Order Total</div>
                                 <div className='text-base font-medium text-gray-900'>
                                     {
                                         isMounted
-                                            ? formatPrice(cartTotal + fee)
+                                            ? formatPrice(cartPriceTotal + fee)
                                             : (
                                                 <Loader2 className='h-4 w-4 animate-spin text-muted-foreground' />
                                             )
