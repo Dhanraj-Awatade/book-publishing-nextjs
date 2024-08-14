@@ -37,6 +37,7 @@ const Page = () => {
             if (origin) {
                 console.log("redirecting to", `/${origin}`)
                 router.replace(`/${origin}`)
+                router.refresh()
                 return
             }
             if (isAuthor) {
@@ -69,7 +70,10 @@ const Page = () => {
                 <div className='flex flex-col mx-auto w-full justify-center space-y-6 sm:w-[350px]'>
                     <div className='flex flex-col items-center'>
                         <Image src={"/Images/Humaaans_SignIn.png"} alt='Human Sign-in Image' width={943.00108} height={795.62948} />
-                        <h1 className='text-2xl my-4 font-semibold'>Sign in to your {isAuthor ? "author " : " "}Account</h1>
+                        {origin
+                            ? <h1 className='text-2xl my-4 font-semibold text-center'>You have to be signed in to complete this action!</h1>
+                            : <h1 className='text-2xl my-4 font-semibold text-center'>Sign in to your {isAuthor ? "author " : " "}Account</h1>
+                        }
                         <div className='grid gap-6'>
                             <form method='POST' onSubmit={handleSubmit(onSubmit)}>
                                 <div className='grid gap-2'>
