@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { authRouter } from "./authRouter";
-import { publicProcedure, router } from "./trpc";
+import { privateProcedure, publicProcedure, router } from "./trpc";
 import {
   PurchasedProductsQueryValidator,
   QueryValidator,
@@ -8,6 +8,7 @@ import {
 import { getPayloadClient } from "../lib/get-payload";
 import { Payload } from "payload";
 import { paymentRouter } from "./payment-router";
+import { Product } from "@/payload-types";
 
 export const appRouter = router({
   auth: authRouter,
@@ -77,6 +78,7 @@ export const appRouter = router({
         nextPage: hasNextPage ? nextPage : null,
         prevPage: hasPrevPage ? prevPage : null,
         hasNextPage,
+        hasPrevPage,
       };
       // } else if (type) {
       //   const {
@@ -150,7 +152,7 @@ export const appRouter = router({
       // }
     }),
 
-  getPurchasedProducts: publicProcedure
+  getPurchasedProducts: privateProcedure
     .input(
       z.object({
         limit: z.number().min(1).max(100),
@@ -158,10 +160,11 @@ export const appRouter = router({
         query: PurchasedProductsQueryValidator,
       })
     )
-    .query(async ({ input }) => {
+    .query(async ({ input, ctx }) => {
       const { query, cursor } = input;
-      const { sort, limit, userId } = query;
+      const { sort, limit } = query;
 
+      const { user } = ctx;
       const payload = await getPayloadClient();
 
       // const parsedQueryOpts: Record<string, { equals: string }> = {};
@@ -178,11 +181,13 @@ export const appRouter = router({
         docs: orders,
         hasNextPage,
         nextPage,
+        hasPrevPage,
+        prevPage,
       } = await payload.find({
         collection: "orders",
         where: {
           user: {
-            equals: userId,
+            equals: user.id,
           },
           _isPaid: {
             equals: true,
@@ -194,18 +199,27 @@ export const appRouter = router({
         page,
       });
 
-      const purchasedProductsArray = orders
-        .flatMap(({ products }) => products)
-        .flatMap((prod) => {
-          if (typeof prod === "string") return null;
-          else return prod;
-        });
+      // const purchasedProductsArray = orders
+      //   .flatMap(({ products }) => products)
+      //   .flatMap((prod) => {
+      //     if (typeof prod === "string") return null;
+      //     else return prod;
+      //   });
       // .filter((prod) => prod !== null);
+
+      const purchasedProductsArray = orders
+        .flatMap(({ products }) =>
+          products.map((prod) => (typeof prod === "string" ? null : prod))
+        )
+        .filter((prod): prod is Product => prod !== null);
 
       const purchasedProducts = Array.from(new Set(purchasedProductsArray));
       return {
         purchasedProducts,
         nextPage: hasNextPage ? nextPage : null,
+        prevPage: hasPrevPage ? prevPage : null,
+        hasNextPage,
+        hasPrevPage,
       };
     }),
 });

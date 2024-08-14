@@ -1,8 +1,7 @@
 "use client"
 import MaxWidthWrapper from '@/components/MaxWidthWrapper'
+import PaginationComponent from '@/components/PaginationComponent'
 import ProductReel from '@/components/ProductReel'
-import { Button } from '@/components/ui/button'
-import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationPrevious } from '@/components/ui/pagination'
 import { PRODUCT_CATEGORIES } from '@/lib/config'
 import React, { useState } from 'react'
 type Param = string | string[] | undefined
@@ -23,49 +22,14 @@ const ProductsPage = ({ searchParams }: ProductPageProps) => {
     const [cursor, setCursor] = useState<number>(1)
 
     const [hasNextPage, setHasNextPage] = useState(true)
+    const [hasPrevPage, setHasPrevPage] = useState(true)
 
     return (
         <MaxWidthWrapper>
 
-            <ProductReel callbackFn={setHasNextPage} cursor={cursor} title={label ?? "Browse all the books here"} query={{ category, type, limit: 16, sort: sort === "desc" || sort === "asc" ? sort : undefined }} />
+            <ProductReel setNextPageFn={setHasNextPage} setPrevPageFn={setHasPrevPage} cursor={cursor} title={label ?? "Browse all the books here"} query={{ category, type, limit: 16, sort: sort === "desc" || sort === "asc" ? sort : undefined }} />
 
-            <Pagination>
-                <PaginationContent>
-
-                    <PaginationItem>
-                        <Button disabled={cursor === 1} onClick={() => setCursor(cursor === 1 ? 1 : cursor - 1)} variant={"outline"}>Previous</Button>
-                    </PaginationItem>
-
-                    {cursor !== 1
-                        ? <PaginationItem>
-                            <Button onClick={() => setCursor(1)} variant={"outline"}>1</Button>
-                        </PaginationItem>
-                        : null
-                    }
-
-                    <PaginationItem>
-                        <Button variant={"default"}>{cursor}</Button>
-                    </PaginationItem>
-
-                    <PaginationItem>
-                        <Button onClick={() => setCursor(cursor + 1)} variant={"outline"}>{cursor + 1}</Button>
-                    </PaginationItem>
-
-                    <PaginationItem>
-                        <Button onClick={() => setCursor(cursor + 2)} variant={"outline"}>{cursor + 2}</Button>
-                    </PaginationItem>
-
-                    <PaginationItem>
-                        <PaginationEllipsis />
-                    </PaginationItem>
-
-                    <PaginationItem>
-                        {/* <PaginationPrevious onClick={() => setCursor(cursor === 1 ? 1 : cursor - 1)} href={""} /> */}
-                        <Button disabled={hasNextPage === false} onClick={() => setCursor(cursor + 1)} variant={"outline"}>Next</Button>
-                    </PaginationItem>
-
-                </PaginationContent>
-            </Pagination>
+            <PaginationComponent cursor={cursor} hasPrevPage={hasPrevPage} hasNextPage={hasNextPage} setCursor={setCursor} />
 
         </MaxWidthWrapper>
     )

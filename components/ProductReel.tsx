@@ -3,7 +3,7 @@ import { TQueryValidator } from '@/lib/validators/query-validator'
 import { Product } from '@/payload-types'
 import { trpc } from '@/trpc/client'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import ProductListing from './ProductListing'
 
 interface ProductReelProps {
@@ -12,14 +12,15 @@ interface ProductReelProps {
     href?: string
     query: TQueryValidator
     cursor?: number
-    callbackFn?: React.Dispatch<React.SetStateAction<boolean>>
+    setPrevPageFn?: React.Dispatch<React.SetStateAction<boolean>>
+    setNextPageFn?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const FALLBACK_LIMIT = 4
 
 const ProductReel = (props: ProductReelProps) => {
 
-    const { title, subtitle, href, query, cursor, callbackFn } = props
+    const { title, subtitle, href, query, cursor, setNextPageFn, setPrevPageFn } = props
     const FALLBACK_CURSOR = 1
 
     const { data: queryResults, isLoading } = trpc.getInfiniteProducts.useQuery({
@@ -37,7 +38,7 @@ const ProductReel = (props: ProductReelProps) => {
     // let products: Product[] | undefined = []
 
     // const nextPage = queryResults?.nextPage
-    // const prevPage = queryResults?.prevPage
+    const hasPrevPage = queryResults?.hasPrevPage
     const hasNextPage = queryResults?.hasNextPage
     // useEffect(() => {
     //     callbackFn ? callbackFn(nextPage, prevPage) : null
@@ -58,7 +59,8 @@ const ProductReel = (props: ProductReelProps) => {
         map = new Array<null>(query.limit ?? FALLBACK_LIMIT).fill(null)
     }
     // useEffect(() => {
-    if (callbackFn) { hasNextPage ? callbackFn(hasNextPage) : callbackFn(false) }
+    if (setPrevPageFn) { hasPrevPage ? setPrevPageFn(hasPrevPage) : setPrevPageFn(false) }
+    if (setNextPageFn) { hasNextPage ? setNextPageFn(hasNextPage) : setNextPageFn(false) }
     // }, [hasNextPage])
 
     return (
