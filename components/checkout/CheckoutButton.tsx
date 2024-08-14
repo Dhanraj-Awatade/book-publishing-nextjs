@@ -125,7 +125,7 @@ const CheckoutButton = ({ productIds, cartItemCount, selectedAddress, isAnyPaper
 
   let paymentObject: any = null
 
-  if (status === "success" && selectedAddress) {
+  if (status === "success") {
     const razorpayServerOrder = razorpayServer.order;
     const razorpayServerOrderOptions = razorpayServer.orderOptions;
 
