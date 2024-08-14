@@ -10,7 +10,7 @@ export const QueryValidator = z.object({
 export const PurchasedProductsQueryValidator = z.object({
   sort: z.enum(["asc", "desc"]).optional(),
   limit: z.number().optional(),
-  userId: z.string(),
+  // userId: z.string(),
 });
 
 export type TQueryValidator = z.infer<typeof QueryValidator>;

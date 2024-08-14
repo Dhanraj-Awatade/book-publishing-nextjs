@@ -84,6 +84,20 @@ const start = async () => {
 
   app.use("/cart", cartRouter);
 
+  const libraryRouter = express.Router();
+  libraryRouter.use(payload.authenticate);
+  libraryRouter.get("/", (req, res) => {
+    const request = req as PayloadRequest;
+
+    if (!request.user) return res.redirect("/sign-in?origin=library");
+
+    const parsedUrl = parse(req.url, true);
+
+    return nextApp.render(req, res, "/library", parsedUrl.query);
+  });
+
+  app.use("/library", libraryRouter);
+
   app.use(
     "/api/trpc",
     trpcExpress.createExpressMiddleware({

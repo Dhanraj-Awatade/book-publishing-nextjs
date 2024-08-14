@@ -145,6 +145,10 @@ const MobileNav = ({ isSignedIn }: MobileNavProps) => {
                                 <DrawerClose asChild><Button className="mx-3 w-1/2" onClick={() => router.replace('/sign-up')} variant={'outline'}>Sign-up</Button></DrawerClose>
                             </div>
                         }*/}
+
+                        <DrawerClose asChild>
+                            <Button onClick={() => router.push('/library')} variant={'default'}>Library</Button>
+                        </DrawerClose>
                         <DrawerClose asChild>
                             <Button variant={'destructive'}>Close Drawer</Button>
                         </DrawerClose>

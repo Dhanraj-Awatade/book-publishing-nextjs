@@ -34,7 +34,7 @@ const Header = async () => {
         <MaxWidthWrapper>
           <div className='flex h-16 items-center mx-4'>
             {/* Done (Completed): Mobile Nav */}
-            <MobileNav isSignedIn />
+            <MobileNav isSignedIn={isSignedIn} />
             <Image className='hidden md:block' src={'/Images/logo.png'} alt='Saptarshee Logo' height={64} width={96} />
             <div className='ml-6 flex lg:ml-0 lg:text-4xl text-2xl'>
               <Link className={cn(styles.logo, mogena.className)} href={"/"}> <span className='text-rose-600 '>Saptarshee {' '}</span>Publications</Link>
@@ -44,6 +44,11 @@ const Header = async () => {
             </div>
             <div className='ml-auto flex items-center'>
               <div className='hidden md:flex md:flex-1 md:items-center md:justify-end md:space-x-6'>
+
+                <Link href='/library' className={cn(buttonVariants({ variant: 'secondary', size: 'lg' }), "font-semibold border ")}>
+                  Library
+                </Link>
+
                 {isSignedIn
                   ? null
                   : <Link href='/sign-in' className={buttonVariants({ variant: 'default' })}>

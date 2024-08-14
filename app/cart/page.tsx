@@ -1,21 +1,12 @@
 "use client"
-// import FetchServerOrder from '@/components/FetchServerOrder'
-// Done:(COMPLETED) Seperate Payments in Server Side Component "FetchServerOrder"
-import { Button } from '@/components/ui/button'
-import { PRODUCT_CATEGORIES } from '@/lib/config'
 import { useCart } from '@/lib/hooks/use-cart'
-import initiatePayment from '@/components/checkout/CheckoutButton'
 import { cn, formatPrice } from '@/lib/utils'
-import { trpc } from '@/trpc/client'
-import { Check, Loader2, X } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import Image from 'next/image'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import CheckoutButton from '@/components/checkout/CheckoutButton'
 import AddressDetails from '@/components/checkout/AddressDetails'
 import { Separator } from '@/components/ui/separator'
-import { Address } from '@/payload-types'
 import CheckOutProductList from '@/components/checkout/CheckOutProductList'
 
 
