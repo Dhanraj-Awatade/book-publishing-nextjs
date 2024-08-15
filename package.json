@@ -12,7 +12,7 @@
     "build:next": "cross-env PAYLOAD_CONFIG_PATH=dist/payload.config.js NEXT_BUILD=true node dist/lib/server.js",
     "build": "cross-env NODE_ENV=production yarn build:payload && yarn build:server && yarn copyfiles && yarn build:next",
     "start": "cross-env PAYLOAD_CONFIG_PATH=dist/payload.config.js NODE_ENV=production node dist/lib/server.js",
-    "copyfiles": "copyfiles \"**/*.{html,css,scss,ttf,woff,woff2,eot,svg,jpg,png}\" dist/"
+    "copyfiles": "copyfiles \"**/*.{html,css,scss,ttf,woff,woff2,eot,svg,jpg,png,pdf,epub}\" dist/"
   },
   "resolutions": {
     "cliui": "7.0.2"
