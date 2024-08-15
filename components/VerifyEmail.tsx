@@ -1,3 +1,4 @@
+"use client"
 import { trpc } from '@/trpc/client'
 import { Loader, TicketCheck, XCircle } from 'lucide-react'
 import Image from 'next/image'
@@ -16,7 +17,8 @@ const VerifyEmail = ({ token }: VerifyEmailProps) => {
     })
 
     if (isError) {
-      console.log("In Error Verify EMail")
+      // console.log("In Error Verify Email")
+
       return <div className='flex flex-col items-center gap-2'>
         <XCircle className='h-8 w-8 text-red-600' />
         <h3 className='font-semibold text-xl'>There was a problem</h3>
@@ -30,7 +32,7 @@ const VerifyEmail = ({ token }: VerifyEmailProps) => {
     }
 
     if (data?.success) {
-      console.log("In Success Verify EMail")
+      // console.log("In Success Verify EMail")
       return (
         <div className='flex h-full flex-col items-center justify-center'>
           <div className='relative mb-4 h-60 w-60 text-green-700 flex items-center justify-center'>
