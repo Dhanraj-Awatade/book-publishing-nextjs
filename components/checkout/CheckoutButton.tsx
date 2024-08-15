@@ -11,10 +11,11 @@ interface CheckoutButtonProps {
   productIds: string[];
   cartItemCount: number
   isAnyPaperback: boolean
+  totalAmount: number
   selectedAddress: { id: string; house: string; state: string; pin: string; adressName: string; updatedAt: string; createdAt: string; road?: string | null | undefined; } | null | undefined
 }
 
-const CheckoutButton = ({ productIds, cartItemCount, selectedAddress, isAnyPaperback }: CheckoutButtonProps) => {
+const CheckoutButton = ({ productIds, cartItemCount, selectedAddress, isAnyPaperback, totalAmount }: CheckoutButtonProps) => {
 
   try {
     const razorScript = document.createElement("script");
@@ -41,7 +42,7 @@ const CheckoutButton = ({ productIds, cartItemCount, selectedAddress, isAnyPaper
     isFetched,
     status,
   } = trpc.payment.createSession.useQuery(
-    { productIds: productIds, addressId: selectedAddressId, isAnyPaperback },
+    { productIds: productIds, addressId: selectedAddressId, isAnyPaperback, totalAmount },
     {
       enabled: razorpayOptions === null,
       retry: productIds.length !== 0,
@@ -117,7 +118,7 @@ const CheckoutButton = ({ productIds, cartItemCount, selectedAddress, isAnyPaper
       }
     );
     const text = await verifyOrderAPI.json();
-    console.log("returned response", text);
+    // console.log("returned response", text);
 
     if (text.isPaymentVerified === true) setOrderVerificationStatus(true)
   }

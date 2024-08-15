@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { privateProcedure, publicProcedure, router } from "./trpc";
+import { privateProcedure, router } from "./trpc";
 import { TRPCError } from "@trpc/server";
 import { getPayloadClient } from "../lib/get-payload";
 import shortid from "shortid";
@@ -15,11 +15,12 @@ export const paymentRouter = router({
         productIds: z.array(z.string()),
         addressId: z.string().or(z.null()),
         isAnyPaperback: z.boolean(),
+        totalAmount: z.number(),
       })
     )
     .query(async ({ ctx, input }) => {
       const { user } = ctx;
-      let { productIds, addressId, isAnyPaperback } = input;
+      let { productIds, addressId, isAnyPaperback, totalAmount } = input;
 
       if (productIds.length === 0) {
         throw new TRPCError({ code: "BAD_REQUEST" });
@@ -40,10 +41,10 @@ export const paymentRouter = router({
         },
       });
 
-      const amount = products.reduce((total, { price }) => total + price, 0);
+      // const amount = products.reduce((total, { price }) => total + price, 0);
 
       const options = {
-        amount: Math.round(amount * 100),
+        amount: Math.round(totalAmount * 100),
         currency: "INR",
         // customer_id: user.id,
         payment_capture: true,
@@ -76,7 +77,7 @@ export const paymentRouter = router({
             user: user.id,
             razorpayOrderId: order.id,
             address: addressId,
-            amount: amount,
+            amount: totalAmount,
           },
         });
       } else {
@@ -88,7 +89,7 @@ export const paymentRouter = router({
             products: products.map((prod) => prod.id) as string[],
             user: user.id,
             razorpayOrderId: order.id,
-            amount: amount,
+            amount: totalAmount,
           },
         });
       }

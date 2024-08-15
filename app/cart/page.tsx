@@ -21,6 +21,7 @@ const Page = () => {
     const cartPriceTotal = items.reduce((total, { product, productCount }) => total + (product.price * productCount), 0)
     const cartMrpTotal = items.reduce((total, { product, productCount }) => total + (product.mrp * productCount), 0)
     const shippingCharges = isAnyPaperback ? 1 : 0
+    const totalAmount = cartPriceTotal + shippingCharges
 
     useEffect(() => {
         setIsMounted(true)
@@ -97,7 +98,7 @@ const Page = () => {
                                 <div className='text-base font-medium text-gray-900'>
                                     {
                                         isMounted
-                                            ? formatPrice(cartPriceTotal + shippingCharges)
+                                            ? formatPrice(totalAmount)
                                             : (
                                                 <Loader2 className='h-4 w-4 animate-spin text-muted-foreground' />
                                             )
@@ -118,7 +119,7 @@ const Page = () => {
                                     : (<Loader2 className='h-4 w-4 animate-spin ml-1.5' />)}
                             </Button> */}
                             {
-                                <CheckoutButton isAnyPaperback={isAnyPaperback} selectedAddress={selectedAddress} productIds={productIds} cartItemCount={items.length} />
+                                <CheckoutButton totalAmount={totalAmount} isAnyPaperback={isAnyPaperback} selectedAddress={selectedAddress} productIds={productIds} cartItemCount={items.length} />
                             }
                         </div>
                     </section>
