@@ -14,7 +14,8 @@ import CartItem from './CartItem';
 
 const Cart = () => {
     const { items, clearCart } = useCart()
-    const itemCount = items.reduce((total, { productCount }) => total + productCount, 0);
+
+    const itemCount = items.length === 0 ? 0 : items.reduce((total, { productCount }) => total + productCount, 0)
     // const itemCount = items.reduce((total, { qty }) => total + qty, 0)
     const fee = 1;
 
@@ -29,12 +30,12 @@ const Cart = () => {
         <SheetTrigger className='group -m-2 p-2 flex items-center'>
             <ShoppingCart aria-hidden='true' className='h-6 w-6 flex-shrink-0 text-gray-600 group-hover:text-gray-950 ' />
             <span className='ml-2 text-sm text-gray-700 group-hover:text-gray-950'>
-                {isMounted ? itemCount : 0}
+                {isMounted ? (itemCount ?? 0) : 0}
             </span>
         </SheetTrigger>
         <SheetContent className='flex w-full flex-col pr-0 sm:max-w-lg'>
             <SheetHeader className='space-y-2.5 pr-6'>
-                <SheetTitle>Cart({itemCount})</SheetTitle>
+                <SheetTitle>Cart({itemCount ?? 0})</SheetTitle>
             </SheetHeader>
             {itemCount > 0
                 ? (
