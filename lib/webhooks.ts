@@ -7,14 +7,24 @@ import { Resend } from "resend";
 import { RecieptEmailHtml } from "../components/emails/RecieptEmail";
 import { Webhooks } from "razorpay/dist/types/webhooks";
 import * as crypto from "crypto";
+import nodemailer from "nodemailer";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// const resend = new Resend(`${process.env.RESEND_API_KEY as string}`);
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "info.saptarshee.publications@gmail.com",
+    pass: "twrpsjqhkorjfxuz",
+  },
+});
+
 // const razorpay = new Razorpay({
 //   key_id: process.env.RAZORPAY_ID as string,
 //   key_secret: process.env.RAZORPAY_KEY as string,
 // });
 
-export const webhookHandler: RequestHandler = async (req, res) => {
+export const razorpayWebhookHandler: RequestHandler = async (req, res) => {
   const secret = process.env.RAZORPAY_WEBHOOK_SECRET as string;
 
   const shaKey = crypto.createHmac("sha256", secret);
@@ -45,8 +55,33 @@ export const webhookHandler: RequestHandler = async (req, res) => {
         },
       });
 
-      console.log("updated Order via webhook:", [updatedOrders]);
-      return res.status(200).send("Success");
+      const [updatedOrder] = updatedOrders;
+      const user = updatedOrder.user;
+      console.log("updated Order via webhook:", updatedOrder);
+
+      // send receipt
+      try {
+        if (typeof user === "string")
+          return new Error("Depth not enough to get User details from order.");
+        const data = await /*resend.emails.*/ transporter.sendMail({
+          from: "Saptarshee Publications <info.saptarshee.publications@gmail.com>",
+          to: [user.email],
+          subject: "Order Placed Successfully | Saptarshee Publications",
+          html: RecieptEmailHtml({
+            date: new Date(),
+            email: user.email,
+            orderId: orderId,
+            products: updatedOrder.products as Product[],
+            amount: updatedOrder.amount,
+          }),
+        });
+        res.status(200).json({ data });
+      } catch (error) {
+        res.status(500).json({ error });
+      }
+      // }
+
+      // return res.status(200).send("Success");
     }
   } else {
     console.log("Invalid Request");

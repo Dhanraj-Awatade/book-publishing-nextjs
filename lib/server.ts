@@ -11,7 +11,7 @@ import path from "path";
 import nextBuild from "next/dist/build";
 import { IncomingMessage } from "http";
 import bodyParser from "body-parser";
-import { webhookHandler } from "./webhooks";
+import { razorpayWebhookHandler } from "./webhooks";
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
@@ -47,7 +47,7 @@ const start = async () => {
   app.use(bodyParser.json());
 
   // app.post("/api/webhooks/test", webhookMiddleware, razorpayWebhookHandler);
-  app.post("/api/webhooks/test", webhookHandler);
+  app.post("/api/webhooks/razorpay", razorpayWebhookHandler);
 
   const payload = await getPayloadClient({
     initOptions: {

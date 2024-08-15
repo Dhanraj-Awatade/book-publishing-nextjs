@@ -11,12 +11,17 @@ dotenv.config({
 const payload_secret = "aedascca9f4eccac";
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.hostinger.com",
-  secure: true,
-  port: 465,
+  // host: "smtp.hostinger.com",
+  // secure: true,
+  // port: 465,
+  // auth: {
+  //   user: "info@saptarshee.in",
+  //   pass: "Kumudinee@7",
+  // },
+  service: "gmail",
   auth: {
-    user: "info@saptarshee.in",
-    pass: "Kumudinee@7",
+    user: "info.saptarshee.publications@gmail.com",
+    pass: "twrpsjqhkorjfxuz",
   },
 });
 
@@ -47,7 +52,7 @@ export const getPayloadClient = async ({
     cached.promise = payload.init({
       email: {
         transport: transporter,
-        fromAddress: "info@saptarshee.in",
+        fromAddress: "info.saptarshee.publications@gmail.com",
         fromName: "Saptarshee Publications",
       },
       // secret: process.env.PAYLOAD_SECRET,

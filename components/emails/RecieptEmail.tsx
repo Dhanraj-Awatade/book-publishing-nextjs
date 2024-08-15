@@ -10,26 +10,27 @@ interface RecieptEmailProps {
     date: Date,
     orderId: string,
     products: Product[]
+    amount: number
 }
 
-export const RecieptEmail = ({ email, date, orderId, products }: RecieptEmailProps) => {
+export const RecieptEmail = ({ email, date, orderId, products, amount }: RecieptEmailProps) => {
 
-    const total = products.reduce((acc, curr) => curr.price + acc, 0) + 1 // transaction fee
+    // const total = products.reduce((acc, curr) => curr.price + acc, 0) + 1 // transaction fee
 
     return (
         <Html>
             <Head />
-            <Preview>Your DigitalHippo Receipt</Preview>
+            <Preview>Your Order Receipt from Saptarshee Publications</Preview>
 
             <Body style={main}>
                 <Container style={container}>
                     <Section>
                         <Column>
                             <Img
-                                src={`${process.env.NEXT_PUBLIC_SERVER_URL}/hippo-email-sent.png`}
+                                src={`${process.env.NEXT_PUBLIC_SERVER_URL}/Images/logo.png`}
                                 width='100'
                                 height='100'
-                                alt='DigitalHippo'
+                                alt='Saptarshee Publications Logo'
                             />
                         </Column>
 
@@ -98,7 +99,7 @@ export const RecieptEmail = ({ email, date, orderId, products }: RecieptEmailPro
                                     <Link
                                         href={`${process.env.NEXT_PUBLIC_SERVER_URL}/thank-you?orderId=${orderId}`}
                                         style={productLink}>
-                                        Download Asset
+                                        View Order Details
                                     </Link>
                                 </Column>
 
@@ -109,7 +110,7 @@ export const RecieptEmail = ({ email, date, orderId, products }: RecieptEmailPro
                         )
                     })}
 
-                    <Section>
+                    {/* <Section>
                         <Column style={{ width: '64px' }}></Column>
                         <Column style={{ paddingLeft: '40px', paddingTop: 20 }}>
                             <Text style={productTitle}>Transaction Fee</Text>
@@ -118,7 +119,7 @@ export const RecieptEmail = ({ email, date, orderId, products }: RecieptEmailPro
                         <Column style={productPriceWrapper} align='right'>
                             <Text style={productPrice}>{formatPrice(1)}</Text>
                         </Column>
-                    </Section>
+                    </Section> */}
 
                     <Hr style={productPriceLine} />
                     <Section align='right'>
@@ -127,7 +128,7 @@ export const RecieptEmail = ({ email, date, orderId, products }: RecieptEmailPro
                         </Column>
                         <Column style={productPriceVerticalLine}></Column>
                         <Column style={productPriceLargeWrapper}>
-                            <Text style={productPriceLarge}>{formatPrice(total)}</Text>
+                            <Text style={productPriceLarge}>{formatPrice(amount)}</Text>
                         </Column>
                     </Section>
                     <Hr style={productPriceLineBottom} />
@@ -138,7 +139,7 @@ export const RecieptEmail = ({ email, date, orderId, products }: RecieptEmailPro
                         <Link href='#'>Privacy Policy </Link>
                     </Text>
                     <Text style={footerCopyright}>
-                        Copyright © 2023 DigitalHippo Inc. <br />{' '}
+                        Copyright © 2024 Saptarshee Publications. <br />{' '}
                         <Link href='#'>All rights reserved</Link>
                     </Text>
                 </Container>

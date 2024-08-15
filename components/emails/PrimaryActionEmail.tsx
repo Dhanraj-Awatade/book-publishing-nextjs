@@ -15,10 +15,10 @@ export const PrimaryActionEmail = ({ actionLabel, buttonText, href }: PrimaryEma
             <Body style={main}>
                 <Container style={container}>
                     <Img
-                        src={`${process.env.NEXT_PUBLIC_SERVER_URL}/hippo-newsletter-sign-up.png`}
+                        src={`${process.env.NEXT_PUBLIC_SERVER_URL}/Images/logo.png`}
                         width="150"
                         height="150"
-                        alt="DigitalHippo"
+                        alt="Saptarshee Publications"
                         style={logo}
                     />
                     <Text style={paragraph}>Hi there,</Text>
@@ -31,9 +31,9 @@ export const PrimaryActionEmail = ({ actionLabel, buttonText, href }: PrimaryEma
                         </Button>
                     </Section>
                     <Text style={paragraph}>
-                        Best,
+                        Best Regards,
                         <br />
-                        The DigitalHippo team
+                        The Saptarshee Publications team
                     </Text>
                     <Hr style={hr} />
                     <Text style={footer}>
