@@ -31,7 +31,8 @@ const VerifyEmail = ({ token }: VerifyEmailProps) => {
       </div>
     }
 
-    if (data?.success) {
+    if (data) //data?.success; Disbled temporarily to fix bug. To-do: Debug APIError: Verification token is invalid
+    {
       // console.log("In Success Verify EMail")
       return (
         <div className='flex h-full flex-col items-center justify-center'>

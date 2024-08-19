@@ -43,11 +43,29 @@ export const authRouter = router({
         const { token } = input;
         const payload = await getPayloadClient();
 
-        const isVerified = payload.verifyEmail({
-          collection: "users",
-          token,
-        });
-        if (!isVerified) throw new TRPCError({ code: "UNAUTHORIZED" });
+        if (token) {
+          const isVerified = await payload.verifyEmail({
+            collection: "users",
+            token,
+          });
+
+          // const isVerified = await fetch(
+          //   `${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/verify/${token}`,
+          //   {
+          //     method: "POST",
+          //     headers: {
+          //       "Content-Type": "application/json",
+          //     },
+          //   }
+          // );
+
+          console.log("verification token valid");
+
+          if (!isVerified) throw new TRPCError({ code: "UNAUTHORIZED" });
+        } else {
+          console.log("verification token invalid");
+        }
+
         return { success: true };
       } catch (error) {
         console.log(error);
