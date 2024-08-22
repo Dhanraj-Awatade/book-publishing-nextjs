@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter, /*Varela, Varela_Round */ } from 'next/font/google'
+import { Inter, /*Varela, Varela_Round */ Fira_Sans } from 'next/font/google'
 import './globals.css'
 import Header from '../components/header_footer/Header'
 import Footer from '../components/header_footer/Footer'
@@ -9,6 +9,8 @@ import { Toaster } from 'sonner'
 import Script from 'next/script'
 
 const inter = Inter({ subsets: ['latin'] })
+const fira = Fira_Sans({ subsets: ['latin'], weight: "500" })
+
 /*const varela = Varela({ weight: '400', subsets: ['latin'] })
 const varela_round = Varela_Round({ weight: '400', subsets: ['latin'] })*/
 
@@ -25,7 +27,7 @@ export default function RootLayout({
   return (
     <>
       <html className='h-full'>
-        <body className={cn("relative h-full font-sans antialiased", inter.className)}>
+        <body className={cn("relative h-full font-sans antialiased", fira.className)}>
           <main className='h-full relative flex flex-col min-h-screen'>
             <Providers>
               <Header />
