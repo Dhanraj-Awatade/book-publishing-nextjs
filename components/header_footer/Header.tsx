@@ -19,7 +19,7 @@ import UserAccountNavMobile from './UserAccountNavMobile';
 // import { LINKS } from '@/lib';
 
 // const migo = localFont({ src: [{ path: './fonts/Migo Black.ttf' }, { path: './fonts/Migo Bold.ttf', weight: 'bold' }] })
-const mogena = localFont({ src: '../../public/fonts/Mogena.ttf' })
+const mogena = localFont({ src: '../../public/fonts/TestDomaineDisplay-Medium.otf' })
 
 
 const Header = async () => {
@@ -37,7 +37,7 @@ const Header = async () => {
             <MobileNav isSignedIn={isSignedIn} />
             <Image className='hidden md:block' src={'/Images/logo.png'} alt='Saptarshee Logo' height={64} width={96} />
             <div className='ml-6 flex lg:ml-0 lg:text-4xl text-2xl'>
-              <Link className={cn(styles.logo, mogena.className)} href={"/"}> <span className='text-rose-600 '>Saptarshee {' '}</span>Publications</Link>
+              <Link className={cn(mogena.className, styles.logo)} href={"/"}> <span className='text-rose-600 '>Saptarshee {' '}</span>Publications</Link>
             </div>
             <div className='hidden z-50 lg:ml-8 lg:block lg:self-stretch'>
               <NavItems />
@@ -87,7 +87,7 @@ const Header = async () => {
   </div>*/}
         </MaxWidthWrapper>
       </header>
-    </div>
+    </div >
   )
 }
 
