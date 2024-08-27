@@ -5,7 +5,7 @@ import { Button } from '../ui/button'
 import { User } from '../../payload-types'
 import Link from 'next/link'
 import { useAuth } from '../../lib/hooks/use-auth'
-import { UserCircleIcon } from 'lucide-react'
+import { InfoIcon, LibraryBigIcon, LogInIcon, LogOutIcon, PlusCircleIcon, UserCircleIcon } from 'lucide-react'
 
 const UserAccountNavMobile = ({ user }: { user: User | null }) => {
     const { signOut } = useAuth()
@@ -24,16 +24,22 @@ const UserAccountNavMobile = ({ user }: { user: User | null }) => {
             </div>
 
             <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+                {user
+                    ? <Link href='/library'><LibraryBigIcon className='mx-2' />Your Library</Link>
+                    : null
+                }
+            </DropdownMenuItem>
             {/* To-Do: Add Account Page */}
             <DropdownMenuItem asChild>
                 {user
-                    ? <Link href='/account'>Account Details</Link>
-                    : <Link href='/sign-in'>Sign in</Link>
+                    ? <Link href='/account'><InfoIcon className='mx-2' />Account Details</Link>
+                    : <Link href='/sign-in'><LogInIcon className='mx-2' />Sign in</Link>
                 }
             </DropdownMenuItem>
             {user
-                ? <DropdownMenuItem onClick={signOut} className='cursor-pointer'>Log Out</DropdownMenuItem>
-                : <DropdownMenuItem asChild><Link href='/sign-up'>Sign up</Link></DropdownMenuItem>
+                ? <DropdownMenuItem onClick={signOut} className='cursor-pointer'><LogOutIcon className='mx-2' />Log Out</DropdownMenuItem>
+                : <DropdownMenuItem asChild><Link href='/sign-up'><PlusCircleIcon className='mx-2' />Sign up</Link></DropdownMenuItem>
             }
         </DropdownMenuContent>
     </DropdownMenu>
