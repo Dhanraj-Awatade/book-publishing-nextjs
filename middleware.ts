@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSideUser } from "./lib/payload-utils";
+// import NextAuth from "next-auth";
+// import { authConfig } from "./lib/auth.config";
 
 const allowedOrigins = [
   "https://saptarshee.in",
@@ -13,6 +15,8 @@ const corsOptions = {
   "Access-Control-Allow-Headers":
     "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
 };
+
+// export default NextAuth(authConfig).auth;
 
 export async function middleware(req: NextRequest) {
   const response = NextResponse.next();
