@@ -8,6 +8,7 @@ import CheckoutButton from '@/components/checkout/CheckoutButton'
 import AddressDetails from '@/components/checkout/AddressDetails'
 import { Separator } from '@/components/ui/separator'
 import CheckOutProductList from '@/components/checkout/CheckOutProductList'
+import { SHIPPING_CHARGES } from '@/lib/config/constants'
 
 
 const Page = () => {
@@ -20,7 +21,8 @@ const Page = () => {
 
     const cartPriceTotal = items.reduce((total, { product, productCount }) => total + (product.price * productCount), 0)
     const cartMrpTotal = items.reduce((total, { product, productCount }) => total + (product.mrp * productCount), 0)
-    const shippingCharges = isAnyPaperback ? 1 : 0
+    const totalItems = items.reduce((total, { productCount }) => total + productCount, 0) //Wildcard amount for now, Remove later
+    const shippingCharges = isAnyPaperback ? SHIPPING_CHARGES * totalItems : 0
     const totalAmount = cartPriceTotal + shippingCharges
 
     useEffect(() => {
