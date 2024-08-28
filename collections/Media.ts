@@ -26,6 +26,10 @@ export const Media: CollectionConfig = {
   },
   admin: {
     hidden: ({ user }) => user.role !== "admin",
+    // hidden: ({ user }) => {
+    //   if (user.role === "admin" || "editor") return false;
+    //   else return true;
+    // },
   },
   access: {
     read: () => true,
@@ -39,6 +43,7 @@ export const Media: CollectionConfig = {
     // },
     delete: isAdminOrHasAccessToImages(),
     update: isAdminOrHasAccessToImages(),
+    create: ({ req }) => req.user.role === "admin",
   },
   upload: {
     staticURL: "/media",

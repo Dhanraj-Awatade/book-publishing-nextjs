@@ -109,7 +109,7 @@ const isAdminOrHasAccess =
     const user = _user as User | undefined;
 
     if (!user) return false;
-    if (user.role === "admin") return true;
+    if (user.role === "admin" || "editor") return true;
 
     const userProductIds = (user.products || []).reduce<Array<string>>(
       (acc, product) => {
@@ -135,7 +135,11 @@ export const Products: CollectionConfig = {
   admin: {
     useAsTitle: "Products",
     description: "Find all your Published Books here.",
-    hidden: ({ user }) => user.role !== "admin",
+    // hidden: ({ user }) => user.role === "admin",
+    hidden: ({ user }) => {
+      if (user.role === "admin" || "editor") return false;
+      else return true;
+    },
   },
   access: {
     read: isAdminOrHasAccess(),

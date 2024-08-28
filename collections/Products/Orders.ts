@@ -3,7 +3,7 @@ import { BeforeChangeHook } from "payload/dist/collections/config/types";
 import { Access, CollectionConfig } from "payload/types";
 
 const yourOwn: Access = ({ req: { user } }) => {
-  if (user.role === "admin") return true;
+  if (user.role === "admin" || "editor") return true;
 
   return {
     user: {
@@ -62,7 +62,11 @@ export const Orders: CollectionConfig = {
       name: "_isPaid",
       type: "checkbox",
       access: {
-        read: ({ req }) => req.user.role === "admin",
+        // read: ({ req }) => req.user.role === "admin",
+        read: ({ req }) => {
+          if (req.user.role === "admin" || "editor") return true;
+          else return false;
+        },
         create: () => false,
         update: ({ req }) => req.user.role === "admin",
       },
@@ -88,7 +92,7 @@ export const Orders: CollectionConfig = {
       name: "user",
       type: "relationship",
       admin: {
-        hidden: true,
+        hidden: false,
       },
       relationTo: "users",
       required: true,

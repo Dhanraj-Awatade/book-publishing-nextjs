@@ -144,13 +144,14 @@ export const Users: CollectionConfig = {
       access: {
         read: () => true,
         // create: () => false,
-        update: () => false,
-        // update: ({ req }) => req.user.role === "admin",
+        // update: () => false,
+        update: ({ req }) => req.user.role === "admin",
       },
       options: [
         { label: "Admin", value: "admin" },
         { label: "Customer", value: "customer" },
         { label: "Author", value: "author" },
+        { label: "Editor", value: "editor" },
       ],
     },
     {

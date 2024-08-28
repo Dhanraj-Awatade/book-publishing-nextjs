@@ -28,7 +28,7 @@ export interface User {
   addresses?: (string | Address)[] | null;
   products?: (string | Product)[] | null;
   product_files?: (string | ProductFile)[] | null;
-  role: 'admin' | 'customer' | 'author';
+  role: 'admin' | 'customer' | 'author' | 'editor';
   name: string;
   updatedAt: string;
   createdAt: string;
@@ -88,9 +88,13 @@ export interface Product {
     | 'fiction'
     | 'literature'
     | 'kids'
-    | 'comics';
+    | 'comics'
+    | 'agriculture'
+    | 'poetry'
+    | 'misc'
+    | 'legal';
   product_files?: (string | null) | ProductFile;
-  stock?: boolean | null;
+  stock: boolean;
   approvedForSale?: ('pending' | 'approved' | 'denied') | null;
   images: {
     image: string | Media;
