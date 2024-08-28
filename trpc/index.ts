@@ -9,10 +9,12 @@ import { getPayloadClient } from "../lib/get-payload";
 import { Payload } from "payload";
 import { paymentRouter } from "./payment-router";
 import { Product } from "@/payload-types";
+import { productRouter } from "./productRouter";
 
 export const appRouter = router({
   auth: authRouter,
   payment: paymentRouter,
+  productProcedures: productRouter,
   getInfiniteProducts: publicProcedure
     .input(
       z.object({
@@ -150,77 +152,6 @@ export const appRouter = router({
       //     nextPage: hasNextPage ? nextPage : null,
       //   };
       // }
-    }),
-
-  getPurchasedProducts: privateProcedure
-    .input(
-      z.object({
-        limit: z.number().min(1).max(100),
-        cursor: z.number().nullish(),
-        query: PurchasedProductsQueryValidator,
-      })
-    )
-    .query(async ({ input, ctx }) => {
-      const { query, cursor } = input;
-      const { sort, limit } = query;
-
-      const { user } = ctx;
-      const payload = await getPayloadClient();
-
-      // const parsedQueryOpts: Record<string, { equals: string }> = {};
-
-      // Object.entries(queryOpts).forEach(([key, value]) => {
-      //   parsedQueryOpts[key] = {
-      //     equals: value,
-      //   };
-      // });
-
-      const page = cursor || 1;
-
-      const {
-        docs: orders,
-        hasNextPage,
-        nextPage,
-        hasPrevPage,
-        prevPage,
-      } = await payload.find({
-        collection: "orders",
-        where: {
-          user: {
-            equals: user.id,
-          },
-          _isPaid: {
-            equals: true,
-          },
-        },
-        sort,
-        depth: 3,
-        limit,
-        page,
-      });
-
-      // const purchasedProductsArray = orders
-      //   .flatMap(({ products }) => products)
-      //   .flatMap((prod) => {
-      //     if (typeof prod === "string") return null;
-      //     else return prod;
-      //   });
-      // .filter((prod) => prod !== null);
-
-      const purchasedProductsArray = orders
-        .flatMap(({ products }) =>
-          products.map((prod) => (typeof prod === "string" ? null : prod))
-        )
-        .filter((prod): prod is Product => prod !== null);
-
-      const purchasedProducts = Array.from(new Set(purchasedProductsArray));
-      return {
-        purchasedProducts,
-        nextPage: hasNextPage ? nextPage : null,
-        prevPage: hasPrevPage ? prevPage : null,
-        hasNextPage,
-        hasPrevPage,
-      };
     }),
 });
 export type AppRouter = typeof appRouter;

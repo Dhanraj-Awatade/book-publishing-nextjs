@@ -7,6 +7,7 @@ import React from 'react'
 import ProductListing from './ProductListing'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from './ui/button'
+import { FALLBACK_CURSOR, FALLBACK_LIMIT } from '@/lib/config/constants'
 
 // TO-Do: Fix Error => Cannot update a component (`LibraryPage`) while rendering a different component (`LibraryProductReel`). 
 // To locate the bad setState() call inside `LibraryProductReel`, follow the stack trace as described in https://reactjs.org/link/setstate-in-render
@@ -20,14 +21,12 @@ interface LibraryProductReelProps {
     setNextPageFn?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const FALLBACK_LIMIT = 4
-const FALLBACK_CURSOR = 1
 
 const LibraryProductReel = (props: LibraryProductReelProps) => {
 
     const { title, subtitle, href, query, setPrevPageFn, cursor, setNextPageFn } = props
 
-    const { data: queryResults, isLoading, error, isError } = trpc.getPurchasedProducts.useQuery({
+    const { data: queryResults, isLoading, error, isError } = trpc.productProcedures.getPurchasedProducts.useQuery({
         limit: query.limit ?? FALLBACK_LIMIT, query, cursor: cursor ? cursor : FALLBACK_CURSOR
     },
         {
