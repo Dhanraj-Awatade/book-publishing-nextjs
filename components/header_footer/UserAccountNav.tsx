@@ -5,6 +5,7 @@ import { Button } from '../ui/button'
 import { User } from '@/payload-types'
 import Link from 'next/link'
 import { useAuth } from '@/lib/hooks/use-auth'
+import { InfoIcon, ListChecksIcon, LogOutIcon } from 'lucide-react'
 
 const UserAccountNav = ({ user }: { user: User }) => {
     const { signOut } = useAuth()
@@ -20,12 +21,20 @@ const UserAccountNav = ({ user }: { user: User }) => {
             </div>
 
             <DropdownMenuSeparator />
+
+            {user.role === "admin" || "editor"
+                ? <DropdownMenuItem asChild>
+                    <Link href='/orders'><ListChecksIcon className='mx-2' />Admin Orders</Link>
+                </DropdownMenuItem>
+                : null
+            }
+
             {/* To-Do: Add Account Page */}
             <DropdownMenuItem asChild>
-                <Link href='/account'>Account Details</Link>
+                <Link href='/account'><InfoIcon className='mx-2' />Account Details</Link>
             </DropdownMenuItem>
 
-            <DropdownMenuItem onClick={signOut} className='cursor-pointer'>Log Out</DropdownMenuItem>
+            <DropdownMenuItem onClick={signOut} className='cursor-pointer'><LogOutIcon className='mx-2' />Log Out</DropdownMenuItem>
 
         </DropdownMenuContent>
     </DropdownMenu>

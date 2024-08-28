@@ -5,7 +5,7 @@ import { Button } from '../ui/button'
 import { User } from '../../payload-types'
 import Link from 'next/link'
 import { useAuth } from '../../lib/hooks/use-auth'
-import { InfoIcon, LibraryBigIcon, LogInIcon, LogOutIcon, PlusCircleIcon, UserCircleIcon } from 'lucide-react'
+import { InfoIcon, LibraryBigIcon, ListChecksIcon, LogInIcon, LogOutIcon, PlusCircleIcon, UserCircleIcon } from 'lucide-react'
 
 const UserAccountNavMobile = ({ user }: { user: User | null }) => {
     const { signOut } = useAuth()
@@ -30,6 +30,12 @@ const UserAccountNavMobile = ({ user }: { user: User | null }) => {
                     : null
                 }
             </DropdownMenuItem>
+            {user && user.role === "admin" || "editor"
+                ? <DropdownMenuItem asChild>
+                    <Link href='/orders'><ListChecksIcon className='mx-2' />Admin Orders</Link>
+                </DropdownMenuItem>
+                : null
+            }
             {/* To-Do: Add Account Page */}
             <DropdownMenuItem asChild>
                 {user
