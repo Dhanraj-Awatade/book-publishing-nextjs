@@ -27,10 +27,16 @@ export const useCart = create<CartState>()(
               items: [
                 ...state.items.map((item) => {
                   if (item.product.id === product.id) {
-                    return {
-                      product: item.product,
-                      productCount: item.productCount + 1,
-                    };
+                    if (product.type === "paperback")
+                      return {
+                        product: item.product,
+                        productCount: item.productCount + 1,
+                      };
+                    else
+                      return {
+                        product: item.product,
+                        productCount: 1,
+                      };
                   } else return item;
                 }),
               ],
