@@ -296,10 +296,16 @@ export const Products: CollectionConfig = {
       label: "Product Status",
       type: "select",
       defaultValue: "pending",
+      admin: {
+        condition: () => true,
+      },
       access: {
-        create: ({ req }) => req.user.role === "admin",
-        read: ({ req }) => req.user.role === "admin",
-        update: ({ req }) => req.user.role === "admin",
+        create: ({ req }) =>
+          req.user.role === "admin" || req.user.role === "editor",
+        read: ({ req }) =>
+          req.user.role === "admin" || req.user.role === "editor",
+        update: ({ req }) =>
+          req.user.role === "admin" || req.user.role === "editor",
       },
       options: [
         {
