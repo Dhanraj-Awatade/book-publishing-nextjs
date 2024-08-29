@@ -18,6 +18,7 @@ const Page = () => {
     const isAnyPaperback = items.flatMap(({ product }) => product.type).includes("paperback")
     const [isMounted, setIsMounted] = useState<boolean>(false)
     const [selectedAddress, selectAddress] = useState<{ id: string; house: string; state: string; pin: string; adressName: string; updatedAt: string; createdAt: string; road?: string | null | undefined; } | null | undefined>(/*addresses && addresses.at(0) ? addresses.at(0) :*/ null)
+    const [isOverlay, setOverlay] = useState<boolean>(false)
 
     const cartPriceTotal = items.reduce((total, { product, productCount }) => total + (product.price * productCount), 0)
     const cartMrpTotal = items.reduce((total, { product, productCount }) => total + (product.mrp * productCount), 0)
@@ -32,14 +33,14 @@ const Page = () => {
 
     return (
         <div className='bg-white'>
-            <div className='mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8'>
+            <div className={cn('mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8', { "hidden": isOverlay })}>
                 <h1 className='text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
                     Shopping Cart
                 </h1>
                 <div className='mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16'>
                     <div className={cn(
                         "lg:col-span-7",
-                        { "rounded-lg border-2 border-dashed border-zinc-200 p-12": isMounted && items.length === 0, }
+                        { "rounded-lg border-2 border-dashed border-zinc-200 p-12 lg:col-start-3": isMounted && items.length === 0, }
                     )}>
                         <h2 className='sr-only'>Items in your shopping cart</h2>
 
@@ -121,11 +122,23 @@ const Page = () => {
                                     : (<Loader2 className='h-4 w-4 animate-spin ml-1.5' />)}
                             </Button> */}
                             {
-                                <CheckoutButton totalAmount={totalAmount} isAnyPaperback={isAnyPaperback} selectedAddress={selectedAddress} productIds={productIds} cartItemCount={items.length} />
+                                <CheckoutButton
+                                    totalAmount={totalAmount}
+                                    isAnyPaperback={isAnyPaperback}
+                                    selectedAddress={selectedAddress}
+                                    productIds={productIds}
+                                    cartItemCount={items.length}
+                                    setOverlay={setOverlay}
+                                />
                             }
                         </div>
                     </section>
                 </div>
+            </div>
+            <div className={cn('flex justify-center items-center w-full h-screen', { "hidden": !isOverlay })}>
+                <p>Awaiting payment status</p>
+                <Loader2 className='h-4 w-4 mx-2 animate-spin' />
+                <p className='text-amber-700'>Please do not go back or refresh this page</p>
             </div>
         </div >
     )

@@ -13,9 +13,10 @@ interface CheckoutButtonProps {
   isAnyPaperback: boolean
   totalAmount: number
   selectedAddress: { id: string; house: string; state: string; pin: string; adressName: string; updatedAt: string; createdAt: string; road?: string | null | undefined; } | null | undefined
+  setOverlay: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const CheckoutButton = ({ productIds, cartItemCount, selectedAddress, isAnyPaperback, totalAmount }: CheckoutButtonProps) => {
+const CheckoutButton = ({ productIds, cartItemCount, selectedAddress, isAnyPaperback, totalAmount, setOverlay }: CheckoutButtonProps) => {
 
   try {
     const razorScript = document.createElement("script");
@@ -76,19 +77,21 @@ const CheckoutButton = ({ productIds, cartItemCount, selectedAddress, isAnyPaper
 
   useEffect(() => {
     try {
+
       if (isFetched === true) {
         setOrderId(razorpayServer!.order.id)
         // console.log("orderId:", orderId)
       }
+
+      if (orderVerificationStatus === true && isFetched) {
+        refetchUpdatedUser()
+        // console.log("UseEffect Checkout Button User", orderId)
+        router.replace(`/thank-you?orderId=${/*razorpayServer?.order.id*/orderId}&isAnyPaperback=${isAnyPaperback}`)
+        // clearCart() //To-do:Check if this works
+      }
+
     } catch (error) {
       console.log(error)
-    }
-
-    if (orderVerificationStatus === true) {
-      refetchUpdatedUser()
-      // console.log("UseEffect Checkout Button User", updatedUser)
-      router.replace(`/thank-you?orderId=${razorpayServer!.order.id}&isAnyPaperback=${isAnyPaperback}`)
-      // clearCart() //To-do:Check if this works
     }
 
   }, [orderVerificationStatus, isFetched, razorpayServer, refetchUpdatedUser, router, isAnyPaperback])
@@ -96,12 +99,13 @@ const CheckoutButton = ({ productIds, cartItemCount, selectedAddress, isAnyPaper
   /*------------------------- Handler Function Start ----------------------------------*/
   async function razorpayHandler(response: any) {
     //   const router = useRouter();
-
     // const isOrderVerified = Razorpay.validateWebhookSignature(
     //   response.razorpay_payment_id,
     //   response.razorpay_order_id,
     //   response.razorpay_signature
     // );
+
+    setOverlay(true)
 
     const functionRespose = {
       razorpay_payment_id: response.razorpay_payment_id,
