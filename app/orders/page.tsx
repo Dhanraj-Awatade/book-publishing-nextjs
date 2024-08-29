@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button'
 import OrderCardComponent from './OrderCardComponent'
 import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react'
 
-const page = () => {
+const Orders = () => {
 
     const [cursor, setCursor] = useState<number>(1)
 
@@ -146,7 +146,7 @@ const page = () => {
     )
 }
 
-export default page
+export default Orders
 
 // interface DataTableProps<TData, TValue> {
 //     columns: ColumnDef<TData, TValue>[]
