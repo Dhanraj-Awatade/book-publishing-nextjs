@@ -69,11 +69,11 @@ const Cart = () => {
                             </div>
                             <SheetFooter >
                                 <SheetTrigger asChild>
-                                    <Button variant={"destructive"} onClick={clearCart}>Clear Cart</Button>
+                                    <Button className='my-2' variant={"destructive"} onClick={clearCart}>Clear Cart</Button>
                                 </SheetTrigger>
                                 <SheetTrigger asChild>
                                     <Link href='/cart' className={buttonVariants({
-                                        className: 'w-full',
+                                        className: 'w-full my-2',
                                     })}>
                                         Continue To Checkout
                                     </Link>
