@@ -1,6 +1,6 @@
 "use client"
 import MaxWidthWrapper from '@/components/MaxWidthWrapper'
-import AllProductPage from '@/components/productDisplay/AllProductsPage'
+import AllProductsPage from '@/components/productDisplay/AllProductsPage'
 import PaginationComponent from '@/components/productDisplay/PaginationComponent'
 import ProductReel from '@/components/productDisplay/ProductReel'
 import { PRODUCT_CATEGORIES } from '@/lib/config'
@@ -26,7 +26,11 @@ const ProductsPage = ({ searchParams }: ProductPageProps) => {
     return (
         <MaxWidthWrapper>
 
-            <AllProductPage /*setNextPageFn={setHasNextPage} setPrevPageFn={setHasPrevPage}*/ title={label ?? "Browse all the books here"} query={{ category, type, limit: 16, sort: sort === "desc" || sort === "asc" ? sort : undefined }} />
+            <AllProductsPage
+                mode='allProducts'
+                title={label ?? "Browse all the books here"}
+                query={{ category, type, limit: 16, sort: sort === "desc" || sort === "asc" ? sort : undefined }}
+            />
 
         </MaxWidthWrapper>
     )

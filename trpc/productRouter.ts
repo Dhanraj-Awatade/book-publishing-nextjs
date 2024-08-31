@@ -49,11 +49,13 @@ export const productRouter = router({
         .flatMap(({ products }) =>
           products.map((prod) => (typeof prod === "string" ? null : prod))
         )
-        .filter((prod): prod is Product => prod !== null);
+        .filter(
+          (prod): prod is Product => prod?.type === "ebook" && prod !== null
+        );
 
-      const purchasedProducts = Array.from(new Set(purchasedProductsArray));
+      const items = Array.from(new Set(purchasedProductsArray));
       return {
-        purchasedProducts,
+        items,
         nextPage: hasNextPage ? nextPage : null,
         prevPage: hasPrevPage ? prevPage : null,
         hasNextPage,
