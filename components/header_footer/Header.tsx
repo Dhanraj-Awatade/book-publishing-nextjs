@@ -45,9 +45,12 @@ const Header = async () => {
             <div className='ml-auto flex items-center'>
               <div className='hidden md:flex md:flex-1 md:items-center md:justify-end md:space-x-6'>
 
-                <Link href='/library' className={cn(buttonVariants({ variant: 'secondary', size: 'lg' }), "font-semibold border ")}>
-                  Library
-                </Link>
+                {isSignedIn ?
+                  <Link href='/library' className={cn(buttonVariants({ variant: 'secondary', size: 'lg' }), "font-semibold border ")}>
+                    Library
+                  </Link>
+                  : null
+                }
 
                 {isSignedIn
                   ? null

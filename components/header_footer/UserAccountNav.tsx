@@ -22,9 +22,9 @@ const UserAccountNav = ({ user }: { user: User }) => {
 
             <DropdownMenuSeparator />
 
-            {user.role === "admin" || "editor"
+            {/*user.role === "admin" || "editor"*/ user
                 ? <DropdownMenuItem asChild>
-                    <Link href='/orders'><ListChecksIcon className='mx-2' />Admin Orders</Link>
+                    <Link href='/orders'><ListChecksIcon className='mx-2' />Orders</Link>
                 </DropdownMenuItem>
                 : null
             }

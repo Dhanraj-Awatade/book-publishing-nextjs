@@ -30,9 +30,9 @@ const UserAccountNavMobile = ({ user }: { user: User | null }) => {
                     : null
                 }
             </DropdownMenuItem>
-            {user && user.role === "admin" || "editor"
+            {user /*&& user.role === "admin" || "editor"*/
                 ? <DropdownMenuItem asChild>
-                    <Link href='/orders'><ListChecksIcon className='mx-2' />Admin Orders</Link>
+                    <Link href='/orders'><ListChecksIcon className='mx-2' />Orders</Link>
                 </DropdownMenuItem>
                 : null
             }
