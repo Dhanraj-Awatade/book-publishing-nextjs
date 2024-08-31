@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from 'react'
 import { pdfjs, Document, Page, Outline } from 'react-pdf';
-import { Progress } from './ui/progress';
-import { Button } from './ui/button';
-import { AspectRatio } from './ui/aspect-ratio';
+import { Progress } from '../ui/progress';
+import { Button } from '../ui/button';
+import { AspectRatio } from '../ui/aspect-ratio';
 import { ArrowLeftCircle, ArrowRightCircle, RotateCw } from 'lucide-react';
 // import pdfjsWorker from "react-pdf/node_modules/pdfjs-dist/build/pdf.worker.entry";
 // import worker from 'pdfjs-dist/webpack'
@@ -23,39 +23,6 @@ interface ReaderProps {
 }
 
 const PdfReader = ({ productPath }: ReaderProps) => {
-    // .addEventListener('touchstart', function (event) {
-    //     touchstartX = event.changedTouches[0].screenX;
-    //     touchstartY = event.changedTouches[0].screenY;
-    // }, false);
-
-    // touchableElement.addEventListener('touchend', function (event) {
-    //     touchendX = event.changedTouches[0].screenX;
-    //     touchendY = event.changedTouches[0].screenY;
-    //     handleGesture();
-    // }, false);
-
-
-    // function handleGesture() {
-    //     if (touchendX < touchstartX) {
-    //         console.log('Swiped Left');
-    //     }
-
-    //     if (touchendX > touchstartX) {
-    //         console.log('Swiped Right');
-    //     }
-
-    //     if (touchendY < touchstartY) {
-    //         console.log('Swiped Up');
-    //     }
-
-    //     if (touchendY > touchstartY) {
-    //         console.log('Swiped Down');
-    //     }
-
-    //     if (touchendY === touchstartY) {
-    //         console.log('Tap');
-    //     }
-    // }
 
     const [numPages, setNumPages] = useState<number>();
     const [pageNumber, setPageNumber] = useState<number>(1);

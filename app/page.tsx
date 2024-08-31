@@ -1,6 +1,6 @@
-import BookCarousel from '@/components/BookCarousel'
+import BookCarousel from '@/components/productDisplay/Carousel/BookCarousel'
 import MaxWidthWrapper from '@/components/MaxWidthWrapper'
-import ProductReel from '@/components/ProductReel'
+import ProductReel from '@/components/productDisplay/ProductReel'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { Check, Star } from 'lucide-react'
@@ -106,11 +106,19 @@ export default function Home() {
 
         <ProductReel query={{ limit: 4 }}
           title='Latest Trending'
-          href='/books'
+          Collectionhref='/books'
         />
         <ProductReel query={{ sort: 'desc', limit: 4 }}
           title='Newest Releases'
-          href='/books'
+          Collectionhref='/books'
+        />
+        <ProductReel query={{ limit: 4, type: "ebook" }}
+          title='Latest Trending in eBooks'
+          Collectionhref='/books?type=ebook'
+        />
+        <ProductReel query={{ limit: 4, type: "paperback" }}
+          title='Latest Trending in Paperbacks'
+          Collectionhref='/books?type=paperback'
         />
       </MaxWidthWrapper >
     </>

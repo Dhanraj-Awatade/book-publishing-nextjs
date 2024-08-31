@@ -1,6 +1,6 @@
 "use client"
 // import React, { useEffect } from 'react'
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from './ui/carousel'
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '../../ui/carousel'
 import { trpc } from '@/trpc/client'
 import { Product } from '@/payload-types'
 import CarouselImage from './CarouselImage'

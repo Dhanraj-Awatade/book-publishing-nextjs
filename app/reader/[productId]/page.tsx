@@ -1,5 +1,6 @@
+import EbookReader from '@/components/readers/EbookReader'
 import MaxWidthWrapper from '@/components/MaxWidthWrapper'
-import PdfReader from '@/components/PdfReader'
+import PdfReader from '@/components/readers/PdfReader'
 import { getPayloadClient } from '@/lib/get-payload'
 import React from 'react'
 
@@ -24,6 +25,8 @@ const ReaderPage = async ({ params }: ReaderPageProps) => {
         }
     })
     const [product] = products
+
+    if (!product) throw new Error("Product not found")
     if (!product.product_files) throw new Error("Product file not found")
     const productPath = typeof product.product_files === "string" ? product.product_files : product.product_files.url!
     // const file = 
@@ -31,6 +34,7 @@ const ReaderPage = async ({ params }: ReaderPageProps) => {
         <MaxWidthWrapper>
 
             <PdfReader productPath={productPath} />
+            {/* <EbookReader productPath={productPath} /> */}
         </MaxWidthWrapper>
     )
 }

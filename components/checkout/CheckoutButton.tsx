@@ -94,7 +94,7 @@ const CheckoutButton = ({ productIds, cartItemCount, selectedAddress, isAnyPaper
       console.log(error)
     }
 
-  }, [orderVerificationStatus, isFetched, razorpayServer, refetchUpdatedUser, router, isAnyPaperback])
+  }, [orderVerificationStatus, isFetched, razorpayServer, refetchUpdatedUser, router, isAnyPaperback, orderId])
 
   /*------------------------- Handler Function Start ----------------------------------*/
   async function razorpayHandler(response: any) {

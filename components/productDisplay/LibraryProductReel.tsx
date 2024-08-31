@@ -6,7 +6,7 @@ import Link from 'next/link'
 import React from 'react'
 import ProductListing from './ProductListing'
 import { cn } from '@/lib/utils'
-import { buttonVariants } from './ui/button'
+import { buttonVariants } from '../ui/button'
 import { FALLBACK_CURSOR, FALLBACK_LIMIT } from '@/lib/config/constants'
 
 // TO-Do: Fix Error => Cannot update a component (`LibraryPage`) while rendering a different component (`LibraryProductReel`). 

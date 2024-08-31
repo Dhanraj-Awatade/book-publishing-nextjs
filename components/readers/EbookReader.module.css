@@ -1,0 +1,20 @@
+.pageTransitionEnter {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  
+  .pageTransitionEnterActive {
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 300ms, transform 300ms;
+  }
+  
+  .pageTransitionExit {
+    opacity: 1;
+  }
+  
+  .pageTransitionExitActive {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 300ms, transform 300ms;
+  }

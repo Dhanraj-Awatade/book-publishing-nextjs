@@ -1,6 +1,6 @@
 import React from 'react'
-import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem } from './ui/pagination'
-import { Button } from './ui/button'
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem } from '../ui/pagination'
+import { Button } from '../ui/button'
 
 interface PaginationComponentProps {
     cursor: number

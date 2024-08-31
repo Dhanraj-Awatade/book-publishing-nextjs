@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { CarouselItem } from './ui/carousel'
+import { CarouselItem } from '../../ui/carousel'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Product } from '@/payload-types'
-import { ProductPlaceholder } from './ProductListing'
+import { ProductPlaceholder } from '../ProductListing'
 import { isValidURL } from '@/lib/validators/urlValidator'
 
 interface CarouselImageProps {

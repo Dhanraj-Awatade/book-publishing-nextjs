@@ -1,7 +1,7 @@
 import AddToCartButton from '@/components/cart/AddToCartButton'
-import ImageSlider from '@/components/ImageSlider'
+import ImageSlider from '@/components/productDisplay/ImageSlider'
 import MaxWidthWrapper from '@/components/MaxWidthWrapper'
-import ProductReel from '@/components/ProductReel'
+import ProductReel from '@/components/productDisplay/ProductReel'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { PRODUCT_CATEGORIES } from '@/lib/config'
@@ -252,7 +252,7 @@ const Page = async ({ params }: PageProps) => {
             <ProductReel
                 title={`Similar ${label}`}
                 subtitle={`Browse Similar High Quality ${label} just like ${product.name}`}
-                href='/products'
+                Collectionhref='/products'
                 query={{ category: product.category, limit: 4 }}
             />
 

@@ -9,7 +9,7 @@ import ProductListing from './ProductListing'
 interface ProductReelProps {
     title: string,
     subtitle?: string
-    href?: string
+    Collectionhref?: string
     query: TQueryValidator
     cursor?: number
     setPrevPageFn?: React.Dispatch<React.SetStateAction<boolean>>
@@ -20,7 +20,7 @@ const FALLBACK_LIMIT = 4
 
 const ProductReel = (props: ProductReelProps) => {
 
-    const { title, subtitle, href, query, cursor, setNextPageFn, setPrevPageFn } = props
+    const { title, subtitle, Collectionhref, query, cursor, setNextPageFn, setPrevPageFn } = props
     const FALLBACK_CURSOR = 1
 
     const { data: queryResults, isLoading } = trpc.getInfiniteProducts.useQuery({
@@ -74,8 +74,8 @@ const ProductReel = (props: ProductReelProps) => {
                         ? <p className='mt-2 text-sm text-muted-foreground'>{subtitle}</p>
                         : null}
                 </div>
-                {href
-                    ? <Link href={href} className='hidden text-sm font-medium text-red-600 hover:text-red-500 md:block'>
+                {Collectionhref
+                    ? <Link href={Collectionhref} className='hidden text-sm font-medium text-red-600 hover:text-red-500 md:block'>
                         Browse entire collection{' '}
                         <span aria-hidden='true'>&rarr;</span>
                     </Link>

@@ -1,7 +1,7 @@
 "use client"
 import MaxWidthWrapper from '@/components/MaxWidthWrapper'
-import PaginationComponent from '@/components/PaginationComponent'
-import ProductReel from '@/components/ProductReel'
+import PaginationComponent from '@/components/productDisplay/PaginationComponent'
+import ProductReel from '@/components/productDisplay/ProductReel'
 import { PRODUCT_CATEGORIES } from '@/lib/config'
 import React, { useState } from 'react'
 type Param = string | string[] | undefined

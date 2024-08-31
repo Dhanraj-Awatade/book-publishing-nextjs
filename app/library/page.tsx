@@ -1,7 +1,7 @@
 "use client"
-import LibraryProductReel from '@/components/LibraryProductReel'
+import LibraryProductReel from '@/components/productDisplay/LibraryProductReel'
 import MaxWidthWrapper from '@/components/MaxWidthWrapper'
-import PaginationComponent from '@/components/PaginationComponent'
+import PaginationComponent from '@/components/productDisplay/PaginationComponent'
 import { useSearchParams } from 'next/navigation'
 import React, { useState } from 'react'
 // type Param = string | string[] | undefined
