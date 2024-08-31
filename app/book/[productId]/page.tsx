@@ -67,10 +67,11 @@ const Page = async ({ params }: PageProps) => {
     let userProductIds: string[] = []
     if (!user) { userProductIds = [] }
     else {
-        userProductIds = user.products!.map((product) => {
-            if (typeof product === 'string') { return product }
-            else { return product.id }
-        })
+        if (user.products)
+            userProductIds = user.products.map((product) => {
+                if (typeof product === 'string') { return product }
+                else { return product.id }
+            })
     }
     const isPurchased = userProductIds.includes(product.id) //Done (Completed): Check Error
 
