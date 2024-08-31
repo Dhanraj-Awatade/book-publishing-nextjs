@@ -32,12 +32,12 @@ const PaginationComponent = ({ cursor, setCursor, hasNextPage, hasPrevPage, next
                 </PaginationItem>
 
                 <PaginationItem>
-                    <Button onClick={() => setCursor(cursor + 1)} variant={"outline"}>{cursor + 1}</Button>
+                    <Button disabled={!hasNextPage} onClick={() => setCursor(cursor + 1)} variant={"outline"}>{cursor + 1}</Button>
                 </PaginationItem>
 
-                <PaginationItem>
+                {/* <PaginationItem>
                     <Button onClick={() => setCursor(cursor + 2)} variant={"outline"}>{cursor + 2}</Button>
-                </PaginationItem>
+                </PaginationItem> */}
 
                 <PaginationItem>
                     <PaginationEllipsis />
