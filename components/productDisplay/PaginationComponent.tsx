@@ -5,17 +5,19 @@ import { Button } from '../ui/button'
 interface PaginationComponentProps {
     cursor: number
     setCursor: React.Dispatch<React.SetStateAction<number>>
-    hasNextPage: boolean
-    hasPrevPage: boolean
+    hasNextPage: boolean | undefined
+    hasPrevPage: boolean | undefined
+    prevPage: number | null | undefined
+    nextPage: number | null | undefined
 }
 
-const PaginationComponent = ({ cursor, setCursor, hasNextPage, hasPrevPage }: PaginationComponentProps) => {
+const PaginationComponent = ({ cursor, setCursor, hasNextPage, hasPrevPage, nextPage, prevPage }: PaginationComponentProps) => {
     return (
         <Pagination>
             <PaginationContent>
 
                 <PaginationItem>
-                    <Button disabled={cursor === 1 || hasPrevPage} onClick={() => setCursor(cursor === 1 ? 1 : cursor - 1)} variant={"outline"}>Previous</Button>
+                    <Button disabled={cursor === 1 || !hasPrevPage} onClick={() => setCursor(prevPage ? prevPage : 1)} variant={"outline"}>Previous</Button>
                 </PaginationItem>
 
                 {cursor !== 1
