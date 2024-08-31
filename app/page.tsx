@@ -106,20 +106,23 @@ export default function Home() {
 
         <ProductReel query={{ limit: 4 }}
           title='Latest Trending'
-          Collectionhref='/books'
+          collectionHref='/books'
         />
         <ProductReel query={{ sort: 'desc', limit: 4 }}
           title='Newest Releases'
-          Collectionhref='/books'
+          collectionHref='/books'
         />
         <ProductReel query={{ limit: 4, type: "ebook" }}
           title='Latest Trending in eBooks'
-          Collectionhref='/books?type=ebook'
+          collectionHref='/books?type=ebook'
+          collectionTitle='ebook'
         />
         <ProductReel query={{ limit: 4, type: "paperback" }}
           title='Latest Trending in Paperbacks'
-          Collectionhref='/books?type=paperback'
+          collectionHref='/books?type=paperback'
+          collectionTitle='paperback'
         />
+
       </MaxWidthWrapper >
     </>
   )
