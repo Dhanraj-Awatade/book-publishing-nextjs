@@ -11,13 +11,13 @@ import { FALLBACK_CURSOR, FALLBACK_LIMIT } from '@/lib/config/constants'
 interface AllProductPageProps {
     title: string,
     subtitle?: string
-    Collectionhref?: string
+    collectionHref?: string
     query: TQueryValidator
 }
 
 const AllProductPage = (props: AllProductPageProps) => {
 
-    const { title, subtitle, Collectionhref, query, } = props
+    const { title, subtitle, collectionHref, query, } = props
 
     const [cursor, setCursor] = useState<number>(FALLBACK_CURSOR)
 
@@ -54,8 +54,8 @@ const AllProductPage = (props: AllProductPageProps) => {
                             ? <p className='mt-2 text-sm text-muted-foreground'>{subtitle}</p>
                             : null}
                     </div>
-                    {Collectionhref
-                        ? <Link href={Collectionhref} className='hidden text-sm font-medium text-red-600 hover:text-red-500 md:block'>
+                    {collectionHref
+                        ? <Link href={collectionHref} className='hidden text-sm font-medium text-red-600 hover:text-red-500 md:block'>
                             Browse entire collection{' '}
                             <span aria-hidden='true'>&rarr;</span>
                         </Link>

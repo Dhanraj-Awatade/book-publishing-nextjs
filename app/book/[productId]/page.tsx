@@ -252,7 +252,7 @@ const Page = async ({ params }: PageProps) => {
             <ProductReel
                 title={`Similar ${label}`}
                 subtitle={`Browse Similar High Quality ${label} just like ${product.name}`}
-                Collectionhref='/products'
+                collectionHref='/products'
                 query={{ category: product.category, limit: 4 }}
             />
 
