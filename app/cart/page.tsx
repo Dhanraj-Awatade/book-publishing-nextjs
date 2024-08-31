@@ -28,7 +28,7 @@ const Page = () => {
 
     useEffect(() => {
         setIsMounted(true)
-    }), []
+    }, [])
 
 
     return (
