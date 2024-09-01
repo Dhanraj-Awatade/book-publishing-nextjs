@@ -1,4 +1,4 @@
-FROM node:18-alpine AS base
+FROM node:22.7.0-alpine AS base
 
 FROM base AS deps
 RUN apk add --no-cache libc6-compat
@@ -44,8 +44,8 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/build ./build
 COPY --from=builder /app/next.config.js ./next.config.js
-COPY --from=builder --chown=nextjs:nodejs /app/media ./dist/media
-COPY --from=builder --chown=nextjs:nodejs /app/product_files ./dist/product_files
+# COPY --from=builder --chown=nextjs:nodejs /app/media ./dist/media
+# COPY --from=builder --chown=nextjs:nodejs /app/product_files ./dist/product_files
 COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json

@@ -1,7 +1,7 @@
 import BookCarousel from '@/components/productDisplay/Carousel/BookCarousel'
 import MaxWidthWrapper from '@/components/MaxWidthWrapper'
 import ProductReel from '@/components/productDisplay/ProductReel'
-import { Button, buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { Check, Star } from 'lucide-react'
 import Link from 'next/link'
