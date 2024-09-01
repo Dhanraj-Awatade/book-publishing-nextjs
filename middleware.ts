@@ -7,6 +7,7 @@ const allowedOrigins = [
   "https://saptarshee.in",
   "https://www.saptarshee.in",
   // "http://localhost:3000",
+  "https://saptarshee-nextjs-docker-398070399895.asia-southeast1.run.app",
 ];
 
 const corsOptions = {
