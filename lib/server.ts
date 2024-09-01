@@ -21,10 +21,7 @@ const createContext = ({
   res,
 }: trpcExpress.CreateExpressContextOptions) => {
   res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Origin", [
-    "https://saptarshee.in",
-    "https://saptarshee-nextjs-docker-398070399895.asia-southeast1.run.app",
-  ]);
+  res.setHeader("Access-Control-Allow-Origin", "https://saptarshee.in");
   return { req, res };
 };
 
@@ -36,11 +33,20 @@ export type ExpressContext = inferAsyncReturnType<typeof createContext>;
 
 const start = async () => {
   app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.setHeader("Access-Control-Allow-Origin", [
+    const corsWhitelist = [
       "https://saptarshee.in",
       "https://saptarshee-nextjs-docker-398070399895.asia-southeast1.run.app",
-    ]);
+    ];
+    if (corsWhitelist.indexOf(req.headers.origin as string) !== -1) {
+      res.header("Access-Control-Allow-Origin", req.headers.origin);
+      res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept"
+      );
+    }
+
+    // res.setHeader("Access-Control-Allow-Credentials", "true");
+    // res.setHeader("Access-Control-Allow-Origin", "https://saptarshee.in");
     next();
   });
 
@@ -114,11 +120,20 @@ const start = async () => {
   );
 
   app.use((req, res) => {
-    res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.setHeader("Access-Control-Allow-Origin", [
+    const corsWhitelist = [
       "https://saptarshee.in",
       "https://saptarshee-nextjs-docker-398070399895.asia-southeast1.run.app",
-    ]);
+    ];
+    if (corsWhitelist.indexOf(req.headers.origin as string) !== -1) {
+      res.header("Access-Control-Allow-Origin", req.headers.origin);
+      res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept"
+      );
+    }
+
+    // res.setHeader("Access-Control-Allow-Credentials", "true");
+    // res.setHeader("Access-Control-Allow-Origin", "https://saptarshee.in");
     return nextHandler(req, res);
   });
   nextApp.prepare().then(() => {
