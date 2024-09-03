@@ -109,7 +109,8 @@ const isAdminOrHasAccess =
     const user = _user as User | undefined;
 
     if (!user) return false;
-    if (user.role === "admin" || "editor") return true;
+    if (user.role === "admin") return true;
+    if (user.role === "editor") return true;
 
     const userProductIds = (user.products || []).reduce<Array<string>>(
       (acc, product) => {
@@ -176,7 +177,11 @@ export const Products: CollectionConfig = {
       required: true,
       hasMany: false,
       admin: {
-        condition: ({ req }) => false,
+        condition: ({ req }) => req.user.role === "admin",
+      },
+      access: {
+        read: () => true,
+        update: ({ req }) => req.user.role === "admin",
       },
     },
     {

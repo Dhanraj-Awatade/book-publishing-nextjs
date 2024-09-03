@@ -3,7 +3,8 @@ import { BeforeChangeHook } from "payload/dist/collections/config/types";
 import { Access, CollectionConfig } from "payload/types";
 
 const yourOwn: Access = ({ req: { user } }) => {
-  if (user.role === "admin" || "editor") return true;
+  if (user.role === "admin") return true;
+  if (user.role === "editor") return true;
 
   return {
     user: {
@@ -11,36 +12,6 @@ const yourOwn: Access = ({ req: { user } }) => {
     },
   };
 };
-
-// const addPurchasedProducts: BeforeChangeHook = async ({
-//   data,
-//   req,
-//   operation,
-//   collection,
-// }) => {
-//   if (operation === "update") {
-//     const user = req.user as User;
-
-//     const { docs: orders } = await req.payload.find({
-//       collection: "orders",
-//       depth: 2,
-//       where: {
-//         user: {
-//           equals: user.id,
-//         },
-//         _isPaid: {
-//           equals: true,
-//         },
-//       },
-//     });
-
-//     const purchasedProductsArray = orders.map((order) => order.products);
-//     const purchasedProducts = purchasedProductsArray.flatMap((prod) => prod);
-
-//     user.products = purchasedProducts;
-//     // return { ...data, products: purchasedProducts };
-//   }
-// };
 
 export const Orders: CollectionConfig = {
   slug: "orders",

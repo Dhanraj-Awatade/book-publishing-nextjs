@@ -35,6 +35,7 @@ const start = async () => {
   app.use((req, res, next) => {
     const corsWhitelist = [
       "https://saptarshee.in",
+      "https://www.saptarshee.in",
       "https://saptarshee-nextjs-docker-398070399895.asia-southeast1.run.app",
     ];
     if (corsWhitelist.indexOf(req.headers.origin as string) !== -1) {
@@ -122,6 +123,7 @@ const start = async () => {
   app.use((req, res) => {
     const corsWhitelist = [
       "https://saptarshee.in",
+      "https://www.saptarshee.in",
       "https://saptarshee-nextjs-docker-398070399895.asia-southeast1.run.app",
     ];
     if (corsWhitelist.indexOf(req.headers.origin as string) !== -1) {

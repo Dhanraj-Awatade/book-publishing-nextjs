@@ -54,6 +54,7 @@ export interface Address {
   road?: string | null;
   pin: string;
   state: string;
+  user?: (string | null) | User;
   updatedAt: string;
   createdAt: string;
 }

@@ -268,6 +268,7 @@ export const paymentRouter = router({
     .mutation(async ({ input, ctx }) => {
       const { house, pin, road, state, name } = input;
       const { user } = ctx;
+      const userId = user.id as string;
       const payload = await getPayloadClient();
 
       const definedRoad = typeof road === "undefined" ? null : road;
@@ -277,83 +278,79 @@ export const paymentRouter = router({
         road: string | null;
         pin: string;
         state: string;
+        user: string;
       } = {
         adressName: name,
         house,
         road: definedRoad,
         pin,
         state,
+        user: userId,
       };
 
       const address = await payload.create({
         collection: "addresses",
         data: updatedAddress,
       });
-      // const [user] = users;
+      // // const [user] = users;
 
-      const addAddressToUserQuery = qs.stringify(
-        {
-          where: {
-            id: {
-              equals: user.id,
-            },
-          },
-        },
-        { addQueryPrefix: true }
-      );
-
-      let existingUserAddressIds: string[] = [];
-
-      try {
-        if (user.addresses) {
-          existingUserAddressIds = ctx.user.addresses!.flatMap((addr) =>
-            typeof addr === "string" ? addr : addr.id
-          );
-        }
-        const addressIdsToAdd = [...existingUserAddressIds, address.id];
-        // console.log("addresstoadd:", addressIdsToAdd);
-        const req = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/${addAddressToUserQuery}`,
-          {
-            method: "PATCH",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              addresses: addressIdsToAdd,
-            }),
-          }
-        );
-        const data = await req.json();
-        console.log("Updated User on server");
-        return user.addresses as Address[];
-      } catch (err) {
-        console.log("Adding Address to user failed:", err);
-      }
-
-      // const { docs: updatedUser } = await payload.update({
-      //   collection: "users",
-      //   where: {
-      //     id: {
-      //       equals: userId,
+      // const addAddressToUserQuery = qs.stringify(
+      //   {
+      //     where: {
+      //       id: {
+      //         equals: user.id,
+      //       },
       //     },
       //   },
-      //   depth: 1,
-      //   data: {
-      //     addresses: addressIdsToAdd,
-      //   },
-      // });
-      // console.log("user:", userId, "updated:", updatedUser);
-      // return updatedUser;
+      //   { addQueryPrefix: true }
+      // );
+
+      // let existingUserAddressIds: string[] = [];
+
+      // try {
+      //   if (user.addresses) {
+      //     existingUserAddressIds = ctx.user.addresses!.flatMap((addr) =>
+      //       typeof addr === "string" ? addr : addr.id
+      //     );
+      //   }
+      //   const addressIdsToAdd = [...existingUserAddressIds, address.id];
+      //   // console.log("addresstoadd:", addressIdsToAdd);
+      //   const req = await fetch(
+      //     `${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/${addAddressToUserQuery}`,
+      //     {
+      //       method: "PATCH",
+      //       credentials: "include",
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //       },
+      //       body: JSON.stringify({
+      //         addresses: addressIdsToAdd,
+      //       }),
+      //     }
+      //   );
+      //   const data = await req.json();
+      //   console.log("Updated User on server", data);
+      //   return user.addresses as Address[];
+      // } catch (err) {
+      //   console.log("Adding Address to user failed:", err);
+      // }
     }),
   //************************************************************************************************************** */
   fetchUserAddresses: privateProcedure.query(async ({ ctx }) => {
     const { user } = ctx;
     if (!user.addresses) return null;
-    const addresses = user.addresses
-      .map((addr) => (typeof addr !== "string" ? addr : null))
-      .filter((addr) => addr !== null);
-    return addresses;
+    // const addresses = user.addresses
+    //   .map((addr) => (typeof addr !== "string" ? addr : null))
+    //   .filter((addr): addr is Address => addr !== null);
+
+    const payload = await getPayloadClient();
+    const addresses = await payload.find({
+      collection: "addresses",
+      where: {
+        user: { equals: user.id },
+      },
+    });
+
+    return addresses.docs;
   }),
 });

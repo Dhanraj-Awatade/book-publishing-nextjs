@@ -11,7 +11,8 @@ const yourOwnAndPurchased: Access = async ({ req }) => {
   const user = req.user as User | null;
   if (!user) return false;
 
-  if (user.role === "admin" || "editor") return true;
+  if (user.role === "admin") return true;
+  if (user.role === "editor") return true;
 
   const { docs: products } = await req.payload.find({
     collection: "products",
