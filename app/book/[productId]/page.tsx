@@ -73,7 +73,7 @@ const Page = async ({ params }: PageProps) => {
                 else { return product.id }
             })
     }
-    const isPurchased = userProductIds.includes(product.id) //Done (Completed): Check Error
+    const isPurchased = userProductIds.includes(product ? product.id : "") //Done (Completed): Check Error
 
     if (!product) return notFound()
 

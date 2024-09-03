@@ -177,12 +177,13 @@ export const Products: CollectionConfig = {
       required: true,
       hasMany: false,
       admin: {
-        condition: ({ req }) => req.user.role === "admin",
+        condition: ({ req }) => false,
+        // req.user.role === "admin",
       },
-      access: {
-        read: () => true,
-        update: ({ req }) => req.user.role === "admin",
-      },
+      // access: {
+      //   read: () => true,
+      //   update: ({ req }) => req.user.role === "admin",
+      // },
     },
     {
       name: "name",
