@@ -3,7 +3,7 @@ import { CarouselItem } from '../../ui/carousel'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Product } from '@/payload-types'
-import { ProductPlaceholder } from '../ProductListing'
+import { CarouselProductPlaceholder } from '../ProductListing'
 import { isValidURL } from '@/lib/validators/urlValidator'
 
 interface CarouselImageProps {
@@ -21,7 +21,7 @@ const CarouselImage = ({ product, index }: CarouselImageProps) => {
         return () => clearTimeout(timer)
     }, [index])
 
-    if (!product || !isVisible) return <ProductPlaceholder />
+    if (!product || !isVisible) return <CarouselProductPlaceholder />
 
     const validUrl = product.images.map(
         ({ image }) => (typeof image === 'string' ? isValidURL(image) : image.url)

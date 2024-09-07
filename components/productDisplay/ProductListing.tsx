@@ -74,4 +74,15 @@ export const ProductPlaceholder = () => {
     )
 }
 
+export const CarouselProductPlaceholder = () => {
+    return (
+        <div className='flex flex-col w-full'>
+            <div className='relative aspect-square w-full overflow-hidden rounded-xl'>
+                <Skeleton className='h-full w-full bg-zinc-300' />
+            </div>
+        </div>
+    )
+}
+
+
 export default ProductListing
