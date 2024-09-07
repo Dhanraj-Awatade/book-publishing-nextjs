@@ -138,7 +138,7 @@ export const Users: CollectionConfig = {
       type: "select",
       required: true,
       defaultValue: "customer",
-      saveToJWT: true,
+      // saveToJWT: true,
       // admin: {
       //   condition: ({ user }) => user.role === "admin",
       // },
