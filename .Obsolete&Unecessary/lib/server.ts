@@ -1,47 +1,36 @@
-// app.use(cors());
-// app.get("/api/trpc", cors(), (req, res) => {});
-// app.use(function (req, res, next) {
-//   // const allowedOrigins = [
-//   //   "https://saptarshee.in",
-//   //   "https://www.saptarshee.in",
-//   //   "https://saptarshee.in",
-//   //   "https://www.saptarshee.in",
-//   //   "http://localhost:3000",
-//   // ];
-//   // const corsOptions = {
-//   //   "Access-Control-Allow-Credentials": "true",
-//   //   "Access-Control-Allow-Methods": "GET,DELETE,PATCH,POST,PUT",
-//   //   "Access-Control-Allow-Headers":
-//   //     "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
-//   // };
+/* CORS OBSOLETE CODE */
 
-//   // const origin = req.headers.host ?? "";
-//   // const isAllowedOrigin = allowedOrigins.includes(origin);
+// app.use((req, res, next) => {
+//   const corsWhitelist = [
+//     "https://saptarshee.in",
+//     "https://www.saptarshee.in",
+//     "https://saptarshee-nextjs-docker-398070399895.asia-southeast1.run.app",
+//     "http://localhost:3000",
+//   ];
+//   if (
+//     corsWhitelist.indexOf(req.headers.origin as string) !== -1 &&
+//     req.method === "OPTIONS"
+//   ) {
+//     res.header("Access-Control-Allow-Origin", req.headers.origin);
+//     res.header(
+//       "Access-Control-Allow-Headers",
+//       "Access-Control-Allow-Headers,Origin, X-Requested-With, Content-Type, Accept,X-API-KEY,Authorization"
+//     );
+//     res.setHeader("Access-Control-Allow-Credentials", "true");
+//     res.setHeader(
+//       "Access-Control-Allow-Methods",
+//       "GET, POST, PATCH, PUT, DELETE, OPTIONS"
+//     );
 
-//   // // Handle preflighted requests
-//   // const isPreflight = req.method === "OPTIONS";
+//     console.log(
+//       "In corsWhitelist",
+//       req.headers.origin,
+//       res.getHeader("Access-Control-Allow-Origin")
+//     );
+//   }
 
-//   // if (isPreflight) {
-//   //   const preflightHeaders = {
-//   //     ...(isAllowedOrigin && { "Access-Control-Allow-Origin": origin }),
-//   //     ...corsOptions,
-//   //   };
-//   //   return NextResponse.json({}, { headers: preflightHeaders });
-//   // }
-
-//   // if (isAllowedOrigin) {
-//   // res.setHeader("Access-Control-Allow-Origin", s);
-//   // }
-//   res.setHeader("Access-Control-Allow-Origin", "https://www.saptarshee.in");
 //   next();
+//   // if (req.method === "OPTIONS") return 204;././
 // });
 
-// // const corsOptions = {
-// //   origin: [
-// //     "https://saptarshee.in",
-// //     "https://www.saptarshee.in",
-// //     "https://saptarshee.in",
-// //     "https://www.saptarshee.in",
-// //   ],
-// // };
-// // app.use(cors(corsOptions));
+/* CORS OBSOLETE CODE END */

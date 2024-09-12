@@ -12,6 +12,7 @@ import nextBuild from "next/dist/build";
 import { IncomingMessage } from "http";
 import bodyParser from "body-parser";
 import { razorpayWebhookHandler } from "./webhooks";
+import cors from "cors";
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
@@ -20,36 +21,33 @@ const createContext = ({
   req,
   res,
 }: trpcExpress.CreateExpressContextOptions) => {
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Origin", "https://saptarshee.in");
   return { req, res };
 };
 
 export type ExpressContext = inferAsyncReturnType<typeof createContext>;
 
-// export type WebhookRequest = IncomingMessage & {
-//   rawBody: Buffer;
-// };
-
 const start = async () => {
-  app.use((req, res, next) => {
-    const corsWhitelist = [
-      "https://saptarshee.in",
-      "https://www.saptarshee.in",
-      "https://saptarshee-nextjs-docker-398070399895.asia-southeast1.run.app",
-    ];
-    if (corsWhitelist.indexOf(req.headers.origin as string) !== -1) {
-      res.header("Access-Control-Allow-Origin", req.headers.origin);
-      res.header(
-        "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept"
-      );
-    }
+  app.use(
+    cors({
+      origin: function (origin, callback) {
+        const allowedOrigins = [
+          "https://saptarshee.in",
+          "https://www.saptarshee.in",
+          "https://saptarshee-nextjs-docker-398070399895.asia-southeast1.run.app",
+          "http://localhost:3000",
+        ];
 
-    // res.setHeader("Access-Control-Allow-Credentials", "true");
-    // res.setHeader("Access-Control-Allow-Origin", "https://saptarshee.in");
-    next();
-  });
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error("Origin not allowed by CORS"));
+        }
+      },
+      methods: "GET, POST, PUT, DELETE,PATCH",
+      allowedHeaders: ["Content-Type", "Authorization"],
+      credentials: true,
+    })
+  );
 
   // const webhookMiddleware = bodyParser.json({
   //   verify: (req: WebhookRequest, _, buffer) => {
@@ -120,24 +118,7 @@ const start = async () => {
     })
   );
 
-  app.use((req, res) => {
-    const corsWhitelist = [
-      "https://saptarshee.in",
-      "https://www.saptarshee.in",
-      "https://saptarshee-nextjs-docker-398070399895.asia-southeast1.run.app",
-    ];
-    if (corsWhitelist.indexOf(req.headers.origin as string) !== -1) {
-      res.header("Access-Control-Allow-Origin", req.headers.origin);
-      res.header(
-        "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept"
-      );
-    }
-
-    // res.setHeader("Access-Control-Allow-Credentials", "true");
-    // res.setHeader("Access-Control-Allow-Origin", "https://saptarshee.in");
-    return nextHandler(req, res);
-  });
+  app.use((req, res) => nextHandler(req, res));
   nextApp.prepare().then(() => {
     // payload.console.logger.info("NextJS Started");
   });
