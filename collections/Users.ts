@@ -82,16 +82,16 @@ export const Users: CollectionConfig = {
     // afterLogin: [addPurchasedProducts],
   },
   auth: {
-    verify: {
-      generateEmailHTML: ({ token }) => {
-        return PrimaryActionEmailHtml({
-          actionLabel: "Verify Your Account",
-          buttonText: "Verify Account",
-          href: `${process.env.NEXT_PUBLIC_SERVER_URL}/verify-email?token=${token}`,
-        });
-        // `<a href='${process.env.NEXT_PUBLIC_URL}/verify-email?token=${token}'>Verify Email</a>`; //TO-DO: Beautify this
-      },
-    },
+    // verify: {
+    //   generateEmailHTML: ({ token }) => {
+    //     return PrimaryActionEmailHtml({
+    //       actionLabel: "Verify Your Account",
+    //       buttonText: "Verify Account",
+    //       href: `https://saptarshee.in/verify-email?token=${token}`,
+    //     });
+    //     // `<a href='${process.env.NEXT_PUBLIC_URL}/verify-email?token=${token}'>Verify Email</a>`; //TO-DO: Beautify this
+    //   },
+    // },
   },
   access: {
     // read: adminsAndUser,

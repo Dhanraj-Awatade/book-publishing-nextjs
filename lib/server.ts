@@ -87,7 +87,7 @@ const start = async () => {
     const request = req as PayloadRequest;
 
     // if (!request.user) return res.redirect("/sign-in?origin=cart");
-    if (!request.user) return res.redirect("/sign-up");
+    if (!request.user) return res.redirect("/sign-up?origin=cart");
 
     const parsedUrl = parse(req.url, true);
 

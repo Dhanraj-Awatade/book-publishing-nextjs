@@ -8,7 +8,7 @@ import { trpc } from '@/trpc/client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckCircle, X } from 'lucide-react'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -17,22 +17,35 @@ import { ZodError } from 'zod'
 const SignUp = () => {
 
     const router = useRouter()
+    const searchParams = useSearchParams()
+    const isAuthor = searchParams.get('as') === 'author'
+    const origin = searchParams.get('origin')
 
     const { mutate, isLoading } = trpc.auth.createPayloadUser.useMutation({
         onError: (err) => {
             if (err.data?.code === "CONFLICT") {
                 toast.error("Email Already Exists. Sign-in?")
+                router.push("/sign-in")
                 return
             }
             if (err instanceof ZodError) {
                 toast.error(err.issues[0].message)
                 return
             }
-            toast.error("Something went wrong. Please try again later.")
+            toast.error("Cannot sign-in automatically. Please sign-in manually.")
+            router.push("/sign-in")
         },
-        onSuccess: ({ sentToEmail }) => {
-            toast.success(`Verification mail sent to ${sentToEmail}.`)
-            router.push('/verify-email?to=' + sentToEmail)
+        onSuccess: ({ name }) => {
+            toast.success(`User ${name} signed up successfully.`)
+            // toast.success(`Verification mail sent to ${sentToEmail}.`)
+            // router.push('/verify-email?to=' + sentToEmail)
+            if (origin) {
+                router.replace(`/${origin}`)
+                router.refresh()
+            }
+            if (isAuthor) { return }
+            router.replace("/")
+            router.refresh()
         }
     })
 
