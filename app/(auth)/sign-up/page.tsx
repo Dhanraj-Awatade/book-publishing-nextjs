@@ -177,7 +177,7 @@ const SignUp = () => {
                                     variant='link'
                                     className='my-2 lg:text-lg bg-blue-300 lg:bg-transparent lg:text-red-500'
                                     disabled={isLoading}
-                                    onClick={() => router.push("/sign-in")}
+                                    onClick={() => origin ? router.push(`/sign-in?${origin}`) : router.push("/sign-in")}
                                 >
                                     Sign in here &rarr;
                                 </Button>
