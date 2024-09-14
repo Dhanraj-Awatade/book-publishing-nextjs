@@ -37,8 +37,6 @@ export interface User {
   resetPasswordExpiration?: string | null;
   salt?: string | null;
   hash?: string | null;
-  _verified?: boolean | null;
-  _verificationToken?: string | null;
   loginAttempts?: number | null;
   lockUntil?: string | null;
   password: string | null;
@@ -54,6 +52,7 @@ export interface Address {
   road?: string | null;
   pin: string;
   state: string;
+  nickName: string;
   user?: (string | null) | User;
   updatedAt: string;
   createdAt: string;

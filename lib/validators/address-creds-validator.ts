@@ -9,6 +9,7 @@ export const AddrCredentialsValidator = z.object({
     .min(6, "Enter a valid Pincode number")
     .max(6, "Enter a valid Pincode number"),
   state: z.string().min(1, "required field"),
+  nickname: z.string().min(1, { message: "Enter a valid nick name" }),
 });
 
 export type TAddrCredentialsValidator = z.infer<

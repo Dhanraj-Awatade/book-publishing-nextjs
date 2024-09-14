@@ -72,6 +72,12 @@ export const Addresses: CollectionConfig = {
       required: true,
     },
     {
+      name: "nickName",
+      type: "text",
+      required: true,
+      //   defaultValue: "Untitled Address",
+    },
+    {
       name: "user",
       type: "relationship",
       relationTo: "users",

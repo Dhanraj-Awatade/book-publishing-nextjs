@@ -263,10 +263,11 @@ export const paymentRouter = router({
         road: z.string().optional(),
         state: z.string(),
         pin: z.string(),
+        nickname: z.string(),
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const { house, pin, road, state, name } = input;
+      const { house, pin, road, state, name, nickname } = input;
       const { user } = ctx;
       const userId = user.id as string;
       const payload = await getPayloadClient();
@@ -279,6 +280,7 @@ export const paymentRouter = router({
         pin: string;
         state: string;
         user: string;
+        nickName: string;
       } = {
         adressName: name,
         house,
@@ -286,6 +288,7 @@ export const paymentRouter = router({
         pin,
         state,
         user: userId,
+        nickName: nickname,
       };
 
       const address = await payload.create({
@@ -338,19 +341,19 @@ export const paymentRouter = router({
   //************************************************************************************************************** */
   fetchUserAddresses: privateProcedure.query(async ({ ctx }) => {
     const { user } = ctx;
-    if (!user.addresses) return null;
+    // if (!user.addresses) return null;
     // const addresses = user.addresses
     //   .map((addr) => (typeof addr !== "string" ? addr : null))
     //   .filter((addr): addr is Address => addr !== null);
 
     const payload = await getPayloadClient();
-    const addresses = await payload.find({
+    const { docs: addresses } = await payload.find({
       collection: "addresses",
       where: {
         user: { equals: user.id },
       },
     });
-
-    return addresses.docs;
+    // console.log(addresses);
+    return addresses;
   }),
 });
