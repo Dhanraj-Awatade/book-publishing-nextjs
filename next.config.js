@@ -1,6 +1,18 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
+  basePath:'',
+  // redirects:async ()=>{
+  //   return [
+  //     {
+  //       source:'/:path*',
+  //       has:[{type:'header',value:'origin',key:'http://localhost:3000'}],
+  //       // www.${process.env.NEXT_PUBLIC_SERVER_URL}
+  //       destination:`${process.env.NEXT_PUBLIC_SERVER_URL}/:path*`,
+  //       permanent:true
+  //     }
+  //   ]
+  // },
   images:{
     // domains:['saptarshee.in','localhost','192.168.204.211','shabdashivar.in'],
     // domains:[`${process.env.NEXT_PUBLIC_SERVER_URL}`],
@@ -36,7 +48,7 @@ const nextConfig = {
             protocol:"https"
         },
         {
-            hostname:"192.168.140.130",
+            hostname:"192.168.191.211",
             pathname:"**",
             port:"3000",
             protocol:"http"

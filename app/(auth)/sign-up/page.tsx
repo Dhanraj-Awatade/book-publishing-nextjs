@@ -32,6 +32,7 @@ const SignUp = () => {
                 toast.error(err.issues[0].message)
                 return
             }
+            console.log(err)
             toast.error("Cannot sign-in automatically. Please sign-in manually.")
             router.push("/sign-in")
         },
@@ -42,12 +43,11 @@ const SignUp = () => {
             if (origin) {
                 router.replace(`/${origin}`)
                 router.refresh()
-                console.log("In Origin")
                 return
             }
             if (isAuthor) { return }
-            // router.replace("/")
-            // router.refresh()
+            router.replace("/")
+            router.refresh()
         }
     })
 

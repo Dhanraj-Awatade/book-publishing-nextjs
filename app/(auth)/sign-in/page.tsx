@@ -44,8 +44,8 @@ const Page = () => {
                 return
                 //TO-DO: Implement Author Selling
             }
-            // router.replace('/')
-            // router.refresh()
+            router.replace('/')
+            router.refresh()
         },
         onError: (err) => {
             if (err.data?.code === "UNAUTHORIZED") {

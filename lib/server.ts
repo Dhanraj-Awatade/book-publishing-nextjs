@@ -16,6 +16,19 @@ import cors from "cors";
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
+const allowedOrigins = [
+  "https://saptarshee.in",
+  "https://www.saptarshee.in",
+  "https://saptarshee-nextjs-docker-398070399895.asia-southeast1.run.app",
+  "http://localhost:3000",
+  process.env.NEXT_PUBLIC_SERVER_URL as string,
+];
+const allowedHostnames = [
+  "saptarshee.in",
+  "www.saptarshee.in",
+  "saptarshee-nextjs-docker-398070399895.asia-southeast1.run.app",
+  "localhost",
+];
 
 const createContext = ({
   req,
@@ -30,13 +43,6 @@ const start = async () => {
   app.use(
     cors({
       origin: function (origin, callback) {
-        const allowedOrigins = [
-          "https://saptarshee.in",
-          "https://www.saptarshee.in",
-          "https://saptarshee-nextjs-docker-398070399895.asia-southeast1.run.app",
-          "http://localhost:3000",
-        ];
-
         if (!origin || allowedOrigins.includes(origin)) {
           callback(null, true);
         } else {
@@ -48,6 +54,27 @@ const start = async () => {
       credentials: true,
     })
   );
+
+  // redirect to main domain because setting cookies failed on subdomain leading to sign-in issues
+  app.use((req, res, next) => {
+    // console.log(req.hostname, "1");
+    // const url = req.url;
+    // console.log(url);
+    if (
+      allowedHostnames.includes(req.hostname) &&
+      // req.hostname !== process.env.NEXT_PUBLIC_SERVER_URL
+      req.hostname !== "saptarshee.in"
+    ) {
+      console.log("req.host check");
+      res.writeHead(301, {
+        Location: process.env.NEXT_PUBLIC_SERVER_URL as string,
+      });
+      // res.redirect(process.env.NEXT_PUBLIC_SERVER_URL as string);
+      res.end();
+    } else {
+      next();
+    }
+  });
 
   // const webhookMiddleware = bodyParser.json({
   //   verify: (req: WebhookRequest, _, buffer) => {
