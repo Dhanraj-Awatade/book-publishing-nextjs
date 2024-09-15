@@ -16,7 +16,7 @@ const varela_round = Varela_Round({ weight: '400', subsets: ['latin'] })*/
 
 export const metadata: Metadata = {
   title: 'Saptarshee Publishers',
-  description: 'Saptarshee Books & eBooks Publishers',
+  description: 'Discover a world of books and ebooks at Saptarshee Publications. Our online bookstore offers a vast collection of titles for readers in India (e-Books available internationally). Enjoy seamless reading experiences with our integrated ebook reader. Shop now to find your next favorite read.',
 }
 
 export default function RootLayout({
