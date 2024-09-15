@@ -42,10 +42,12 @@ const SignUp = () => {
             if (origin) {
                 router.replace(`/${origin}`)
                 router.refresh()
+                console.log("In Origin")
+                return
             }
             if (isAuthor) { return }
-            router.replace("/")
-            router.refresh()
+            // router.replace("/")
+            // router.refresh()
         }
     })
 
@@ -177,7 +179,7 @@ const SignUp = () => {
                                     variant='link'
                                     className='my-2 lg:text-lg bg-blue-300 lg:bg-transparent lg:text-red-500'
                                     disabled={isLoading}
-                                    onClick={() => origin ? router.push(`/sign-in?${origin}`) : router.push("/sign-in")}
+                                    onClick={() => origin ? router.push(`/sign-in?origin=${origin}`) : router.push("/sign-in")}
                                 >
                                     Sign in here &rarr;
                                 </Button>

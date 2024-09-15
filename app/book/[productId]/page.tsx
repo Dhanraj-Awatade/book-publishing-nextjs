@@ -14,6 +14,7 @@ import { cookies } from 'next/headers'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import React from 'react'
+import { Metadata, ResolvingMetadata } from 'next'
 
 interface PageProps {
     params: {
@@ -27,7 +28,45 @@ const BREADCRUMBS = [
     { id: 2, name: 'Books', href: '/books' },
 ]
 
-// const isPurchased:Boolean =  
+export async function generateMetadata(
+    { params }: PageProps,
+    parent: ResolvingMetadata
+): Promise<Metadata> {
+
+    const { productId } = params
+    const payload = await getPayloadClient()
+
+    // const product = await fetch(`https://.../${id}`).then((res) => res.json())
+
+    const { docs: products } = await payload.find({
+        collection: "products",
+        limit: 1,
+        where: {
+            id: {
+                equals: productId
+            },
+            approvedForSale: {
+                equals: "approved"
+            }
+        }
+    })
+
+    const [product] = products
+
+    const validUrl = product.images.map(
+        ({ image }) => (typeof image === 'string' ? isValidURL(image) : image.url)
+    ).filter(Boolean) as string[]
+
+    // optionally access and extend (rather than replace) parent metadata
+    const previousImages = (await parent).openGraph?.images || []
+
+    return {
+        title: product.name,
+        openGraph: {
+            images: [validUrl.at(0) as string, ...previousImages],
+        },
+    }
+}
 
 const Page = async ({ params }: PageProps) => {
 
@@ -82,6 +121,17 @@ const Page = async ({ params }: PageProps) => {
     const validUrl = product.images.map(
         ({ image }) => (typeof image === 'string' ? isValidURL(image) : image.url)
     ).filter(Boolean) as string[]
+
+    // try {
+    //     const head = document.querySelector("head")
+    //     const productMeta = document.createElement("meta");
+    //     productMeta.name = "og:title"
+    //     productMeta.content = "Test Title"
+    //     head?.appendChild(productMeta);
+    //     console.log("appended Product Meta Tags!");
+    // } catch (error) {
+    //     console.error("Error appending Product Meta Tags!", error);
+    // }
 
 
     return (

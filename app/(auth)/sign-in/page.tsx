@@ -36,7 +36,6 @@ const Page = () => {
         onSuccess: () => {
             toast.success("Signed in successfully.")
             if (origin) {
-                console.log("redirecting to", `/${origin}`)
                 router.replace(`/${origin}`)
                 router.refresh()
                 return
@@ -45,8 +44,8 @@ const Page = () => {
                 return
                 //TO-DO: Implement Author Selling
             }
-            router.replace('/')
-            router.refresh()
+            // router.replace('/')
+            // router.refresh()
         },
         onError: (err) => {
             if (err.data?.code === "UNAUTHORIZED") {
