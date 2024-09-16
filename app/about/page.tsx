@@ -1,4 +1,3 @@
-
 // import { Button } from '@/components/ui/button'
 // import { createBatchProductFiles } from '@/lib/createBatchProductFiles'
 // import { getServerSideUser } from '@/lib/payload-utils'
@@ -10,7 +9,7 @@ const About = async () => {
     // const user = await getServerSideUser(nextCookies)
     // if (!user) return (<div>Not Signed In</div>)
 
-    // createBatchProductFiles({ user: user, directory: "judgement" })
+    // createBatchProductFiles({ user: user, directory: "uploadPDF" })
     // return (
     //     <div>
     //         Signed User

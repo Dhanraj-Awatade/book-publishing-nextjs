@@ -62,10 +62,10 @@ const start = async () => {
     // console.log(url);
     if (
       allowedHostnames.includes(req.hostname) &&
-      // req.hostname !== process.env.NEXT_PUBLIC_SERVER_URL
-      req.hostname !== "saptarshee.in"
+      req.hostname !== "saptarshee.in" &&
+      req.hostname !== "localhost"
     ) {
-      console.log("req.host check");
+      console.log("req.host check", req.hostname);
       res.writeHead(301, {
         Location: process.env.NEXT_PUBLIC_SERVER_URL as string,
       });
