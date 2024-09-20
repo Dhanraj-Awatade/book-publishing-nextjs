@@ -35,7 +35,8 @@ export const Orders: CollectionConfig = {
       access: {
         // read: ({ req }) => req.user.role === "admin",
         read: ({ req }) => {
-          if (req.user.role === "admin" || "editor") return true;
+          if (req.user.role === "admin" || req.user.role === "editor")
+            return true;
           else return false;
         },
         create: () => false,

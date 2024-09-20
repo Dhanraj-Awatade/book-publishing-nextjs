@@ -75,7 +75,7 @@ export const productRouter = router({
       const page = cursor || FALLBACK_CURSOR;
       const limit = FALLBACK_ORDER_LIMIT;
 
-      if (user.role === "editor" || "admin") {
+      if (user.role === "editor" || user.role === "admin") {
         const {
           docs: allOrders,
           hasNextPage,

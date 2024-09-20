@@ -138,7 +138,7 @@ export const Products: CollectionConfig = {
     description: "Find all your Published Books here.",
     // hidden: ({ user }) => user.role === "admin",
     hidden: ({ user }) => {
-      if (user.role === "admin" || "editor") return false;
+      if (user.role === "admin" || user.role === "editor") return false;
       else return true;
     },
   },
