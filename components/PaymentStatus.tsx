@@ -1,15 +1,18 @@
 'use client'
+import { Address } from '@/payload-types'
 import { trpc } from '@/trpc/client'
 import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
 
 interface PaymentStatusProps {
-    orderEmail: string,
+    orderUserName: string,
     orderId: string,
     isPaid: boolean
+    isAnyPaperback: boolean
+    orderAddress?: string | Address | null
 }
 
-const PaymentStatus = ({ orderEmail, orderId, isPaid }: PaymentStatusProps) => {
+const PaymentStatus = ({ orderUserName, orderId, isPaid, isAnyPaperback, orderAddress }: PaymentStatusProps) => {
 
     const router = useRouter()
     const { data } = trpc.payment.pullOrderStatus.useQuery(
@@ -27,15 +30,17 @@ const PaymentStatus = ({ orderEmail, orderId, isPaid }: PaymentStatusProps) => {
     return (
         <div className='mt-16 grid grid-cols-2 gap-x-4 text-sm text-gray-600'>
             <div>
-                <p className='font-medium text-gray-900'>Shipping to</p>
-                <p>{orderEmail}</p>
+                <p className='font-medium text-gray-900'>{
+                    isAnyPaperback ? "Shipping to" : "Added to library of"
+                }</p>
+                <p>{isAnyPaperback ? orderAddress as string : orderUserName}</p>
             </div>
             <div>
                 <p className='font-medium text-gray-900'>Order Status</p>
                 <p>{
                     isPaid
-                        ? "Payment Successful"
-                        : "Payment Pending"
+                        ? <span className='text-green-600'>Payment Successful</span>
+                        : <span className='text-amber-800'>Payment Pending</span>
                 }</p>
             </div>
         </div>

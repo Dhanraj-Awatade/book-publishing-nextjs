@@ -58,8 +58,8 @@ const ThankYouPage = async ({ searchParams }: PageProps) => {
     }, 0)
 
     return (
-        <main className='relative lg:minmax-h-full'>
-            <div className='h-80 overflow-hidden lg:absolute lg:h-full lg:w-1/2 lg:pr-4 xl:pr-12'>
+        <main className='relative lg:max-h-full'>
+            <div className='h-96 w-screen mt-4 relative overflow-hidden lg:absolute lg:h-full lg:w-1/2 lg:pr-4 xl:pr-12'>
                 <Image fill src='/Images/checkout-thank-you.jpg' className='h-full w-full object-contain object-center' alt='Thank You Image' />
             </div>
             <div>
@@ -158,7 +158,7 @@ const ThankYouPage = async ({ searchParams }: PageProps) => {
                                     <p className='text-base'>{formatPrice(orderTotal + 1)}</p>
                                 </div>
 
-                                <PaymentStatus isPaid={order._isPaid} orderEmail={(order.user as User).email} orderId={order.id} />
+                                <PaymentStatus isAnyPaperback={isAnyPaperback} isPaid={order._isPaid} orderUserName={(order.user as User).name} orderAddress={order.address} orderId={order.id} />
 
                                 <div className='mt-16 border-t border-gray-200 py-6 text-right'>
                                     <Link href='/books' className='text-sm font-medium text-blue-600 hover:text-blue-500'>
