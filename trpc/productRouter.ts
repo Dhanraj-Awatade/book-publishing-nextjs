@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { privateProcedure, router } from "./trpc";
+import { privateProcedure, publicProcedure, router } from "./trpc";
 import { PurchasedProductsQueryValidator } from "../lib/validators/query-validator";
 import { getPayloadClient } from "../lib/get-payload";
 import { Product } from "../payload-types";
@@ -131,6 +131,52 @@ export const productRouter = router({
           prevPage: hasPrevPage ? prevPage : null,
         };
       }
+    }),
+
+  /* ----------------------------------------------------------------------------------------- */
+
+  isPurchasedProduct: publicProcedure
+    .input(
+      z.object({
+        productId: z.string(),
+        userId: z.string().optional(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      const { productId, userId } = input;
+
+      if (!userId) return false;
+
+      const payload = await getPayloadClient();
+
+      const { docs: products } = await payload.find({
+        collection: "products",
+        where: {
+          id: { equals: productId },
+        },
+      });
+
+      const [product] = products;
+      if (product.type === "paperback") return false;
+
+      const { docs: orders } = await payload.find({
+        collection: "orders",
+        where: {
+          user: {
+            equals: userId,
+          },
+          _isPaid: {
+            equals: true,
+          },
+        },
+      });
+
+      const purchasedProductsIds = orders
+        .flatMap(({ products }) => products)
+        .flatMap((prod) => (typeof prod === "string" ? prod : prod.id));
+
+      if (purchasedProductsIds.includes(productId)) return true;
+      return false;
     }),
   /* End of productRouter */
 });

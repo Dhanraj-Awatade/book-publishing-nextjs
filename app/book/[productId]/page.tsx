@@ -1,13 +1,11 @@
-import AddToCartButton from '@/components/cart/AddToCartButton'
 import ImageSlider from '@/components/productDisplay/ImageSlider'
 import MaxWidthWrapper from '@/components/MaxWidthWrapper'
 import ProductReel from '@/components/productDisplay/ProductReel'
-import { Button, buttonVariants } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { PRODUCT_CATEGORIES } from '@/lib/config'
 import { getPayloadClient } from '@/lib/get-payload'
 import { getServerSideUser } from '@/lib/payload-utils'
-import { cn, formatPrice } from '@/lib/utils'
+import { formatPrice } from '@/lib/utils'
 import { isValidURL } from '@/lib/validators/urlValidator'
 import { Check, Shield, X } from 'lucide-react'
 import { cookies } from 'next/headers'
@@ -15,6 +13,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import React from 'react'
 import { Metadata, ResolvingMetadata } from 'next'
+import ReadButton from './ReadButton'
 
 interface PageProps {
     params: {
@@ -91,29 +90,6 @@ const Page = async ({ params }: PageProps) => {
 
     const [product] = products
 
-    const { docs: users } = await payload.find({
-        collection: "users",
-        depth: 2,
-        where: {
-            id: {
-                equals: signedUser?.id
-            }
-        },
-    })
-
-    const [user] = users
-
-    let userProductIds: string[] = []
-    if (!user) { userProductIds = [] }
-    else {
-        if (user.products)
-            userProductIds = user.products.map((product) => {
-                if (typeof product === 'string') { return product }
-                else { return product.id }
-            })
-    }
-    const isPurchased = userProductIds.includes(product ? product.id : "") //Done (Completed): Check Error
-
     if (!product) return notFound()
 
     const label = PRODUCT_CATEGORIES.find(({ value }) => value === product.category)?.label
@@ -121,18 +97,6 @@ const Page = async ({ params }: PageProps) => {
     const validUrl = product.images.map(
         ({ image }) => (typeof image === 'string' ? isValidURL(image) : image.url)
     ).filter(Boolean) as string[]
-
-    // try {
-    //     const head = document.querySelector("head")
-    //     const productMeta = document.createElement("meta");
-    //     productMeta.name = "og:title"
-    //     productMeta.content = "Test Title"
-    //     head?.appendChild(productMeta);
-    //     console.log("appended Product Meta Tags!");
-    // } catch (error) {
-    //     console.error("Error appending Product Meta Tags!", error);
-    // }
-
 
     return (
         <MaxWidthWrapper>
@@ -266,25 +230,9 @@ const Page = async ({ params }: PageProps) => {
                             {/* Add to cart Part */}
                             <div className='mt-10 lg:col-start-1 lg:row-start-2 lg:max-w-lg lg:self-start' >
                                 <div>
-                                    <div className='mt-10'>
-                                        {
-                                            isPurchased && product.type === "ebook"
-                                                ? <Link
-                                                    href={`/reader/${productId}`}
-                                                    className={cn(buttonVariants({ size: 'lg' }), "w-full")}
-                                                >
-                                                    Read
-                                                </Link>
-                                                : <>{product.stock
-                                                    ? <AddToCartButton product={product} />
-                                                    : <Button size='lg'
-                                                        className='w-full mt-2' disabled>Add to Cart</Button>
-                                                }
 
-                                                </>
-                                        }
+                                    <ReadButton userId={signedUser?.id} product={product} isSignedUser={signedUser ? true : false} />
 
-                                    </div>
                                     <div className='mt-6 text-center'>
                                         <div className='group inline-flex text-sm text-medium'>
                                             <Shield aria-hidden='true' className='mr-2 h-5 w-5 flex-shrink-0 text-gray-400' />
