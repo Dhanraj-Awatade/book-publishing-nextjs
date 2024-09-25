@@ -36,7 +36,7 @@ const CartItem = ({ product, qty }: { product: Product, qty: number }) => {
                             {product.name}
                         </span>
                         <span className='line-clamp-1 text-xs capitalize text-muted-foreground'>
-                            {label}
+                            {label}{" | "}{product.type}
                         </span>
 
                         <div className='mt-4 text-xs text-muted-foreground flex '>
