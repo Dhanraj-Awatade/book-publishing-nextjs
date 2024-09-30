@@ -94,6 +94,12 @@ export interface Product {
     | 'misc'
     | 'legal';
   product_files?: (string | null) | ProductFile;
+  dimensions?: {
+    length?: number | null;
+    breadth?: number | null;
+    height?: number | null;
+    weight?: number | null;
+  };
   stock: boolean;
   approvedForSale?: ('pending' | 'approved' | 'denied') | null;
   images: {

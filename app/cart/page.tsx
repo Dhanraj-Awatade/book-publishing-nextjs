@@ -1,14 +1,17 @@
 "use client"
 import { useCart } from '@/lib/hooks/use-cart'
-import { cn, formatPrice } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { Loader2 } from 'lucide-react'
-import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import CheckoutButton from '@/components/checkout/CheckoutButton'
 import AddressDetails from '@/components/checkout/AddressDetails'
 import { Separator } from '@/components/ui/separator'
 import CheckOutProductList from '@/components/checkout/CheckOutProductList'
 import { SHIPPING_CHARGES } from '@/lib/config/constants'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import CourierSelection from '@/components/checkout/CourierSelection'
+import OrderSummary from '@/components/checkout/OrderSummary'
+import PaymentMethodSelection from '@/components/checkout/PaymentMethodSelection'
 
 
 const Page = () => {
@@ -19,16 +22,21 @@ const Page = () => {
     const [isMounted, setIsMounted] = useState<boolean>(false)
     const [selectedAddress, selectAddress] = useState<{ id: string; house: string; state: string; pin: string; adressName: string; updatedAt: string; createdAt: string; road?: string | null | undefined; } | null | undefined>(/*addresses && addresses.at(0) ? addresses.at(0) :*/ null)
     const [isOverlay, setOverlay] = useState<boolean>(false)
+    const [paymentMethod, setPaymentMethod] = useState<"razorpay" | "cod">("razorpay")
 
     const cartPriceTotal = items.reduce((total, { product, productCount }) => total + (product.price * productCount), 0)
     const cartMrpTotal = items.reduce((total, { product, productCount }) => total + (product.mrp * productCount), 0)
-    const totalItems = items.reduce((total, { productCount }) => total + productCount, 0) //Wildcard amount for now, Remove later
-    const shippingCharges = isAnyPaperback ? SHIPPING_CHARGES * totalItems : 0
+    const totalItems = items.reduce((total, { productCount }) => total + productCount, 0)
+    const shippingCharges = isAnyPaperback ? SHIPPING_CHARGES * totalItems : 0 //Wildcard amount of shipping charge for now, Remove later
     const totalAmount = cartPriceTotal + shippingCharges
 
     useEffect(() => {
         setIsMounted(true)
     }, [])
+
+    useEffect(() => {
+        console.log("paymentMethod:", paymentMethod)
+    }, [paymentMethod])
 
 
     return (
@@ -43,84 +51,34 @@ const Page = () => {
                         { "rounded-lg border-2 border-dashed border-zinc-200 p-12 lg:col-start-3": isMounted && items.length === 0, }
                     )}>
                         <h2 className='sr-only'>Items in your shopping cart</h2>
-
-                        <CheckOutProductList isMounted items={items} removeItem={removeItem} addItem={addItem} removeItemCompletely={removeItemCompletely} />
-
+                        <ScrollArea className='rounded-lg border border-gray-700 px-4'>
+                            <CheckOutProductList isMounted items={items} removeItem={removeItem} addItem={addItem} removeItemCompletely={removeItemCompletely} />
+                        </ScrollArea>
                     </div>
                     {isAnyPaperback
                         ? <AddressDetails selectedAddress={selectedAddress} selectAddress={selectAddress} />
                         : null
                     }
-                    <section className='mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-9 lg:col-start-2 lg:mt-0 lg:p-8'>
+                    <section className='mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-9 lg:col-start-2 lg:mt-4 lg:p-8'>
+
                         <Separator className='my-4 bg-black' />
-                        <h2 className='text-lg font-medium text-gray-900'>Order Summary</h2>
-                        <div className='mt-6 space-y-4'>
-                            <div className='flex items-center justify-between'>
-                                <p className='text-sm text-gray-600'>Subtotal</p>
-                                <p className='text-sm font-medium text-gray-900'>
-                                    {
-                                        isMounted
-                                            ? <>
-                                                <span className='mr-1 line-through text-xs font-normal text-gray-400'>{formatPrice(cartMrpTotal)}</span>
-                                                {formatPrice(cartPriceTotal)}
-                                            </>
-
-                                            : (
-                                                <Loader2 className='h-4 w-4 animate-spin text-muted-foreground' />
-                                            )
-                                    }
-                                </p>
-                            </div>
-                            <div className='flex items-center justify-between border-t border-gray-200 pt-4'>
-                                <div className='flex items-center text-sm text-muted-foreground'>
-                                    <span>Shipping Charges</span>
-                                </div>
-                                <div className='text-sm font-medium text-gray-900'>
-                                    {isMounted
-                                        ? formatPrice(shippingCharges)
-                                        : (
-                                            <Loader2 className='h-4 w-4 animate-spin text-muted-foreground' />
-                                        )}
-                                </div>
-                            </div>
-                            <div className='flex items-center justify-between border-t border-gray-200 pt-4'>
-                                <div className='flex items-center text-sm text-green-700'>
-                                    <span className='mr-2'>Total saved</span>
-                                    <Image src={"/Images/party_popper.png"} alt='party popper icon' width={20} height={20} />
-                                </div>
-                                <div className='text-sm font-medium text-green-700'>
-                                    {isMounted
-                                        ? formatPrice(cartMrpTotal - cartPriceTotal)
-                                        : (
-                                            <Loader2 className='h-4 w-4 animate-spin text-muted-foreground' />
-                                        )}
-                                </div>
-                            </div>
-                            <div className='flex items-center justify-between border-t border-gray-200 pt-4'>
-                                <div className='text-base font-medium text-gray-900'>Order Total</div>
-                                <div className='text-base font-medium text-gray-900'>
-                                    {
-                                        isMounted
-                                            ? formatPrice(totalAmount)
-                                            : (
-                                                <Loader2 className='h-4 w-4 animate-spin text-muted-foreground' />
-                                            )
-                                    }
-                                </div>
-                            </div>
-                        </div>
+                        <PaymentMethodSelection
+                            selectedAddress={selectedAddress}
+                            paymentMethod={paymentMethod}
+                            setPaymentMethod={setPaymentMethod}
+                            isAnyPaperback={isAnyPaperback}
+                        />
+                        <Separator className='my-4 bg-black' />
+                        <CourierSelection isMounted={isMounted} />
+                        <Separator className='my-4 bg-black' />
+                        <OrderSummary
+                            totalAmount={totalAmount}
+                            shippingCharges={shippingCharges}
+                            isMounted={isMounted}
+                            cartPriceTotal={cartPriceTotal}
+                            cartMrpTotal={cartMrpTotal}
+                        />
                         <div className='mt-6'>
-                            {/* <Button
-                                disabled={items.length === 0}
-                                className='w-full'
-                                size='lg'
-                                onClick={() => initiatePayment({ productIds }) /*createRazorpaySession(orderOptions)> */}
-
-
-                            {/*(!isLoading) && *//*  isMounted
-                                    ? "Checkout"
-                                    : (<Loader2 className='h-4 w-4 animate-spin ml-1.5' />)}
-                            </Button> */}
                             {
                                 <CheckoutButton
                                     totalAmount={totalAmount}

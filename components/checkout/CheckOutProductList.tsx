@@ -18,7 +18,7 @@ interface CheckOutProductListProps {
 
 const CheckOutProductList = ({ isMounted, items, removeItem, addItem, removeItemCompletely }: CheckOutProductListProps) => {
     return (
-        <>
+        <div className='lg:max-h-96'>
             {
                 isMounted && items.length === 0
                     ? (
@@ -134,7 +134,7 @@ const CheckOutProductList = ({ isMounted, items, removeItem, addItem, removeItem
                     })
                 }
             </ul>
-        </>
+        </div>
     )
 }
 

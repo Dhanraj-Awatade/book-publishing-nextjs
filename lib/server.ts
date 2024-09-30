@@ -11,7 +11,7 @@ import path from "path";
 import nextBuild from "next/dist/build";
 import { IncomingMessage } from "http";
 import bodyParser from "body-parser";
-import { razorpayWebhookHandler } from "./webhooks";
+import { razorpayWebhookHandler, shiprocketWebhookHandler } from "./webhooks";
 import cors from "cors";
 
 const app = express();
@@ -76,16 +76,10 @@ const start = async () => {
     }
   });
 
-  // const webhookMiddleware = bodyParser.json({
-  //   verify: (req: WebhookRequest, _, buffer) => {
-  //     req.rawBody = buffer;
-  //   },
-  // });
-
   app.use(bodyParser.json());
 
-  // app.post("/api/webhooks/test", webhookMiddleware, razorpayWebhookHandler);
   app.post("/api/webhooks/razorpay", razorpayWebhookHandler);
+  app.post("/api/webhooks/shipping", shiprocketWebhookHandler);
 
   const payload = await getPayloadClient({
     initOptions: {

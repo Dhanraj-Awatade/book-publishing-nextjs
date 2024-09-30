@@ -1,15 +1,9 @@
-import express, { RequestHandler } from "express";
-// import { WebhookRequest } from "./server";
-import Razorpay from "razorpay";
+import { RequestHandler } from "express";
 import { getPayloadClient } from "./get-payload";
 import { Product } from "../payload-types";
-import { Resend } from "resend";
 import { RecieptEmailHtml } from "../components/emails/RecieptEmail";
-import { Webhooks } from "razorpay/dist/types/webhooks";
 import * as crypto from "crypto";
 import nodemailer from "nodemailer";
-
-// const resend = new Resend(`${process.env.RESEND_API_KEY as string}`);
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -18,11 +12,6 @@ const transporter = nodemailer.createTransport({
     pass: "twrpsjqhkorjfxuz",
   },
 });
-
-// const razorpay = new Razorpay({
-//   key_id: process.env.RAZORPAY_ID as string,
-//   key_secret: process.env.RAZORPAY_KEY as string,
-// });
 
 export const razorpayWebhookHandler: RequestHandler = async (req, res) => {
   const secret = process.env.RAZORPAY_WEBHOOK_SECRET as string;
@@ -89,6 +78,12 @@ export const razorpayWebhookHandler: RequestHandler = async (req, res) => {
   }
 };
 
+export const shiprocketWebhookHandler: RequestHandler = async (req, res) => {
+  console.log("Hit");
+  //trpc API call to shippingRouter here
+  res.status(200).json({ success: true });
+};
+
 /*
 export const razorpayWebhookHandler = async (
   req: express.Request,
@@ -97,7 +92,7 @@ export const razorpayWebhookHandler = async (
   const webhookRequest = req as any as WebhookRequest;
   const body = webhookRequest.rawBody;
   const signature = req.headers["stripe-signature"] || "";
-  
+
 
   console.log(body.toJSON());
   //   let event;

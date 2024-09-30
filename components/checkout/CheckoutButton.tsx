@@ -1,11 +1,9 @@
 import { trpc } from "@/trpc/client";
-// import razorpayHandler from "../lib/payments/razorpayHandler";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/lib/hooks/use-cart";
-// import { cookies } from "next/headers";
 
 interface CheckoutButtonProps {
   productIds: string[];
@@ -176,8 +174,13 @@ const CheckoutButton = ({ productIds, cartItemCount, selectedAddress, isAnyPaper
     className='w-full'
     size='lg'
     onClick={(e) => {
-      paymentObject.open()
-      e.preventDefault()
+      try {
+        paymentObject.open()
+        e.preventDefault()
+      } catch (error) {
+        console.log(error);
+      }
+
       // setOrderVerificationStatus(true)
     } /*createRazorpaySession(orderOptions) */}
   >

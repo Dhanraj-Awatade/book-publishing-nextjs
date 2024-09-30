@@ -5,9 +5,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import AddressView from './AddressView'
 import AddressForm from './AddressForm'
 import { Button } from '../ui/button'
+
+export type TSelectedAddress = { id: string; house: string; state: string; pin: string; adressName: string; updatedAt: string; createdAt: string; road?: string | null | undefined; } | undefined | null
 interface AddressDetailsProps {
     selectAddress: Dispatch<SetStateAction<{ id: string; house: string; state: string; pin: string; adressName: string; updatedAt: string; createdAt: string; road?: string | null | undefined; } | null | undefined>>
-    selectedAddress: { id: string; house: string; state: string; pin: string; adressName: string; updatedAt: string; createdAt: string; road?: string | null | undefined; } | null | undefined
+    selectedAddress: TSelectedAddress
 }
 
 const AddressDetails = ({ selectAddress, selectedAddress }: AddressDetailsProps) => {
@@ -23,10 +25,10 @@ const AddressDetails = ({ selectAddress, selectedAddress }: AddressDetailsProps)
     }
 
     return (
-        <div className='container relative flex-col items-center lg:px-20'>
-            <div className='flex flex-col mx-auto w-full justify-center space-y-6 sm:w-[350px]'>
+        <div className='container relative flex-col items-center lg:px-20 lg:mb-4'>
+            <div className='flex flex-col mx-auto w-full justify-center space-y-6 sm:w-[350px] lg:max-h-96'>
                 <div className='flex flex-col items-center'>
-                    <h1 className='text-2xl my-4 font-semibold'>Address Details</h1>
+                    <h1 className='text-2xl my-4 lg:mt-0 font-semibold'>Address Details</h1>
                     {/* <h2>Use Existing Address</h2> */}
                     <Select onValueChange={handleSelection}>
                         {isLoading
