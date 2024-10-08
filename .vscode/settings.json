@@ -148,10 +148,10 @@
     "editor.minimap.maxColumn": 250,
     "codesnap.containerPadding": "8em",
     "codesnap.boxShadow": "rgba(0, 0, 0, 0.55) 0px 12px 24px",
-    "explorer.confirmDelete": false,
+    "explorer.confirmDelete": true,
     "editor.accessibilitySupport": "off",
-    "chat.editor.wordWrap": "on",
-    "editor.wordWrap": "wordWrapColumn",
+    "chat.editor.wordWrap": "off",
+    // "editor.wordWrap": "wordWrapColumn",
 //     "[php]": {
 //         "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
 //     },

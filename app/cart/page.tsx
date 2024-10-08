@@ -13,7 +13,6 @@ import CourierSelection from '@/components/checkout/CourierSelection'
 import OrderSummary from '@/components/checkout/OrderSummary'
 import PaymentMethodSelection from '@/components/checkout/PaymentMethodSelection'
 
-
 const Page = () => {
 
     const { items, removeItem, addItem, removeItemCompletely } = useCart()
@@ -27,7 +26,7 @@ const Page = () => {
     const cartPriceTotal = items.reduce((total, { product, productCount }) => total + (product.price * productCount), 0)
     const cartMrpTotal = items.reduce((total, { product, productCount }) => total + (product.mrp * productCount), 0)
     const totalItems = items.reduce((total, { productCount }) => total + productCount, 0)
-    const shippingCharges = isAnyPaperback ? SHIPPING_CHARGES * totalItems : 0 //Wildcard amount of shipping charge for now, Remove later
+    const [shippingCharges, setShippingCharges] = useState<number>(/*isAnyPaperback ? SHIPPING_CHARGES * totalItems :*/ 0)
     const totalAmount = cartPriceTotal + shippingCharges
 
     useEffect(() => {
@@ -63,13 +62,14 @@ const Page = () => {
 
                         <Separator className='my-4 bg-black' />
                         <PaymentMethodSelection
+                            isMounted={isMounted}
                             selectedAddress={selectedAddress}
                             paymentMethod={paymentMethod}
                             setPaymentMethod={setPaymentMethod}
                             isAnyPaperback={isAnyPaperback}
+                            setShippingCharges={setShippingCharges}
                         />
-                        <Separator className='my-4 bg-black' />
-                        <CourierSelection isMounted={isMounted} />
+
                         <Separator className='my-4 bg-black' />
                         <OrderSummary
                             totalAmount={totalAmount}

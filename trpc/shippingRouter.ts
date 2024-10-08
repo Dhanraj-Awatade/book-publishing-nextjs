@@ -110,19 +110,27 @@ export const shipmentRouter = router({
             }
             myHeaders.append("Authorization", `Bearer ${token}`);
 
-            // const checkCourierBody = JSON.stringify({
-            //     pickup_postcode,
-            //     delivery_postcode,
-            //     weight,
-            //     cod: paymentMethod === "cod" ? 1 : 0,
-            // });
-
             const checkCourierOptions = {
                 method: "GET",
                 headers: myHeaders,
                 // body: checkCourierBody,
             };
             try {
+                // const courierReq = await fetch(
+                //     "https://apiv2.shiprocket.in/v1/external/courier/courierListWithCounts",
+                //     checkCourierOptions
+                // );
+                // const courierList = await courierReq.json();
+                // const courierListIds = courierList.courier_data.map(
+                //     ({ id }: any) => id as string
+                // );
+                // console.log(
+                //     "courierList: ",
+                //     courierList,
+                //     "IDs: ",
+                //     courierListIds
+                // );
+
                 const req = await fetch(
                     `https://apiv2.shiprocket.in/v1/external/courier/serviceability/?pickup_postcode=${pickup_postcode}&
 delivery_postcode=${delivery_postcode}&weight=${weight}&cod=${

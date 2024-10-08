@@ -130,7 +130,6 @@ const ThankYouPage = async ({ searchParams }: PageProps) => {
                                                     ? (
                                                         <Link
                                                             href='/library'
-                                                            // download={product.name}
                                                             className={cn(buttonVariants({ variant: "default" }))}
                                                         >View in Library
                                                         </Link>

@@ -33,7 +33,7 @@ const PaymentStatus = ({ orderUserName, orderId, isPaid, isAnyPaperback, orderAd
                 <p className='font-medium text-gray-900'>{
                     isAnyPaperback ? "Shipping to" : "Added to library of"
                 }</p>
-                <p>{isAnyPaperback ? orderAddress as string : orderUserName}</p>
+                <p>{isAnyPaperback ? (typeof orderAddress === "object" ? `${orderAddress?.nickName}: ${orderAddress?.adressName}, ${orderAddress?.house}, ${orderAddress?.pin}, ${orderAddress?.state}` : orderAddress) : orderUserName}</p>
             </div>
             <div>
                 <p className='font-medium text-gray-900'>Order Status</p>

@@ -5,15 +5,19 @@ import { cn } from '@/lib/utils'
 import { trpc } from '@/trpc/client'
 import { TSelectedAddress } from './AddressDetails'
 import { PICKUP_POSTCODE } from '@/lib/config/constants'
+import CourierSelection from './CourierSelection'
+import { Separator } from '../ui/separator'
 
 interface PaymentMethodSelectionProps {
     setPaymentMethod: React.Dispatch<React.SetStateAction<"razorpay" | "cod">>
     paymentMethod: "razorpay" | "cod"
     isAnyPaperback: boolean
     selectedAddress: TSelectedAddress
+    isMounted: boolean
+    setShippingCharges: React.Dispatch<React.SetStateAction<number>>
 }
 
-const PaymentMethodSelection = ({ paymentMethod, setPaymentMethod, isAnyPaperback, selectedAddress }: PaymentMethodSelectionProps) => {
+const PaymentMethodSelection = ({ paymentMethod, setPaymentMethod, isAnyPaperback, selectedAddress, isMounted, setShippingCharges }: PaymentMethodSelectionProps) => {
     useEffect(() => { refetchCouriers() }, [paymentMethod])
     const checkCourierObject = {
         delivery_postcode: selectedAddress ? parseInt(selectedAddress.pin) : null,
@@ -22,8 +26,8 @@ const PaymentMethodSelection = ({ paymentMethod, setPaymentMethod, isAnyPaperbac
         weight: 1
     }
 
-    const { data: availableCouriers, refetch: refetchCouriers } = trpc.shipmentProcedures.getAvailableCouriers.useQuery(checkCourierObject, { enabled: isAnyPaperback && selectedAddress !== (undefined || null) })
-    console.log("Couriers on Client Side", availableCouriers)
+    const { data: availableCouriers, refetch: refetchCouriers, isLoading } = trpc.shipmentProcedures.getAvailableCouriers.useQuery(checkCourierObject, { enabled: isAnyPaperback && selectedAddress !== (undefined || null) })
+
     return (
         <>
             <h2 className='text-lg font-medium text-gray-900 my-2'>Select Payment Method</h2>
@@ -47,6 +51,13 @@ const PaymentMethodSelection = ({ paymentMethod, setPaymentMethod, isAnyPaperbac
                     <Label htmlFor="cod" className={cn({ "text-muted-foreground": !isAnyPaperback })}>Cash on delivery</Label>
                 </div>
             </RadioGroup>
+            <Separator className='my-4 bg-black' />
+            <CourierSelection
+                setShippingCharges={setShippingCharges}
+                isMounted={isMounted}
+                isLoading={isLoading}
+                availableCouriers={availableCouriers}
+            />
         </>
     )
 }
