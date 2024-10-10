@@ -5,14 +5,16 @@ import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { Check, Star } from 'lucide-react'
 import Link from 'next/link'
+import HomepageBanner from '@/components/HomepageBanner'
 
 
 export default function Home() {
   return (
     <>
+      <HomepageBanner />
       <MaxWidthWrapper>
 
-        <div className='mt-20 mb-10 mx-4 gap-y-6 pr-0 flex-col sm:flex-row flex md:gap-x-20 justify-between max-w-full'>
+        <div className='mt-20 mb-10 mx-12 gap-y-6 pr-0 flex-col sm:flex-row flex md:gap-x-20 justify-between max-w-full lg:px-28'>
           <div className='text-center leading-relaxed md:ml-10 md:mr-20 lg:my-auto'>
             <h1 className='text-4xl font-bold tracking-normal text-gray-900 sm:text-4xl max-w-4xl flex flex-col items-center '>{/* lg:ml-auto lg:mr-8 */}
               Welcome to your marketplace of high-quality{' '}
@@ -21,6 +23,7 @@ export default function Home() {
               </span>
             </h1>
           </div>
+
           <BookCarousel />
         </div>
 

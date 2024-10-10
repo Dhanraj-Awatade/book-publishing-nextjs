@@ -29,7 +29,7 @@ const Header = async () => {
   const isSignedIn = user !== null
 
   return (
-    <div className={cn(/*styles.container,*/ "z-[50] top-0 h-18 inset-x-0 sticky  w-full bg-white/70 border-b border-gray-200 backdrop-blur-lg")}>
+    <div className={cn(/*styles.container,*/ "z-[50] top-0 h-18 inset-x-0 sticky  w-full bg-white/70 border-b border-gray-200 backdrop-blur-lg shadow-lg")}>
       <header className='relative'>
         <MaxWidthWrapper>
           <div className='flex h-16 items-center mx-4'>
@@ -84,7 +84,7 @@ const Header = async () => {
 
             </div>
           </div>
-          {/* 
+          {/*
             <div className={styles.headerLinks}>
               {LINKS.map(link => (<Link key={link.id} className={cn(styles.link, migo.className)} href={link.link}>{link.title}</Link>))}
   </div>*/}
