@@ -85,7 +85,7 @@ const CourierSelection = ({ isMounted, availableCouriers, isLoading, setShipping
                             {/* <Label htmlFor="option-one">Option One</Label> */}
                             <Card>
                                 <CardHeader className='bg-red-200 border rounded-lg border-red-700'>
-                                    <Label htmlFor="option-one">Couldn't fetch courier options. Please try toggling payment method or select an address.</Label></CardHeader>
+                                    <Label htmlFor="option-one">Couldn&apos;t fetch courier options. Please try toggling payment method or select an address.</Label></CardHeader>
                             </Card>
                         </div>
                     </RadioGroup>
