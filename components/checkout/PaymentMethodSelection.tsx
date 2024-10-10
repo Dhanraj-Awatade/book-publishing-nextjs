@@ -51,13 +51,18 @@ const PaymentMethodSelection = ({ paymentMethod, setPaymentMethod, isAnyPaperbac
                     <Label htmlFor="cod" className={cn({ "text-muted-foreground": !isAnyPaperback })}>Cash on delivery</Label>
                 </div>
             </RadioGroup>
-            <Separator className='my-4 bg-black' />
-            <CourierSelection
-                setShippingCharges={setShippingCharges}
-                isMounted={isMounted}
-                isLoading={isLoading}
-                availableCouriers={availableCouriers}
-            />
+            {isAnyPaperback ?
+                <>
+                    <Separator className='my-4 bg-black' />
+                    <CourierSelection
+                        setShippingCharges={setShippingCharges}
+                        isMounted={isMounted}
+                        isLoading={isLoading}
+                        availableCouriers={availableCouriers}
+                    />
+                </>
+                : null
+            }
         </>
     )
 }
