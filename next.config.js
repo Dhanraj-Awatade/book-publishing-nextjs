@@ -48,7 +48,7 @@ const nextConfig = {
             protocol:"https"
         },
         {
-            hostname:"192.168.167.211",
+            hostname:"192.168.17.211",
             pathname:"**",
             port:"3000",
             protocol:"http"
@@ -62,9 +62,9 @@ const nextConfig = {
         config.module.rules.push({
             test: /\.node/,
             use: "raw-loader",
-          });   
+          });
         return config;
-         
+
   },
   async headers() {
     return [
@@ -87,7 +87,7 @@ const nextConfig = {
       //     { key: "Access-Control-Allow-Headers", value: "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" },
       //     { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" }
       //   ]
-      // }  
+      // }
     ]
   },
     // experimental: {
