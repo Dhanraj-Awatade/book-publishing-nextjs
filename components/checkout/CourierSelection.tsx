@@ -30,67 +30,77 @@ const CourierSelection = ({ isMounted, availableCouriers, isLoading, setShipping
     return (
         <div className='my-2'>
             <h2 className='text-lg font-medium text-gray-900 my-2'>Select Courier</h2>
-
-            <RadioGroup
-                defaultValue={`${prefferedCourier}`}
-                className=' md:flex'
-            >
-                {availableCouriers && availableCouriers.data && availableCouriers.data.available_courier_companies
-                    ? availableCouriers.data.available_courier_companies.map((data: any) =>
-                        <div key={data.courier_company_id} className="flex items-center md:mx-auto my-2 space-x-2">
-                            <RadioGroupItem
-                                className={cn({ "bg-green-500": data.courier_company_id === courier })}
-                                value={`${data.courier_company_id
-                                    }`}
-                                id={`${data.courier_company_id
-                                    }`}
-                                onClick={() => {
+            {isLoading
+                ? <div className='flex-col flex gap-y-2 items-center justify-center '>
+                    <Loader2 className='animate-spin h-6 w-6' />
+                    <p>Loading Couriers, Please wait...</p>
+                </div>
+                : <RadioGroup
+                    defaultValue={`${prefferedCourier}`}
+                    className=' md:flex'
+                >
+                    {availableCouriers && availableCouriers.data && availableCouriers.data.available_courier_companies
+                        ? availableCouriers.data.available_courier_companies.map((data: any) =>
+                            <div key={data.courier_company_id} className="flex items-center md:mx-auto my-2 space-x-2">
+                                <RadioGroupItem
+                                    className={cn({ "bg-green-500": data.courier_company_id === courier })}
+                                    value={`${data.courier_company_id
+                                        }`}
+                                    id={`${data.courier_company_id
+                                        }`}
+                                    onClick={() => {
+                                        selectCourier(data.courier_company_id);
+                                        setShippingCharges(data.cod_charges + data.freight_charge)
+                                    }}
+                                />
+                                <Card onClick={() => {
                                     selectCourier(data.courier_company_id);
                                     setShippingCharges(data.cod_charges + data.freight_charge)
                                 }}
-                            />
-                            <Card>
-                                <CardHeader>
-                                    <Label
-                                        htmlFor={`${data.courier_company_id}`}
-                                    >
-                                        {`${data.courier_name}`}
-                                    </Label>
-                                    <p hidden={data.courier_company_id !== prefferedCourier} className='text-xs text-green-500'>Preffered</p>
-                                </CardHeader>
-                                <CardContent>
-                                    <div><p className='text-sm font-medium text-gray-900'>
-                                        {
-                                            isMounted || isLoading
-                                                ? <>
-                                                    <span className='mr-1 text-xs font-normal text-gray-400'>Charges:{' '}</span>
-                                                    {formatPrice(data.cod_charges + data.freight_charge)}
-                                                    <br />
-                                                    <span className='mr-1 text-xs font-normal text-gray-400'>ETA:{' '}</span>
-                                                    {data.etd}
-                                                </>
-                                                : (
-                                                    <Loader2 className='h-4 w-4 animate-spin text-muted-foreground' />
-                                                )
-                                        }
-                                    </p></div>
-                                </CardContent>
-                            </Card>
-                        </div>
-                    )
-                    :
-                    <RadioGroup defaultValue="option-one" disabled className='justify-between flex'>
-                        <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="option-one" id="option-one" />
-                            {/* <Label htmlFor="option-one">Option One</Label> */}
-                            <Card>
-                                <CardHeader className='bg-red-200 border rounded-lg border-red-700'>
-                                    <Label htmlFor="option-one">Couldn&apos;t fetch courier options. Please try toggling payment method or select an address.</Label></CardHeader>
-                            </Card>
-                        </div>
-                    </RadioGroup>
-                }
-            </RadioGroup>
+                                    className={cn({ "border-green-500 border": data.courier_company_id === courier })}
+                                >
+                                    <CardHeader>
+                                        <Label
+                                            htmlFor={`${data.courier_company_id}`}
+                                        >
+                                            {`${data.courier_name}`}
+                                        </Label>
+                                        <p hidden={data.courier_company_id !== prefferedCourier} className='text-xs text-green-500'>Preffered</p>
+                                    </CardHeader>
+                                    <CardContent>
+                                        <div><p className='text-sm font-medium text-gray-900'>
+                                            {
+                                                isMounted || isLoading
+                                                    ? <>
+                                                        <span className='mr-1 text-xs font-normal text-gray-400'>Charges:{' '}</span>
+                                                        {formatPrice(data.cod_charges + data.freight_charge)}
+                                                        <br />
+                                                        <span className='mr-1 text-xs font-normal text-gray-400'>ETA:{' '}</span>
+                                                        {data.etd}
+                                                    </>
+                                                    : (
+                                                        <Loader2 className='h-4 w-4 animate-spin text-muted-foreground' />
+                                                    )
+                                            }
+                                        </p></div>
+                                    </CardContent>
+                                </Card>
+                            </div>
+                        )
+                        :
+                        <RadioGroup defaultValue="option-one" disabled className='justify-between flex'>
+                            <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="option-one" id="option-one" />
+                                {/* <Label htmlFor="option-one">Option One</Label> */}
+                                <Card>
+                                    <CardHeader className='bg-red-200 border rounded-lg border-red-700'>
+                                        <Label htmlFor="option-one">Couldn&apos;t fetch courier options. Please try toggling payment method or select an address.</Label></CardHeader>
+                                </Card>
+                            </div>
+                        </RadioGroup>
+                    }
+                </RadioGroup>
+            }
         </div>
     )
 }
