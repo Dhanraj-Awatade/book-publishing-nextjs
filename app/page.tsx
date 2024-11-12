@@ -11,7 +11,7 @@ import HomepageBanner from '@/components/HomepageBanner'
 export default function Home() {
   return (
     <>
-      <HomepageBanner />
+      {/* <HomepageBanner /> */}
       <MaxWidthWrapper>
 
         <div className='mt-20 mb-10 mx-12 gap-y-6 pr-0 flex-col sm:flex-row flex md:gap-x-20 justify-between max-w-full lg:px-28'>
@@ -111,7 +111,7 @@ export default function Home() {
           title='Latest Trending'
           collectionHref='/books'
         />
-        <ProductReel query={{ sort: 'desc', limit: 4 }}
+        <ProductReel query={{ sort: 'asc', limit: 4 }}
           title='Newest Releases'
           collectionHref='/books'
         />
