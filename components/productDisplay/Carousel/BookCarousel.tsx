@@ -1,31 +1,28 @@
 "use client"
-// import React, { useEffect } from 'react'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '../../ui/carousel'
 import { trpc } from '@/trpc/client'
 import { Product } from '@/payload-types'
 import CarouselImage from './CarouselImage'
 import { Loader2 } from 'lucide-react'
+import { useState } from 'react'
+import { FALLBACK_CURSOR } from '@/lib/config/constants'
 
 const BookCarousel = () => {
-
-    // useEffect(() => {
-    //     const timeout = setTimeout(() => {
-
-    //     }, 2000);
-    //     return () => clearTimeout(timeout)
-
-    // }, [])
+    const [cursor,setCursor] = useState<number>(FALLBACK_CURSOR)
     const query = { limit: 4 }
-    const { data: queryResults, isLoading } = trpc.getInfiniteProducts.useInfiniteQuery({
-        limit: 4, query
-    },
-        {
-            getNextPageParam: (lastPage) => lastPage.nextPage,
-        })
+    const { data: queryResults, isLoading } = trpc.getInfiniteProducts.useQuery({
+        limit: 4, query,cursor
+    })
 
-    const products = queryResults?.pages.flatMap(
-        (page) => page.items
-    )
+    // const products = queryResults?.pages.flatMap(
+    //     (page) => page.items
+    // )
+
+    const timer = setTimeout(() => {
+        setCursor(cursor+1)
+        if(queryResults?.hasNextPage === false){setCursor(FALLBACK_CURSOR)}
+            }, 15000);
+    const products = queryResults?.items
 
     let map: (Product | null)[] = []
 
@@ -46,7 +43,7 @@ const BookCarousel = () => {
                     <Carousel className="w-full max-w-xs">
                         <CarouselContent className='items-center'>
                             {
-                                map.flatMap((product, i) =>
+                                map.flatMap((product,i) =>
                                     <CarouselImage key={i} product={product} index={i} />
                                 )
                             }

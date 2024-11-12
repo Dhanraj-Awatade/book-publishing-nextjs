@@ -21,8 +21,6 @@ const ProductsPage = ({ searchParams }: ProductPageProps) => {
     const type = parse(searchParams.type)
     const label = PRODUCT_CATEGORIES.find(({ value }) => value === category)?.label
 
-
-
     return (
         <MaxWidthWrapper>
 

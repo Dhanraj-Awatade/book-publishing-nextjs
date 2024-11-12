@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { CarouselItem } from '../../ui/carousel'
 import Link from 'next/link'
 import Image from 'next/image'
