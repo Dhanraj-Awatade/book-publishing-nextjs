@@ -97,7 +97,6 @@
         "ts-node": "^10.9.2",
         "typescript": "5.4.5"
     },
-    "packageManager": "yarn@4.5.1",
     "repository": "https://github.com/Dhanraj-Awatade/saptareshee1-nextjs.git",
     "author": "Dhanraj Awatade <dhanuawatade@gmail.com>",
     "license": "MIT"
