@@ -15,6 +15,7 @@ import { toast } from 'sonner'
 import { ZodError } from 'zod'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { CheckCircle, X } from 'lucide-react'
+import MaxWidthWrapper from '@/components/MaxWidthWrapper'
 
 
 
@@ -65,7 +66,7 @@ const Page = () => {
     }
 
     return (
-        <>
+        <MaxWidthWrapper>
             <div className='flex items-center justify-center bg-green-300/20 relative'>
                 {/* <Image aria-hidden className='object-cover border rounded-3xl z-0' src={"/Images/background.jpg"} fill alt='Background Image' /> */}
                 <div className="w-full mx-auto md:w-2/3 pr-8 py-10 " >
@@ -149,92 +150,7 @@ const Page = () => {
                     </div>
                 </div>
             </div>
-
-
-
-            {/* <div className='container relative pt-20 flex-col items-center lg:px-20'>
-                <div className='flex flex-col mx-auto w-full justify-center space-y-6 sm:w-[350px]'>
-                    <div className='flex flex-col items-center'>
-                        <Image src={"/Images/Humaaans_SignIn.png"} alt='Human Sign-in Image' width={943.00108} height={795.62948} />
-                        {origin
-                            ? <h1 className='text-2xl my-4 font-semibold text-center'>You have to be signed in to complete this action!</h1>
-                            : <h1 className='text-2xl my-4 font-semibold text-center'>Sign in to your {isAuthor ? "author " : " "}Account</h1>
-                        }
-                        <div className='grid gap-6'>
-                            <form method='POST' onSubmit={handleSubmit(onSubmit)}>
-                                <div className='grid gap-2'>
-                                    <div className='grid gap-1 py-2'>
-                                        <Label htmlFor='email'>Email</Label>
-                                        <Input {...register('email')}
-                                            className={cn({
-                                                "focus-visible:ring-gray-500": !errors.email,
-                                                "focus-visible:ring-red-500": errors.email
-                                            })}
-                                            placeholder="you@example.com"
-                                        />
-                                        {
-                                            errors?.email && (
-                                                <p className='text-sm font-semibold mt-2 text-red-500'>
-                                                    {errors.email.message}
-                                                </p>
-                                            )
-                                        }
-                                    </div>
-                                    <div className='grid gap-1 py-2'>
-                                        <Label htmlFor='password'>Password</Label>
-                                        <Input {...register('password')} type='password'
-                                            className={cn({
-                                                "focus-visible:ring-gray-500": !errors.password,
-                                                "focus-visible:ring-red-500": errors.password
-                                            })}
-                                            placeholder="Enter your Password"
-                                        />
-                                        {
-                                            errors?.password && (
-                                                <p className='text-sm font-semibold mt-2 text-red-500'>
-                                                    {errors.password.message}
-                                                </p>
-                                            )
-                                        }
-                                    </div>
-                                    <Button>Login</Button>
-                                </div>
-                            </form>
-
-                            <div className='relative'>
-                                <div aria-hidden='true' className='absolute inset-0 flex items-center'>
-                                    <span className='w-full border-t' />
-                                </div>
-                                <div className='relative flex justify-center text-xs uppercase'>
-                                    <span className='bg-transparent px-2 text-muted-foreground'>
-                                        or
-                                    </span>
-                                </div>
-                            </div>
-                            {
-                                isAuthor
-                                    ? (
-                                        <Button onClick={continueAsCustomer}
-                                            variant='secondary'
-                                            disabled={isLoading}>
-                                            Continue as Customer
-                                        </Button>)
-                                    : (
-                                        <Button onClick={continueAsAuthor}
-                                            variant='secondary'
-                                            disabled={isLoading}>
-                                            Continue as author
-                                        </Button>
-                                    )
-                            }
-                        </div>
-                        <Separator className='my-4' />
-                        <h4 className='text-muted-foreground'>Don&apos;t have an account?</h4>
-                        <Link className={buttonVariants({ variant: 'link' })} href={"/sign-up"}>Sign up</Link>
-                    </div>
-                </div>
-            </div> */}
-        </>
+        </MaxWidthWrapper>
     )
 }
 

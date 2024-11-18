@@ -21,7 +21,7 @@ const BookCarousel = () => {
     const timer = setTimeout(() => {
         setCursor(cursor+1)
         if(queryResults?.hasNextPage === false){setCursor(FALLBACK_CURSOR)}
-            }, 15000);
+            }, 60000);
     const products = queryResults?.items
 
     let map: (Product | null)[] = []
