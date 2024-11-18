@@ -4,6 +4,66 @@ import { getShiprocketToken } from "../lib/getShiprocketToken";
 import { SHIPPING_MODE } from "../lib/config/constants";
 
 export const shipmentRouter = router({
+
+    /** Get all couriers available  */
+    getAvailableCouriers: publicProcedure
+        .input(
+            z.object({
+                pickup_postcode: z.number() /*.max(6).min(6)*/,
+                delivery_postcode: z.number().or(z.null()),
+                weight: z.number(),
+                paymentMethod: z.string(),
+            })
+        )
+        .query(async ({ input }) => {
+            // const token: string | undefined = await getShiprocketToken();
+            const {
+                delivery_postcode,
+                paymentMethod,
+                pickup_postcode,
+                weight,
+            } = input;
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+            // if (token === undefined) {
+            // console.log("token is undefined");
+            // return;
+            // }
+            // myHeaders.append("Authorization", `Bearer ${token}`);
+
+            const checkCourierOptions = {
+                method: "GET",
+                headers: myHeaders,
+                // body: checkCourierBody,
+            };
+            try {
+                if(!delivery_postcode){
+                    console.log("delivery_postcode not available!");
+                 return {err:"delivery_postcode not available!"}
+                }
+                const req2 = await getShiprocketToken().then(async (token) => {
+                    if (token === undefined) {
+                        console.error("token is undefined");
+                        return {err:"token is undefined"};
+                    }
+                    myHeaders.append("Authorization", `Bearer ${token}`);
+                    const req = await fetch(
+                        `https://apiv2.shiprocket.in/v1/external/courier/serviceability/?pickup_postcode=${pickup_postcode}&
+    delivery_postcode=${delivery_postcode}&weight=${weight}&cod=${
+                            paymentMethod === "cod" ? 1 : 0
+                        }&mode=${SHIPPING_MODE}`,
+                        checkCourierOptions
+                    );
+                    const data = await req.json();
+                    return data;
+                });
+                console.log("req2:", req2);
+                return req2;
+            } catch (error) {
+                console.log(error);
+            }
+        }),
+          /* Create an Order
     createOrder: publicProcedure.query(async () => {
         const token: string | undefined = await getShiprocketToken();
 
@@ -83,75 +143,6 @@ export const shipmentRouter = router({
         }
         // };
     }),
+    */
 
-    /** Get all couriers available  */
-    getAvailableCouriers: publicProcedure
-        .input(
-            z.object({
-                pickup_postcode: z.number() /*.max(6).min(6)*/,
-                delivery_postcode: z.number().or(z.null()),
-                weight: z.number(),
-                paymentMethod: z.string(),
-            })
-        )
-        .query(async ({ input }) => {
-            // const token: string | undefined = await getShiprocketToken();
-            const {
-                delivery_postcode,
-                paymentMethod,
-                pickup_postcode,
-                weight,
-            } = input;
-            var myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
-            // if (token === undefined) {
-            // console.log("token is undefined");
-            // return;
-            // }
-            // myHeaders.append("Authorization", `Bearer ${token}`);
-
-            const checkCourierOptions = {
-                method: "GET",
-                headers: myHeaders,
-                // body: checkCourierBody,
-            };
-            try {
-                // const courierReq = await fetch(
-                //     "https://apiv2.shiprocket.in/v1/external/courier/courierListWithCounts",
-                //     checkCourierOptions
-                // );
-                // const courierList = await courierReq.json();
-                // const courierListIds = courierList.courier_data.map(
-                //     ({ id }: any) => id as string
-                // );
-                // console.log(
-                //     "courierList: ",
-                //     courierList,
-                //     "IDs: ",
-                //     courierListIds
-                // );
-
-                const req2 = await getShiprocketToken().then(async (token) => {
-                    if (token === undefined) {
-                        console.error("token is undefined");
-                        return;
-                    }
-                    myHeaders.append("Authorization", `Bearer ${token}`);
-
-                    const req = await fetch(
-                        `https://apiv2.shiprocket.in/v1/external/courier/serviceability/?pickup_postcode=${pickup_postcode}&
-    delivery_postcode=${delivery_postcode}&weight=${weight}&cod=${
-                            paymentMethod === "cod" ? 1 : 0
-                        }&mode=${SHIPPING_MODE}`,
-                        checkCourierOptions
-                    );
-                    const data = await req.json();
-                    return data;
-                });
-                console.log("req2:", req2);
-                return req2;
-            } catch (error) {
-                console.log(error);
-            }
-        }),
 });
