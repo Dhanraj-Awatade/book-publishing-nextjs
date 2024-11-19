@@ -4,7 +4,6 @@ import { getShiprocketToken } from "../lib/getShiprocketToken";
 import { SHIPPING_MODE } from "../lib/config/constants";
 
 export const shipmentRouter = router({
-
     /** Get all couriers available  */
     getAvailableCouriers: publicProcedure
         .input(
@@ -37,14 +36,14 @@ export const shipmentRouter = router({
                 // body: checkCourierBody,
             };
             try {
-                if(!delivery_postcode){
+                if (!delivery_postcode) {
                     console.log("delivery_postcode not available!");
-                 return {err:"delivery_postcode not available!"}
+                    return { err: "delivery_postcode not available!" };
                 }
                 const req2 = await getShiprocketToken().then(async (token) => {
                     if (token === undefined) {
                         console.error("token is undefined");
-                        return {err:"token is undefined"};
+                        return { err: "token is undefined" };
                     }
                     myHeaders.append("Authorization", `Bearer ${token}`);
                     const req = await fetch(
@@ -63,7 +62,7 @@ export const shipmentRouter = router({
                 console.log(error);
             }
         }),
-          /* Create an Order
+    /* Create an Order
     createOrder: publicProcedure.query(async () => {
         const token: string | undefined = await getShiprocketToken();
 
@@ -144,5 +143,4 @@ export const shipmentRouter = router({
         // };
     }),
     */
-
 });

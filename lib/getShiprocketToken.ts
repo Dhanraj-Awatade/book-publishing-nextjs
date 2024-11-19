@@ -23,7 +23,10 @@ export const getShiprocketToken = async () => {
         // .then((data) => (token = data.token))
         // .then(() => createOrder())
         // .catch((error) => console.log(error));
-        console.log("token req success");
+        console.log(
+            "token req success, Warning remove this! token: ",
+            data.token as string
+        );
         return data.token as string;
     } catch (error) {
         console.log(error);
