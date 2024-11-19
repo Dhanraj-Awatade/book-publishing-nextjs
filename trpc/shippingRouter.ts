@@ -40,24 +40,27 @@ export const shipmentRouter = router({
                     console.log("delivery_postcode not available!");
                     return { err: "delivery_postcode not available!" };
                 }
-                const req2 = await getShiprocketToken().then(async (token) => {
-                    if (token === undefined) {
-                        console.error("token is undefined");
-                        return { err: "token is undefined" };
-                    }
-                    myHeaders.append("Authorization", `Bearer ${token}`);
-                    const req = await fetch(
-                        `https://apiv2.shiprocket.in/v1/external/courier/serviceability/?pickup_postcode=${pickup_postcode}&
+                const token = await getShiprocketToken();
+                // .then(
+                // async (token) => {
+                if (token === undefined) {
+                    console.error("token is undefined");
+                    return { err: "token is undefined" };
+                }
+                myHeaders.append("Authorization", `Bearer ${token}`);
+                const req = await fetch(
+                    `https://apiv2.shiprocket.in/v1/external/courier/serviceability/?pickup_postcode=${pickup_postcode}&
     delivery_postcode=${delivery_postcode}&weight=${weight}&cod=${
-                            paymentMethod === "cod" ? 1 : 0
-                        }&mode=${SHIPPING_MODE}`,
-                        checkCourierOptions
-                    );
-                    const data = await req.json();
-                    return data;
-                });
-                console.log("req2:", req2);
-                return req2;
+                        paymentMethod === "cod" ? 1 : 0
+                    }&mode=${SHIPPING_MODE}`,
+                    checkCourierOptions
+                );
+                const data = await req.json();
+                return data;
+                // }
+                // );
+                // console.log("req2:", req2);
+                // return req2;
             } catch (error) {
                 console.log(error);
             }
