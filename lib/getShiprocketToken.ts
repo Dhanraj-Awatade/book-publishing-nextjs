@@ -19,12 +19,14 @@ export const getShiprocketToken = async () => {
             "https://apiv2.shiprocket.in/v1/external/auth/login",
             requestOptions
         );
-        const data = await req.json();
-        // .then((data) => (token = data.token))
-        // .then(() => createOrder())
-        // .catch((error) => console.log(error));
-        console.log("shiprocket token req success");
-        return data.token as string;
+        // const data = await req.json();
+
+        const data = await req
+            .json()
+            .then((data) => data.token)
+            .catch((error) => console.log(error));
+        console.log("shiprocket token req success", data);
+        return data as string;
     } catch (error) {
         console.log(error);
     }
