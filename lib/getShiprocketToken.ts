@@ -25,7 +25,7 @@ export const getShiprocketToken = async () => {
         // .json()
         // .then((data) => data.token)
         // .catch((error) => console.log(error));
-        console.log("shiprocket token req success", data);
+        console.log("shiprocket token req success");
         return data.token as string;
     } catch (error) {
         console.log(error);
