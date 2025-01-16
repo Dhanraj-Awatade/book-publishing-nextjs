@@ -84,8 +84,8 @@ export const razorpayWebhookHandler: RequestHandler = async (req, res) => {
             // return res.status(200).send("Success");
         }
     } else {
-        console.log("Invalid Request");
-        return res.status(502).send("Invalid Request");
+        console.log("Invalid Razorpay Webhook Request");
+        return res.status(502).send("Invalid Razorpay Webhook Request");
     }
 };
 
