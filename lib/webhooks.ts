@@ -4,84 +4,95 @@ import { Product } from "../payload-types";
 import { RecieptEmailHtml } from "../components/emails/RecieptEmail";
 import * as crypto from "crypto";
 import nodemailer from "nodemailer";
+import { validateWebhookSignature } from "razorpay/dist/utils/razorpay-utils";
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: "info.saptarshee.publications@gmail.com",
-    pass: "twrpsjqhkorjfxuz",
-  },
+    service: "gmail",
+    auth: {
+        user: "info.saptarshee.publications@gmail.com",
+        pass: "twrpsjqhkorjfxuz",
+    },
 });
 
 export const razorpayWebhookHandler: RequestHandler = async (req, res) => {
-  const secret = process.env.RAZORPAY_WEBHOOK_SECRET as string;
+    const secret = process.env.RAZORPAY_WEBHOOK_SECRET as string;
 
-  const shaKey = crypto.createHmac("sha256", secret);
-  shaKey.update(JSON.stringify(req.body));
-  const digest = shaKey.digest("hex");
+    const isValidWebhookSignature = validateWebhookSignature(
+        JSON.stringify(req.body),
+        req.headers["x-razorpay-signature"] as string,
+        secret
+    );
 
-  console.log(digest, req.headers["x-razorpay-signature"]);
+    // const shaKey = crypto.createHmac("sha256", secret);
+    // shaKey.update(JSON.stringify(req.body));
+    // const digest = shaKey.digest("hex");
 
-  if (digest === req.headers["x-razorpay-signature"]) {
-    console.log("Valid Request", "body:", req.body);
+    // console.log(digest, req.headers["x-razorpay-signature"]);
 
-    if (req.body.event === "order.paid") {
-      const isPaid = req.body.payload.order.entity.status === "paid";
-      const orderId = req.body.payload.order.entity.id;
-      const payload = await getPayloadClient();
+    // if (digest === req.headers["x-razorpay-signature"])
+    if (isValidWebhookSignature == true) {
+        console.log("Valid Razorpay Webhook Request");
 
-      const { docs: updatedOrders } = await payload.update({
-        // id: payloadOrderId,
-        collection: "orders",
-        depth: 1,
-        where: {
-          razorpayOrderId: {
-            equals: orderId,
-          },
-        },
-        data: {
-          _isPaid: isPaid,
-        },
-      });
+        if (req.body.event === "order.paid") {
+            const isPaid = req.body.payload.order.entity.status === "paid";
+            const orderId = req.body.payload.order.entity.id;
+            const payload = await getPayloadClient();
 
-      const [updatedOrder] = updatedOrders;
-      const user = updatedOrder.user;
-      console.log("updated Order via webhook:", updatedOrder);
+            const { docs: updatedOrders } = await payload.update({
+                // id: payloadOrderId,
+                collection: "orders",
+                depth: 1,
+                where: {
+                    razorpayOrderId: {
+                        equals: orderId,
+                    },
+                },
+                data: {
+                    _isPaid: isPaid,
+                },
+            });
 
-      // send receipt
-      try {
-        if (typeof user === "string")
-          return new Error("Depth not enough to get User details from order.");
-        const data = await /*resend.emails.*/ transporter.sendMail({
-          from: "Saptarshee Publications <info.saptarshee.publications@gmail.com>",
-          to: [user.email],
-          subject: "Order Placed Successfully | Saptarshee Publications",
-          html: RecieptEmailHtml({
-            date: new Date(),
-            email: user.email,
-            orderId: orderId,
-            products: updatedOrder.products as Product[],
-            amount: updatedOrder.amount,
-          }),
-        });
-        res.status(200).json({ data });
-      } catch (error) {
-        res.status(500).json({ error });
-      }
-      // }
+            const [updatedOrder] = updatedOrders;
+            const user = updatedOrder.user;
+            console.log("updated Order via webhook:", updatedOrder);
 
-      // return res.status(200).send("Success");
+            // send receipt
+            try {
+                if (typeof user === "string")
+                    return new Error(
+                        "Depth not enough to get User details from order."
+                    );
+                const data = await /*resend.emails.*/ transporter.sendMail({
+                    from: "Saptarshee Publications <info.saptarshee.publications@gmail.com>",
+                    to: [user.email],
+                    subject:
+                        "Order Placed Successfully | Saptarshee Publications",
+                    html: RecieptEmailHtml({
+                        date: new Date(),
+                        email: user.email,
+                        orderId: orderId,
+                        products: updatedOrder.products as Product[],
+                        amount: updatedOrder.amount,
+                    }),
+                });
+                res.status(200).json({ data });
+            } catch (error) {
+                res.status(500).json({ error });
+            }
+            // }
+
+            // return res.status(200).send("Success");
+        }
+    } else {
+        console.log("Invalid Request");
+        return res.status(502).send("Invalid Request");
     }
-  } else {
-    console.log("Invalid Request");
-    return res.status(502).send("Invalid Request");
-  }
 };
 
 export const shiprocketWebhookHandler: RequestHandler = async (req, res) => {
-  console.log("Hit");
-  //trpc API call to shippingRouter here
-  res.status(200).json({ success: true });
+    console.log("Hit");
+    //trpc API call to shippingRouter here
+    res.status(200).json({ success: true });
 };
 
 /*

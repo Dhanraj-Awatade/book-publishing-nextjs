@@ -1,5 +1,6 @@
 export const SHIPPING_CHARGES = 60;
 export const FALLBACK_LIMIT = 4;
+export const RAZORPAY_ORDER_COUNT_LIMIT = 50;
 export const FALLBACK_CURSOR = 1;
 export const FALLBACK_ORDER_LIMIT = 10;
 export const PICKUP_POSTCODE = 413305;
