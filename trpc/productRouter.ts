@@ -2,181 +2,210 @@ import { z } from "zod";
 import { privateProcedure, publicProcedure, router } from "./trpc";
 import { PurchasedProductsQueryValidator } from "../lib/validators/query-validator";
 import { getPayloadClient } from "../lib/get-payload";
-import { Product } from "../payload-types";
+import { Order, Product } from "../payload-types";
 import { FALLBACK_CURSOR, FALLBACK_ORDER_LIMIT } from "../lib/config/constants";
 
 export const productRouter = router({
-  getPurchasedProducts: privateProcedure
-    .input(
-      z.object({
-        limit: z.number().min(1).max(100),
-        cursor: z.number().nullish(),
-        query: PurchasedProductsQueryValidator,
-      })
-    )
-    .query(async ({ input, ctx }) => {
-      const { query, cursor } = input;
-      const { sort, limit } = query;
-
-      const { user } = ctx;
-      const payload = await getPayloadClient();
-
-      const page = cursor || 1;
-
-      const {
-        docs: orders,
-        hasNextPage,
-        nextPage,
-        hasPrevPage,
-        prevPage,
-      } = await payload.find({
-        collection: "orders",
-        where: {
-          user: {
-            equals: user.id,
-          },
-          _isPaid: {
-            equals: true,
-          },
-        },
-        sort,
-        depth: 3,
-        limit,
-        page,
-      });
-
-      const purchasedProductsArray = orders
-        .flatMap(({ products }) =>
-          products.map((prod) => (typeof prod === "string" ? null : prod))
+    getPurchasedProducts: privateProcedure
+        .input(
+            z.object({
+                limit: z.number().min(1).max(100),
+                cursor: z.number().nullish(),
+                query: PurchasedProductsQueryValidator,
+            })
         )
-        .filter(
-          (prod): prod is Product => prod?.type === "ebook" && prod !== null
-        );
+        .query(async ({ input, ctx }) => {
+            const { query, cursor } = input;
+            const { sort, limit } = query;
 
-      const items = Array.from(new Set(purchasedProductsArray));
-      return {
-        items,
-        nextPage: hasNextPage ? nextPage : null,
-        prevPage: hasPrevPage ? prevPage : null,
-        hasNextPage,
-        hasPrevPage,
-      };
-    }),
+            const { user } = ctx;
+            const payload = await getPayloadClient();
 
-  /* ----------------------------------------------------------------------------------------- */
+            const page = cursor || 1;
 
-  getOrders: privateProcedure
-    .input(z.object({ cursor: z.number() }))
-    .query(async ({ ctx, input }) => {
-      const user = ctx.user;
-      const { cursor } = input;
-      const payload = await getPayloadClient();
+            const {
+                docs: orders,
+                hasNextPage,
+                nextPage,
+                hasPrevPage,
+                prevPage,
+            } = await payload.find({
+                collection: "orders",
+                where: {
+                    user: {
+                        equals: user.id,
+                    },
+                    _isPaid: {
+                        equals: true,
+                    },
+                },
+                sort,
+                depth: 3,
+                limit,
+                page,
+            });
 
-      const page = cursor || FALLBACK_CURSOR;
-      const limit = FALLBACK_ORDER_LIMIT;
+            const purchasedProductsArray = orders
+                .flatMap(({ products }) =>
+                    products.map((prod) =>
+                        typeof prod === "string" ? null : prod
+                    )
+                )
+                .filter(
+                    (prod): prod is Product =>
+                        prod?.type === "ebook" && prod !== null
+                );
 
-      if (user.role === "editor" || user.role === "admin") {
-        const {
-          docs: allOrders,
-          hasNextPage,
-          hasPrevPage,
-          nextPage,
-          prevPage,
-        } = await payload.find({
-          collection: "orders",
-          depth: 4,
-          where: {
-            _isPaid: {
-              equals: true,
-            },
-          },
-          page,
-          limit,
-        });
+            const items = Array.from(new Set(purchasedProductsArray));
+            return {
+                items,
+                nextPage: hasNextPage ? nextPage : null,
+                prevPage: hasPrevPage ? prevPage : null,
+                hasNextPage,
+                hasPrevPage,
+            };
+        }),
 
-        return {
-          orders: allOrders,
-          hasNextPage,
-          hasPrevPage,
-          nextPage: hasNextPage ? nextPage : null,
-          prevPage: hasPrevPage ? prevPage : null,
-        };
-      } else {
-        const {
-          docs: userOrders,
-          hasNextPage,
-          hasPrevPage,
-          nextPage,
-          prevPage,
-        } = await payload.find({
-          collection: "orders",
-          depth: 4,
-          where: {
-            user: {
-              equals: typeof user === "string" ? user : user.id,
-            },
-            _isPaid: {
-              equals: true,
-            },
-          },
-          page,
-          limit,
-        });
+    /* ----------------------------------------------------------------------------------------- */
 
-        return {
-          orders: userOrders,
-          hasNextPage,
-          hasPrevPage,
-          nextPage: hasNextPage ? nextPage : null,
-          prevPage: hasPrevPage ? prevPage : null,
-        };
-      }
-    }),
+    getOrders: privateProcedure
+        .input(z.object({ cursor: z.number(), showOnlyPaperback: z.boolean() }))
+        .query(async ({ ctx, input }) => {
+            const user = ctx.user;
+            const { cursor, showOnlyPaperback } = input;
+            const payload = await getPayloadClient();
 
-  /* ----------------------------------------------------------------------------------------- */
+            const page = cursor || FALLBACK_CURSOR;
+            const limit = FALLBACK_ORDER_LIMIT;
 
-  isPurchasedProduct: publicProcedure
-    .input(
-      z.object({
-        productId: z.string(),
-        userId: z.string().optional(),
-      })
-    )
-    .query(async ({ input, ctx }) => {
-      const { productId, userId } = input;
+            if (user.role === "editor" || user.role === "admin") {
+                const {
+                    docs: allOrders,
+                    hasNextPage,
+                    hasPrevPage,
+                    nextPage,
+                    prevPage,
+                } = await payload.find({
+                    collection: "orders",
+                    depth: 4,
 
-      if (!userId) return false;
+                    where: {
+                        _isPaid: {
+                            equals: true,
+                        },
+                        "products.type": {
+                            equals: showOnlyPaperback
+                                ? "paperback"
+                                : "paperback" || "ebook",
+                        },
+                    },
+                    page,
+                    limit,
+                });
 
-      const payload = await getPayloadClient();
+                // const paperbackOnlyOrders = allOrders
+                //     .flatMap((order) => {
+                //         const productType = order.products.map((prod) =>
+                //             typeof prod == "string" ? false : prod.type
+                //         );
+                //         return productType.includes("paperback") ? order : null;
+                //     })
+                //     .filter((order): order is Order => order != null);
 
-      const { docs: products } = await payload.find({
-        collection: "products",
-        where: {
-          id: { equals: productId },
-        },
-      });
+                return {
+                    orders: /*showOnlyPaperback ? paperbackOnlyOrders :*/ allOrders,
+                    hasNextPage,
+                    hasPrevPage,
+                    nextPage: hasNextPage ? nextPage : null,
+                    prevPage: hasPrevPage ? prevPage : null,
+                };
+            } else {
+                const {
+                    docs: userOrders,
+                    hasNextPage,
+                    hasPrevPage,
+                    nextPage,
+                    prevPage,
+                } = await payload.find({
+                    collection: "orders",
+                    depth: 4,
+                    where: {
+                        user: {
+                            equals: typeof user === "string" ? user : user.id,
+                        },
+                        _isPaid: {
+                            equals: true,
+                        },
+                    },
+                    page,
+                    limit,
+                });
 
-      const [product] = products;
-      if (product.type === "paperback") return false;
+                const paperbackOnlyOrders = userOrders
+                    .flatMap((order) => {
+                        const productType = order.products.map((prod) =>
+                            typeof prod == "string" ? false : prod.type
+                        );
+                        return productType.includes("paperback") ? order : null;
+                    })
+                    .filter((order): order is Order => order != null);
 
-      const { docs: orders } = await payload.find({
-        collection: "orders",
-        where: {
-          user: {
-            equals: userId,
-          },
-          _isPaid: {
-            equals: true,
-          },
-        },
-      });
+                return {
+                    orders: showOnlyPaperback
+                        ? userOrders
+                        : paperbackOnlyOrders,
+                    hasNextPage,
+                    hasPrevPage,
+                    nextPage: hasNextPage ? nextPage : null,
+                    prevPage: hasPrevPage ? prevPage : null,
+                };
+            }
+        }),
 
-      const purchasedProductsIds = orders
-        .flatMap(({ products }) => products)
-        .flatMap((prod) => (typeof prod === "string" ? prod : prod.id));
+    /* ----------------------------------------------------------------------------------------- */
 
-      if (purchasedProductsIds.includes(productId)) return true;
-      return false;
-    }),
-  /* End of productRouter */
+    isPurchasedProduct: publicProcedure
+        .input(
+            z.object({
+                productId: z.string(),
+                userId: z.string().optional(),
+            })
+        )
+        .query(async ({ input, ctx }) => {
+            const { productId, userId } = input;
+
+            if (!userId) return false;
+
+            const payload = await getPayloadClient();
+
+            const { docs: products } = await payload.find({
+                collection: "products",
+                where: {
+                    id: { equals: productId },
+                },
+            });
+
+            const [product] = products;
+            if (product.type === "paperback") return false;
+
+            const { docs: orders } = await payload.find({
+                collection: "orders",
+                where: {
+                    user: {
+                        equals: userId,
+                    },
+                    _isPaid: {
+                        equals: true,
+                    },
+                },
+            });
+
+            const purchasedProductsIds = orders
+                .flatMap(({ products }) => products)
+                .flatMap((prod) => (typeof prod === "string" ? prod : prod.id));
+
+            if (purchasedProductsIds.includes(productId)) return true;
+            return false;
+        }),
+    /* End of productRouter */
 });

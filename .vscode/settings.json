@@ -144,7 +144,6 @@
     "editor.fontLigatures": "'ss01', 'ss02', 'ss03', 'ss04', 'ss05', 'ss06', 'ss07', 'ss08', 'calt', 'dlig'",
     "diffEditor.wordWrap": "on",
     "notebook.output.wordWrap": true,
-    "editor.fontSize": 16,
     "editor.minimap.maxColumn": 250,
     "codesnap.containerPadding": "8em",
     "codesnap.boxShadow": "rgba(0, 0, 0, 0.55) 0px 12px 24px",
@@ -197,8 +196,8 @@
 //         "file:///home/dhanraj-awatade/Projects/vscode_custom_css.css",
 //         "file:///home/dhanraj-awatade/Projects/vscode_custom_js.js"
     ],
-    "workbench.colorTheme": "React Theme",
-    "workbench.iconTheme": "eq-material-theme-icons-light",
+    "workbench.colorTheme": "Default Dark Modern",
+    "workbench.iconTheme": "a-file-icon-vscode",
     "workbench.sideBar.location": "left",
     "material-icon-theme.files.color": "#42a5f5",
     "workbench.tree.enableStickyScroll": false

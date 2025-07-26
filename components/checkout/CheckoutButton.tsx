@@ -202,8 +202,9 @@ const CheckoutButton = ({
     return (
         <Button
             disabled={
-                cartItemCount === 0 || isAnyPaperback
-                    ? !selectedAddress && shippingCharges !== 0
+                isLoading || cartItemCount === 0 || isAnyPaperback == true
+                    ? (selectedAddress === null || undefined) &&
+                      shippingCharges == 0
                     : isAnyPaperback
             }
             className="w-full"

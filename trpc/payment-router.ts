@@ -7,6 +7,7 @@ import { Orders } from "razorpay/dist/types/orders";
 import Razorpay from "razorpay";
 import qs from "qs";
 import { Address, User } from "../payload-types";
+import { RAZORPAY_ORDER_COUNT_LIMIT } from "../lib/config/constants";
 
 export const paymentRouter = router({
     createSession: privateProcedure
@@ -55,6 +56,7 @@ export const paymentRouter = router({
                     userId: `${user.id}`,
                     userName: `${user.name}`,
                     addressId: `${addressId}`,
+                    productIds: `${productIds}`,
                 },
             };
 
@@ -361,4 +363,114 @@ export const paymentRouter = router({
         // console.log(addresses);
         return addresses;
     }),
+    //************************************************************************************************************** */
+    // ToDo: Implement refreshing all orders
+    refreshAllRazorpayOrders: privateProcedure
+        .input(z.object({ condition: z.boolean(), page: z.number() }))
+        .query(async ({ ctx, input }) => {
+            if (ctx.user.role != "admin") {
+                console.error(
+                    "User not an Admin to refresh All Orders. Please login as an Admin."
+                );
+                return;
+            }
+
+            const isPaid = input.condition;
+            const page = input.page;
+            const payload = await getPayloadClient();
+
+            const {
+                docs: orders,
+                totalPages,
+                hasNextPage,
+                hasPrevPage,
+            } = await payload.find({
+                page: page,
+                limit: RAZORPAY_ORDER_COUNT_LIMIT,
+                collection: "orders",
+                where: {
+                    _isPaid: { equals: isPaid },
+                },
+            });
+
+            try {
+                const token = btoa(
+                    `${process.env.RAZORPAY_ID}:${process.env.RAZORPAY_KEY}`
+                );
+                const myHeaders = new Headers();
+                myHeaders.append("Authorization", `Basic ${token}`);
+
+                // const res = await fetch(/*"https://api.razorpay.com/v1/orders?"*/ "", {
+                //     method: "GET",
+                //     headers: myHeaders,
+                // });
+                // const razorpayOrders = await res.json();
+                // return { razorpayOrders: razorpayOrders, unpaidOrders: orders };
+
+                const refreshedRazorpayOrders = orders.flatMap(
+                    async (order) => {
+                        const res = await fetch(
+                            `https://api.razorpay.com/v1/orders/${order.razorpayOrderId}`,
+                            {
+                                method: "GET",
+                                headers: myHeaders,
+                            }
+                        );
+                        const razorpayOrder = await res.json();
+                        return [order.id, razorpayOrder];
+                    }
+                );
+                return {
+                    refreshedRazorpayOrders,
+                    totalPages,
+                    hasNextPage,
+                    hasPrevPage,
+                };
+            } catch (error) {
+                console.log("Error while getting Razorpay Orders: ", error);
+            }
+            return;
+        }),
+
+    //************************************************************************************************************** */
+    refreshUserRazorpayOrders: privateProcedure
+        .input(z.boolean())
+        .query(async ({ ctx, input }) => {
+            const signedUser: User = ctx.user;
+            const isPaid = input;
+            const payload = await getPayloadClient();
+
+            const { docs: orders } = await payload.find({
+                collection: "orders",
+                where: {
+                    user: {
+                        equals: signedUser,
+                    },
+                    _isPaid: { equals: isPaid },
+                },
+            });
+
+            try {
+                const token = btoa(
+                    `${process.env.RAZORPAY_ID}:${process.env.RAZORPAY_KEY}`
+                );
+                const myHeaders = new Headers();
+                myHeaders.append("Authorization", `Basic ${token}`);
+                const refreshedRazorpayOrders = orders.map(async (order) => {
+                    const res = await fetch(
+                        `https://api.razorpay.com/v1/orders/${order.razorpayOrderId}`,
+                        {
+                            method: "GET",
+                            headers: myHeaders,
+                        }
+                    );
+                    const razorpayOrder = await res.json();
+                    return [order.id, razorpayOrder];
+                });
+                return { razorpayOrders: refreshedRazorpayOrders };
+            } catch (error) {
+                console.log("Error while getting Razorpay Orders: ", error);
+            }
+            return;
+        }),
 });
