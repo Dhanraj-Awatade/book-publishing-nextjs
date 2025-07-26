@@ -10,32 +10,25 @@ import {
 } from "@/components/ui/table";
 
 import { formatPrice } from "@/lib/utils";
-import { Product } from "@/payload-types";
-
-import { redirect, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import OrderStatusComponent from "./OrderStatusComponent";
-import {
-    ColumnDef,
-    getCoreRowModel,
-    getPaginationRowModel,
-    useReactTable,
-} from "@tanstack/react-table";
 import { trpc } from "@/trpc/client";
 import { Button } from "@/components/ui/button";
 import OrderCardComponent from "./OrderCardComponent";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import Link from "next/link";
+import { Switch } from "@/components/ui/switch";
 
 const Orders = () => {
     const [cursor, setCursor] = useState<number>(1);
+    const [showOnlyPaperback, setShowOnlyPaperback] = useState<boolean>(false);
 
     const { data, isLoading, error, isError } =
         trpc.productProcedures.getOrders.useQuery(
-            { cursor },
-            {
-                getNextPageParam: (lastPage) => lastPage.nextPage,
-            }
+            { cursor, showOnlyPaperback }
+            // {
+            //     getNextPageParam: (lastPage) => lastPage.nextPage,
+            // }
         );
 
     const orders = data?.orders;
@@ -68,7 +61,21 @@ const Orders = () => {
                             <h1 className="text-4xl font-bold tracking-tight mb-3">
                                 Upcoming Orders
                             </h1>
-
+                            <div className="flex flex-row gap-x-4 my-4 md:text-right md:justify-end">
+                                <p className="text-sm">
+                                    Show only Paperback Orders
+                                </p>
+                                <Switch
+                                    checked={showOnlyPaperback}
+                                    onCheckedChange={() =>
+                                        setShowOnlyPaperback(
+                                            showOnlyPaperback == false
+                                                ? true
+                                                : false
+                                        )
+                                    }
+                                />
+                            </div>
                             {isLoading ? (
                                 <div className="flex flex-col w-full items-center justify-center">
                                     <Loader2 className="animate-spin h-24 w-24 text-slate-950" />
@@ -77,6 +84,7 @@ const Orders = () => {
                                 <Table>
                                     <TableHeader>
                                         <TableRow>
+                                            <TableHead>Order ID</TableHead>
                                             <TableHead>Customer</TableHead>
                                             <TableHead>Created on</TableHead>
                                             <TableHead /*className='hidden sm:table-cell'*/
@@ -103,6 +111,9 @@ const Orders = () => {
                                                         key={order.id}
                                                         className="bg-accent"
                                                     >
+                                                        <TableCell>
+                                                            {order.id}
+                                                        </TableCell>
                                                         <TableCell>
                                                             <div>
                                                                 {typeof order.user ===
@@ -258,7 +269,11 @@ const Orders = () => {
                                                                                 ) =>
                                                                                     typeof prod ===
                                                                                     "string" ? (
-                                                                                        <li>
+                                                                                        <li
+                                                                                            key={
+                                                                                                i
+                                                                                            }
+                                                                                        >
                                                                                             <p>
                                                                                                 {i +
                                                                                                     1}
@@ -270,7 +285,7 @@ const Orders = () => {
                                                                                                 {
                                                                                                     <Link
                                                                                                         className="underline"
-                                                                                                        href={`process.env.NEXT_PUBLIC_SERVER_URL/book/${prod}`}
+                                                                                                        href={`${process.env.NEXT_PUBLIC_SERVER_URL}/book/${prod}`}
                                                                                                     >
                                                                                                         {
                                                                                                             prod
