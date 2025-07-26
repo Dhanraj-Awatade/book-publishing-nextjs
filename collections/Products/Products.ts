@@ -7,73 +7,6 @@ import { Access, CollectionConfig } from "payload/types";
 import { Product, User } from "../../payload-types";
 import payload from "payload";
 
-// const addUser: BeforeChangeHook<Product> = async ({ req, data }) => {
-//   const user = req.user;
-
-//   return { ...data, user: user.id };
-// };
-
-// const yourOwn: Access = ({ req: { user } }) => {
-//   if (user.role === "admin") return true;
-
-//   return {
-//     user: {
-//       equals: user?.id,
-//     },
-//   };
-// };
-// const adminAndPurchased: Access = async ({ req }) => {
-//   const user = req.user as User | null;
-
-//   if (user?.role === "admin") return true;
-//   if (!user) return false;
-
-// const { docs: products } = await req.payload.find({
-//   collection: "products",
-//   depth: 0,
-//   where: {
-//     user: {
-//       equals: user.id,
-//     },
-//   },
-// });
-
-// const ownProductFileIds = products.map((prod) => prod.product_files).flat();
-
-//   const { docs: orders } = await req.payload.find({
-//     collection: "orders",
-//     depth: 2,
-//     where: {
-//       user: {
-//         equals: user.id,
-//       },
-//       _isPaid: {
-//         equals: true,
-//       },
-//     },
-//   });
-
-//   const purchasedProductIds = orders
-//     .map((order) => {
-//       return order.products.map((product) => {
-//         if (typeof product === "string")
-//           return req.payload.logger.error(
-//             "Search Depth not sufficient to find Purchased File IDs"
-//           );
-
-//         return product.id;
-//       });
-//     })
-//     .filter(Boolean)
-//     .flat();
-
-//   return {
-//     id: {
-//       in: [...purchasedProductIds],
-//     },
-//   };
-// };
-
 const syncUser: AfterChangeHook<Product> = async ({ req, doc }) => {
     const fullUser = await payload.findByID({
         collection: "users",
@@ -150,24 +83,7 @@ export const Products: CollectionConfig = {
     },
     hooks: {
         afterChange: [syncUser],
-        beforeChange: [
-            // addUser,
-            // async (args) => {
-            //   if (args.operation === "create") {
-            //     const data = args.data as Product;
-            //     // const createdProduct = await razorpay.orders.create({
-            //     //   amount: ,
-            //     //   currency: "INR",
-            //     // });
-            //     const updated: Product = {
-            //       ...data,
-            //       // razorId: createdProduct.id,
-            //       // priceId:createdProduct.
-            //     };
-            //   } else if (args.operation === "update") {
-            //   }
-            // },
-        ],
+        beforeChange: [],
     },
     fields: [
         {
@@ -239,7 +155,7 @@ export const Products: CollectionConfig = {
         {
             name: "price",
             label: "Price in INR",
-            min: 1,
+            min: 0,
             // max: 1000,
             type: "number",
             required: true,
